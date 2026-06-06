@@ -1,0 +1,6 @@
+{
+  "name": "Untukmu, Sayang",
+  "description": "Sebuah surat cinta interaktif dan penuh dengan kehangatan untuk pasangan tercinta.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
