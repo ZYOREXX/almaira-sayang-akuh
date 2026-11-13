@@ -1,0 +1,410 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Token desain                                                         */
+/* ------------------------------------------------------------------ */
+@theme {
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Cormorant Garamond Variable", "Cormorant Garamond", "Iowan Old Style",
+    "Palatino Linotype", Georgia, serif;
+
+  --color-ink-950: #0b0708;
+  --color-ink-900: #130c0e;
+  --color-ink-800: #1c1215;
+  --color-ink-700: #2a1c20;
+
+  --color-oxblood-950: #24070d;
+  --color-oxblood-900: #3a0b15;
+  --color-oxblood-800: #53101d;
+  --color-oxblood-700: #6e1526;
+  --color-crimson-600: #9a1b2f;
+  --color-crimson-500: #b5263c;
+
+  --color-brass-700: #765829;
+  --color-brass-600: #96753f;
+  --color-brass-500: #b8935a;
+  --color-brass-400: #cdae78;
+  --color-champagne-300: #e3cfa5;
+  --color-champagne-200: #eee1c5;
+  --color-champagne-100: #f6edd9;
+
+  --color-ivory-50: #fcfaf5;
+  --color-ivory-100: #f6f1e7;
+  --color-ivory-200: #eee7d9;
+  --color-ivory-300: #e1d8c6;
+
+  --color-taupe-700: #463c40;
+  --color-taupe-600: #5d5256;
+  --color-taupe-500: #786c70;
+  --color-taupe-400: #a3989b;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ------------------------------------------------------------------ */
+/* Dasar                                                                */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-ink-900);
+    color: var(--color-ink-900);
+    font-feature-settings: "kern", "liga", "calt";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-crimson-600);
+    color: var(--color-champagne-100);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brass-500);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  em {
+    font-style: italic;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Komponen                                                             */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 82rem;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .shell {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 64rem) {
+    .shell {
+      padding-inline: 3.5rem;
+    }
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    line-height: 1.02;
+    font-feature-settings: "kern", "liga", "dlig", "lnum";
+  }
+  .display em {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Angka bergaya huruf display, mis. statistik dan nomor lintasan */
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-feature-settings: "lnum", "tnum";
+    letter-spacing: -0.01em;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      background-color 0.4s var(--ease-out-expo),
+      border-color 0.4s var(--ease-out-expo),
+      color 0.4s var(--ease-out-expo),
+      transform 0.4s var(--ease-out-expo);
+  }
+  .btn svg {
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  .btn:hover svg {
+    transform: translate(3px, -3px);
+  }
+  .btn[data-arrow="down"]:hover svg {
+    transform: translateY(3px);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn-gold {
+    background: var(--color-champagne-300);
+    color: var(--color-ink-950);
+  }
+  .btn-gold:hover {
+    background: var(--color-champagne-100);
+  }
+  .btn-ink {
+    background: var(--color-ink-900);
+    color: var(--color-ivory-100);
+  }
+  .btn-ink:hover {
+    background: var(--color-oxblood-800);
+  }
+  .btn-line-light {
+    border: 1px solid color-mix(in srgb, var(--color-champagne-300) 38%, transparent);
+    color: var(--color-champagne-100);
+  }
+  .btn-line-light:hover {
+    border-color: var(--color-champagne-300);
+    background: color-mix(in srgb, var(--color-champagne-300) 8%, transparent);
+  }
+  .btn-line-dark {
+    border: 1px solid color-mix(in srgb, var(--color-ink-900) 24%, transparent);
+    color: var(--color-ink-900);
+  }
+  .btn-line-dark:hover {
+    border-color: var(--color-ink-900);
+    background: color-mix(in srgb, var(--color-ink-900) 4%, transparent);
+  }
+
+  /* Tautan teks dengan garis bawah yang "digambar" saat hover */
+  .link-draw {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    transition: background-size 0.5s var(--ease-out-expo);
+    padding-bottom: 2px;
+  }
+  .link-draw:hover {
+    background-position: 100% 100%;
+    background-size: 0% 1px;
+  }
+
+  /* Garis bawah yang baru muncul saat hover, untuk daftar tautan */
+  .link-reveal {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 0.5s var(--ease-out-expo);
+    padding-bottom: 2px;
+  }
+  a:hover > .link-reveal,
+  a:focus-visible > .link-reveal {
+    background-position: 0 100%;
+    background-size: 100% 1px;
+  }
+
+  /* Akordeon: tinggi beranimasi lewat grid-template-rows */
+  .accordion-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.55s var(--ease-out-expo);
+  }
+  .accordion-body[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+  .accordion-body > div {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* Tekstur butiran halus untuk bidang gelap */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+  }
+
+  /* Garis lintasan: delapan garis tipis sebagai pemisah bagian */
+  .lane-rule {
+    height: 29px;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      currentColor 0,
+      currentColor 1px,
+      transparent 1px,
+      transparent 4px
+    );
+    opacity: 0.16;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Gerak                                                                */
+/* ------------------------------------------------------------------ */
+
+/* Muncul saat masuk viewport. Hanya aktif bila JavaScript tersedia. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 1s var(--ease-out-expo),
+    transform 1s var(--ease-out-expo);
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, transform;
+}
+.js [data-reveal][data-visible] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Hero: baris judul naik dari balik "topeng" */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.line-mask > span {
+  display: block;
+  animation: line-rise 1.25s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes line-rise {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.fade-up {
+  animation: fade-up 1.1s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-in {
+  animation: fade-in 1.6s ease-out both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Lintasan atletik pada hero */
+.lane-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: lane-draw 2.6s var(--ease-out-expo) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes lane-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.lane-run {
+  stroke-dasharray: var(--len, 60) calc(1000 - var(--len, 60));
+  animation:
+    fade-in 1.2s ease-out both,
+    lane-run var(--t, 14s) linear infinite;
+  animation-delay: 1.8s, var(--o, 0s);
+}
+@keyframes lane-run {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+/* Panel yang berganti isi (tab, konsentrasi) */
+.swap-in {
+  animation: swap-in 0.7s var(--ease-out-expo) both;
+}
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .lane-run {
+    display: none;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
