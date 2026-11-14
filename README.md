@@ -55,6 +55,18 @@ secara relatif, sehingga situs juga berjalan di dalam sub-folder.
 | `npm run preview` | Menyajikan folder `dist/` untuk pemeriksaan akhir          |
 | `npm run lint`    | Pemeriksaan tipe TypeScript                                |
 
+## Hosting gratis
+
+**Vercel (disarankan).** Berkas `vercel.json` sudah disiapkan.
+
+1. Buka <https://vercel.com/new> dan masuk dengan akun GitHub.
+2. Pilih repo ini lalu klik **Deploy**; pengaturan build terbaca otomatis.
+3. Vercel memasang branch `main` sebagai situs produksi. Canonical URL dan `sitemap.xml`
+   terisi otomatis dari alamat produksi Vercel.
+
+**GitHub Pages.** Workflow `.github/workflows/pages.yml` memasang situs setiap ada push
+ke `main`. Aktifkan di **Settings > Pages > Source: GitHub Actions**.
+
 ## Memperbarui konten
 
 Seluruh isi halaman disimpan terpisah dari tampilan, di folder `src/data/`:

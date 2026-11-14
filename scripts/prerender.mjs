@@ -17,7 +17,9 @@ for (const file of ['.env.local', '.env']) {
   }
 }
 
-const siteUrl = (process.env.SITE_URL ?? '').trim().replace(/\/+$/, '');
+// Di Vercel, alamat produksi tersedia otomatis lewat VERCEL_PROJECT_PRODUCTION_URL.
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '';
+const siteUrl = (process.env.SITE_URL || vercelUrl).trim().replace(/\/+$/, '');
 
 const { render, structuredData } = await import(pathToFileURL(path.join(ssrDir, 'entry-server.js')).href);
 
