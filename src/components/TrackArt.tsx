@@ -43,8 +43,8 @@ export function TrackArt({ className = '' }: { className?: string }) {
     >
       <defs>
         <radialGradient id="infield" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stopColor="#9a1b2f" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="#9a1b2f" stopOpacity="0" />
+          <stop offset="0%" stopColor="#4a5cf0" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="#4a5cf0" stopOpacity="0" />
         </radialGradient>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="5" />
@@ -54,7 +54,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
       {/* Lapangan tengah */}
       <path d={stadium(R0 - 10)} fill="url(#infield)" />
       <g
-        stroke="#e3cfa5"
+        stroke="#cfdcff"
         strokeOpacity="0.16"
         strokeWidth="1"
         className="fade-in"
@@ -68,7 +68,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
       </g>
 
       {/* Garis lintasan */}
-      <g stroke="#e3cfa5" strokeWidth="1" strokeLinecap="round">
+      <g stroke="#cfdcff" strokeWidth="1" strokeLinecap="round">
         {lines.map((r, i) => (
           <path
             key={r}
@@ -88,7 +88,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
           y1={CY + R0}
           x2={FINISH_X}
           y2={CY + R0 + LANES * LANE}
-          stroke="#f6edd9"
+          stroke="#ffffff"
           strokeOpacity="0.7"
           strokeWidth="2"
         />
@@ -100,7 +100,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
             textAnchor="middle"
             fontSize="12"
             fontWeight="600"
-            fill="#e3cfa5"
+            fill="#cfdcff"
             fillOpacity="0.55"
             style={{ fontFamily: 'var(--font-sans)' }}
           >
@@ -109,7 +109,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
         ))}
 
         {/* Anotasi ukuran, seperti pada gambar teknik */}
-        <g fill="#e3cfa5" fillOpacity="0.5" fontSize="11" letterSpacing="2" style={{ fontFamily: 'var(--font-sans)' }}>
+        <g fill="#cfdcff" fillOpacity="0.5" fontSize="11" letterSpacing="2" style={{ fontFamily: 'var(--font-sans)' }}>
           <text x={CX} y={CY - R0 - LANES * LANE - 22} textAnchor="middle">
             84,39 M
           </text>
@@ -117,7 +117,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
             R 36,50 M
           </text>
         </g>
-        <g stroke="#e3cfa5" strokeOpacity="0.35" strokeWidth="1">
+        <g stroke="#cfdcff" strokeOpacity="0.35" strokeWidth="1">
           <line x1={CX - HALF} y1={CY - R0 - LANES * LANE - 14} x2={CX - 46} y2={CY - R0 - LANES * LANE - 14} />
           <line x1={CX + 46} y1={CY - R0 - LANES * LANE - 14} x2={CX + HALF} y2={CY - R0 - LANES * LANE - 14} />
           <line x1={CX - HALF} y1={CY - R0 - LANES * LANE - 19} x2={CX - HALF} y2={CY - R0 - LANES * LANE - 9} />
@@ -129,7 +129,7 @@ export function TrackArt({ className = '' }: { className?: string }) {
       {/* Jejak pelari */}
       {runners.map((runner) => {
         const d = stadium(laneCentre(runner.lane));
-        const stroke = runner.tone === 'crimson' ? '#d0364f' : '#f6edd9';
+        const stroke = runner.tone === 'crimson' ? '#f2c94c' : '#ffffff';
         const style = {
           '--len': runner.length,
           '--t': `${runner.duration}s`,

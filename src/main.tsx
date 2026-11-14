@@ -1,6 +1,4 @@
 import '@fontsource-variable/plus-jakarta-sans/wght.css';
-import '@fontsource-variable/cormorant-garamond/wght.css';
-import '@fontsource-variable/cormorant-garamond/wght-italic.css';
 import './index.css';
 
 import { StrictMode } from 'react';

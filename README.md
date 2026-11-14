@@ -7,20 +7,24 @@ pembelajaran, landasan keilmuan, staf pengajar, riset, dan informasi admisi.
 
 ## Sekilas
 
-- **Konsep visual "lintasan":** garis lintasan atletik 400 m menjadi motif utama, dari
-  ilustrasi hero hingga penomoran bagian 01 sampai 08.
-- **Tipografi:** Cormorant Garamond untuk judul dan Plus Jakarta Sans untuk teks, keduanya
-  dihos sendiri (tanpa permintaan ke pihak ketiga).
-- **Interaktif:** tab jenjang, penelusur kurikulum dengan pencarian, saringan dosen,
-  akordeon tanya jawab, menu seluler layar penuh, dan garis kemajuan baca.
+- **Tata letak:** mengikuti struktur laman Program Studi SPs UPI (bilah utilitas, menu
+  dropdown, banner, kisi kartu "Selengkapnya", kaki halaman tiga kolom), khusus untuk
+  Prodi Pendidikan Olahraga, dengan palet biru dan emas.
+- **Tipografi:** Plus Jakarta Sans, dihos sendiri (tanpa permintaan ke pihak ketiga).
+- **Animasi:** Framer Motion (`motion`) untuk kemunculan saat gulir, dropdown, menu
+  seluler, dan garis kemajuan baca; menghormati `prefers-reduced-motion`.
+- **Komponen UI:** `src/components/ui/` memuat number ticker, border beam, spotlight card,
+  dan dot pattern, ditulis mengikuti pola komponen sumber terbuka yang terdaftar di
+  21st.dev (Magic UI, Aceternity UI). Registri 21st.dev mewajibkan login, sehingga
+  komponen tidak diunduh lewat `npx shadcn add`.
+- **Interaktif:** tab jenjang, penelusur kurikulum dengan pencarian, saringan dosen, dan
+  akordeon tanya jawab.
 - **SEO:** HTML diprerender saat build, lengkap dengan meta Open Graph, data terstruktur
   schema.org (organisasi, program, FAQ), `robots.txt`, dan `sitemap.xml`.
-- **Aksesibilitas:** struktur judul berurutan, navigasi papan ketik, tautan lompat ke
-  konten, dan dukungan `prefers-reduced-motion`.
 
 ## Teknologi
 
-React 19, TypeScript, Vite 6, dan Tailwind CSS 4. Tidak ada backend; hasil build berupa
+React 19, TypeScript, Vite 6, Tailwind CSS 4, dan Framer Motion. Tidak ada backend; hasil build berupa
 berkas statis di folder `dist/`.
 
 ## Menjalankan di komputer sendiri

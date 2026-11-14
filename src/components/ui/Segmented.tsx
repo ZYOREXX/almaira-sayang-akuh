@@ -69,7 +69,7 @@ export function Segmented<T extends string>({
     refs.current[next]?.focus();
   };
 
-  const activeFill = dark ? 'bg-champagne-300' : 'bg-ink-900';
+  const activeFill = dark ? 'bg-sun-300' : 'bg-navy-900';
 
   return (
     <div
@@ -77,7 +77,7 @@ export function Segmented<T extends string>({
       aria-label={label}
       onKeyDown={onKeyDown}
       className={`relative inline-flex rounded-full p-1 ${
-        dark ? 'bg-ivory-50/[0.06] ring-1 ring-champagne-300/20' : 'bg-ink-900/[0.05] ring-1 ring-ink-900/10'
+        dark ? 'bg-paper-50/[0.06] ring-1 ring-sun-300/20' : 'bg-navy-900/[0.05] ring-1 ring-navy-900/10'
       } ${className}`}
     >
       {pill ? (
@@ -103,10 +103,10 @@ export function Segmented<T extends string>({
             onClick={() => onChange(option.value)}
             className={`relative z-10 rounded-full px-5 py-2.5 text-[0.8125rem] font-semibold whitespace-nowrap transition-colors duration-300 sm:px-6 ${
               selected
-                ? `${dark ? 'text-ink-950' : 'text-ivory-50'} ${pill ? '' : activeFill}`
+                ? `${dark ? 'text-navy-950' : 'text-paper-50'} ${pill ? '' : activeFill}`
                 : dark
-                  ? 'text-ivory-200/70 hover:text-ivory-50'
-                  : 'text-taupe-600 hover:text-ink-900'
+                  ? 'text-paper-200/70 hover:text-paper-50'
+                  : 'text-mute-600 hover:text-navy-900'
             }`}
           >
             {option.label}

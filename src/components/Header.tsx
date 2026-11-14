@@ -1,69 +1,23 @@
-import { ArrowUpRight, Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Instagram, Mail, Menu, X } from 'lucide-react';
+import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { primaryNav, sections, site } from '../data/site';
+import { navGroups, site } from '../data/site';
 import { Emblem } from './ui/Emblem';
-
-const navItems = sections.filter((s) => primaryNav.includes(s.id));
-
-/** Menandai bagian yang sedang dibaca agar tautan navigasi ikut menyala. */
-function useActiveSection(ids: string[]): string | null {
-  const [active, setActive] = useState<string | null>(null);
-
-  useEffect(() => {
-    const elements = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
-    if (!elements.length || !('IntersectionObserver' in window)) return;
-
-    const visible = new Map<string, number>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) visible.set(entry.target.id, entry.intersectionRatio);
-          else visible.delete(entry.target.id);
-        }
-        // Bagian teratas yang terlihat dianggap aktif.
-        const current = ids.find((id) => visible.has(id)) ?? null;
-        setActive(current);
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    );
-    elements.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [ids]);
-
-  return active;
-}
-
-const allIds = sections.map((s) => s.id);
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const progressRef = useRef<HTMLSpanElement>(null);
+  const [menu, setMenu] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const active = useActiveSection(allIds);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 });
 
   useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const y = window.scrollY;
-      setScrolled(y > 24);
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (progressRef.current) {
-        progressRef.current.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
-      }
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    update();
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      if (frame) cancelAnimationFrame(frame);
-    };
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -83,7 +37,6 @@ export function Header() {
     };
   }, [open]);
 
-  // Tutup menu bila layar melebar ke tata letak desktop.
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 64rem)');
     const onChange = () => mq.matches && setOpen(false);
@@ -91,156 +44,271 @@ export function Header() {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  const solid = scrolled && !open;
-
   return (
     <>
-      <header
-        className={`no-print fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,color] duration-500 ${
-          solid
-            ? 'border-b border-ink-900/10 bg-ivory-100/85 text-ink-900 backdrop-blur-xl backdrop-saturate-150'
-            : 'border-b border-transparent text-ivory-50'
-        }`}
-      >
-        <div className="shell flex h-[4.5rem] items-center justify-between gap-6 lg:h-20">
-          <a
-            href="#beranda"
-            className="group flex min-w-0 items-center gap-3"
-            aria-label={`${site.name} ${site.school} ${site.universityShort}, kembali ke awal halaman`}
-            onClick={() => setOpen(false)}
-          >
-            <Emblem
-              className={`size-10 shrink-0 transition-colors duration-500 ${solid ? 'text-crimson-600' : 'text-champagne-300'}`}
-            />
-            <span className="min-w-0 leading-none">
-              <span className="display block truncate text-[1.375rem] tracking-[-0.01em]">{site.shortName}</span>
-              <span
-                className={`eyebrow mt-1 block truncate text-[0.5625rem] tracking-[0.2em] transition-colors duration-500 ${
-                  solid ? 'text-taupe-600' : 'text-champagne-200/75'
-                }`}
-              >
-                {site.school} {site.universityShort}
-              </span>
-            </span>
-          </a>
-
-          <nav aria-label="Navigasi utama" className="hidden lg:block">
-            <ul className="flex items-center gap-8 xl:gap-10">
-              {navItems.map((item) => {
-                const isActive = active === item.id;
-                return (
-                  <li key={item.id}>
-                    <a
-                      href={`#${item.id}`}
-                      aria-current={isActive ? 'location' : undefined}
-                      className="group relative block py-2 text-[0.8125rem] font-medium tracking-[0.02em]"
-                    >
-                      <span
-                        className={`transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}
-                      >
-                        {item.label}
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className={`absolute inset-x-0 -bottom-0.5 h-px origin-left transition-transform duration-500 ease-out-expo ${
-                          solid ? 'bg-crimson-600' : 'bg-champagne-300'
-                        } ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-                      />
-                    </a>
-                  </li>
-                );
-              })}
+      <header className="no-print fixed inset-x-0 top-0 z-50">
+        {/* Bilah utilitas */}
+        <div
+          className={`hidden overflow-hidden bg-navy-900 text-paper-200 transition-[max-height] duration-500 ease-out-expo lg:block ${
+            scrolled ? 'max-h-0' : 'max-h-10'
+          }`}
+        >
+          <div className="shell flex h-10 items-center justify-between text-[0.75rem]">
+            <p className="tracking-wide text-paper-200/80">
+              {site.school} · {site.university}
+            </p>
+            <ul className="flex items-center gap-6">
+              <li>
+                <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2 hover:text-sun-300">
+                  <Mail className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                  {site.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={site.instagram.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 hover:text-sun-300"
+                >
+                  <Instagram className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                  {site.instagram.handle}
+                </a>
+              </li>
+              <li>
+                <a href={site.links.sps} target="_blank" rel="noopener noreferrer" className="hover:text-sun-300">
+                  Laman SPs UPI
+                </a>
+              </li>
             </ul>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <a
-              href={site.links.admisi}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`btn hidden min-h-11 px-5 py-2 sm:inline-flex ${solid ? 'btn-ink' : 'btn-line-light'}`}
-            >
-              Daftar
-              <ArrowUpRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
-              <span className="sr-only">(membuka portal admisi UPI di tab baru)</span>
-            </a>
-            <button
-              ref={toggleRef}
-              type="button"
-              className={`grid size-11 place-items-center rounded-full border transition-colors duration-300 lg:hidden ${
-                solid ? 'border-ink-900/15 hover:border-ink-900/40' : 'border-ivory-50/25 hover:border-ivory-50/60'
-              }`}
-              aria-expanded={open}
-              aria-controls="menu-seluler"
-              aria-label={open ? 'Tutup menu' : 'Buka menu'}
-              onClick={() => setOpen((v) => !v)}
-            >
-              {open ? (
-                <X className="size-5" strokeWidth={1.5} aria-hidden="true" />
-              ) : (
-                <Menu className="size-5" strokeWidth={1.5} aria-hidden="true" />
-              )}
-            </button>
           </div>
         </div>
 
-        {/* Garis kemajuan baca */}
-        <span
-          ref={progressRef}
-          aria-hidden="true"
-          className={`absolute inset-x-0 bottom-[-1px] h-px origin-left bg-crimson-600 transition-opacity duration-500 ${
-            solid ? 'opacity-100' : 'opacity-0'
+        {/* Navigasi utama */}
+        <div
+          className={`relative border-b bg-paper-50/90 text-navy-900 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-500 ${
+            scrolled || open ? 'border-navy-900/10 shadow-[0_8px_30px_-12px_rgba(10,18,48,0.18)]' : 'border-transparent'
           }`}
-          style={{ transform: 'scaleX(0)' }}
-        />
+        >
+          <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
+            <a
+              href="#beranda"
+              className="flex min-w-0 items-center gap-3"
+              aria-label={`${site.name} ${site.school} ${site.universityShort}, kembali ke awal halaman`}
+              onClick={() => setOpen(false)}
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-royal-500 to-deep-900 text-sun-300 shadow-lg shadow-royal-600/25">
+                <Emblem className="size-8" />
+              </span>
+              <span className="min-w-0 leading-none">
+                <span className="display block truncate text-[1.0625rem]">{site.shortName}</span>
+                <span className="mt-1.5 block truncate text-[0.6875rem] font-medium tracking-wide text-mute-500">
+                  {site.school} {site.universityShort}
+                </span>
+              </span>
+            </a>
+
+            <nav aria-label="Navigasi utama" className="hidden lg:block" onMouseLeave={() => setMenu(null)}>
+              <ul className="flex items-center gap-1">
+                {navGroups.map((group) => {
+                  const isOpen = menu === group.label;
+                  return (
+                    <li
+                      key={group.label}
+                      className="relative"
+                      onMouseEnter={() => setMenu(group.children ? group.label : null)}
+                    >
+                      {group.children ? (
+                        <button
+                          type="button"
+                          aria-expanded={isOpen}
+                          aria-haspopup="true"
+                          onClick={() => setMenu(isOpen ? null : group.label)}
+                          onKeyDown={(e) => e.key === 'Escape' && setMenu(null)}
+                          className={`inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.875rem] font-semibold transition-colors duration-300 ${
+                            isOpen ? 'bg-royal-600/8 text-royal-600' : 'hover:bg-navy-900/5'
+                          }`}
+                        >
+                          {group.label}
+                          <ChevronDown
+                            className={`size-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                            strokeWidth={2}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      ) : (
+                        <a
+                          href={group.href}
+                          className="inline-flex rounded-full px-3.5 py-2 text-[0.875rem] font-semibold transition-colors duration-300 hover:bg-navy-900/5"
+                        >
+                          {group.label}
+                        </a>
+                      )}
+                      <AnimatePresence>
+                        {group.children && isOpen ? (
+                          <motion.div
+                            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                            className="absolute top-full left-1/2 w-80 -translate-x-1/2 pt-3"
+                          >
+                            <ul className="rounded-2xl bg-paper-50 p-2 shadow-[0_24px_60px_-20px_rgba(10,18,48,0.35)] ring-1 ring-navy-900/10">
+                              {group.children.map((child) => (
+                                <li key={child.href + child.label}>
+                                  <a
+                                    href={child.href}
+                                    onClick={() => setMenu(null)}
+                                    className="group flex items-center justify-between gap-4 rounded-xl px-4 py-3 transition-colors duration-200 hover:bg-paper-200"
+                                  >
+                                    <span>
+                                      <span className="block text-[0.875rem] font-semibold">{child.label}</span>
+                                      <span className="mt-0.5 block text-[0.75rem] text-mute-500">{child.hint}</span>
+                                    </span>
+                                    <ArrowUpRight
+                                      className="size-4 shrink-0 text-royal-600 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                                      strokeWidth={1.75}
+                                      aria-hidden="true"
+                                    />
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <a
+                href={site.links.admisi}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-royal hidden min-h-11 px-5 py-2 sm:inline-flex"
+              >
+                Daftar
+                <ArrowUpRight className="size-4" strokeWidth={2} aria-hidden="true" />
+                <span className="sr-only">(membuka portal admisi UPI di tab baru)</span>
+              </a>
+              <button
+                ref={toggleRef}
+                type="button"
+                className="grid size-11 place-items-center rounded-full border border-navy-900/15 transition-colors duration-300 hover:border-navy-900/40 lg:hidden"
+                aria-expanded={open}
+                aria-controls="menu-seluler"
+                aria-label={open ? 'Tutup menu' : 'Buka menu'}
+                onClick={() => setOpen((v) => !v)}
+              >
+                {open ? (
+                  <X className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                ) : (
+                  <Menu className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Garis kemajuan baca */}
+          <motion.span
+            aria-hidden="true"
+            className="absolute inset-x-0 -bottom-px h-0.5 origin-left bg-gradient-to-r from-royal-600 via-royal-500 to-sun-300"
+            style={{ scaleX: progress }}
+          />
+        </div>
       </header>
 
-      {/* Menu seluler layar penuh */}
-      <div
-        id="menu-seluler"
-        className={`no-print grain fixed inset-0 z-40 overflow-y-auto bg-ink-900 text-ivory-50 transition-[opacity,visibility] duration-500 lg:hidden ${
-          open ? 'visible opacity-100' : 'invisible opacity-0'
-        }`}
-        aria-hidden={!open}
-      >
-        <nav aria-label="Navigasi seluler" className="shell relative flex min-h-full flex-col pt-28 pb-10">
-          <ul className="border-t border-ivory-50/10">
-            {sections.map((item, i) => (
-              <li key={item.id} className="border-b border-ivory-50/10">
-                <a
-                  href={`#${item.id}`}
-                  tabIndex={open ? 0 : -1}
-                  onClick={() => setOpen(false)}
-                  className="flex items-baseline gap-5 py-4 transition-[opacity,transform] duration-700 ease-out-expo"
-                  style={{
-                    transitionDelay: open ? `${80 + i * 45}ms` : '0ms',
-                    opacity: open ? 1 : 0,
-                    transform: open ? 'none' : 'translate3d(0, 14px, 0)',
-                  }}
-                >
-                  <span className="numeral w-7 text-base italic text-champagne-300">{item.index}</span>
-                  <span className="display text-[2rem]">{item.label}</span>
+      {/* Menu seluler */}
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            id="menu-seluler"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="no-print fixed inset-0 z-40 overflow-y-auto bg-paper-50 text-navy-900 lg:hidden"
+          >
+            <nav aria-label="Navigasi seluler" className="shell flex min-h-full flex-col pt-24 pb-8">
+              <ul className="divide-y divide-navy-900/10 border-y border-navy-900/10">
+                {navGroups.map((group, i) => {
+                  const isExpanded = expanded === group.label;
+                  return (
+                    <motion.li
+                      key={group.label}
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.05 + i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      {group.children ? (
+                        <>
+                          <button
+                            type="button"
+                            aria-expanded={isExpanded}
+                            onClick={() => setExpanded(isExpanded ? null : group.label)}
+                            className="display flex w-full items-center justify-between py-4 text-left text-[1.375rem]"
+                          >
+                            {group.label}
+                            <ChevronDown
+                              className={`size-5 text-mute-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                              strokeWidth={1.75}
+                              aria-hidden="true"
+                            />
+                          </button>
+                          <AnimatePresence initial={false}>
+                            {isExpanded ? (
+                              <motion.ul
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                                className="overflow-hidden"
+                              >
+                                {group.children.map((child) => (
+                                  <li key={child.href + child.label}>
+                                    <a
+                                      href={child.href}
+                                      onClick={() => setOpen(false)}
+                                      className="block rounded-xl px-4 py-3 text-[0.9375rem] font-medium text-mute-700 hover:bg-paper-200"
+                                    >
+                                      {child.label}
+                                    </a>
+                                  </li>
+                                ))}
+                                <li aria-hidden="true" className="h-3" />
+                              </motion.ul>
+                            ) : null}
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <a
+                          href={group.href}
+                          onClick={() => setOpen(false)}
+                          className="display block py-4 text-[1.375rem]"
+                        >
+                          {group.label}
+                        </a>
+                      )}
+                    </motion.li>
+                  );
+                })}
+              </ul>
+              <div className="mt-auto flex flex-col gap-4 pt-8">
+                <a href={site.links.admisi} target="_blank" rel="noopener noreferrer" className="btn btn-royal w-full">
+                  Portal Admisi UPI
+                  <ArrowUpRight className="size-4" strokeWidth={2} aria-hidden="true" />
                 </a>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-auto flex flex-col gap-4 pt-10">
-            <a
-              href={site.links.admisi}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabIndex={open ? 0 : -1}
-              className="btn btn-gold w-full"
-            >
-              Portal Admisi UPI
-              <ArrowUpRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
-            </a>
-            <a href={`mailto:${site.email}`} tabIndex={open ? 0 : -1} className="text-center text-sm text-ivory-200/70">
-              {site.email}
-            </a>
-          </div>
-        </nav>
-      </div>
+                <a href={`mailto:${site.email}`} className="text-center text-sm text-mute-600">
+                  {site.email}
+                </a>
+              </div>
+            </nav>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }

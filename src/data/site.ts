@@ -52,13 +52,81 @@ export const sections: NavItem[] = [
   { id: 'admisi', label: 'Admisi', index: '08' },
 ];
 
-/** Tautan yang tampil di bilah navigasi desktop (ringkas). */
-export const primaryNav = ['profil', 'program', 'kurikulum', 'dosen', 'riset', 'admisi'];
+export type NavGroup = { label: string; href: string; children?: { label: string; href: string; hint: string }[] };
 
+/** Menu utama, disusun seperti navigasi laman Sekolah Pascasarjana UPI. */
+export const navGroups: NavGroup[] = [
+  { label: 'Beranda', href: '#beranda' },
+  {
+    label: 'Profil',
+    href: '#profil',
+    children: [
+      { label: 'Tentang Prodi', href: '#profil', hint: 'Sejarah singkat dan akreditasi' },
+      { label: 'Visi & Misi', href: '#visi-misi', hint: 'Arah jenjang Magister dan Doktor' },
+    ],
+  },
+  {
+    label: 'Akademik',
+    href: '#program',
+    children: [
+      { label: 'Program & Jalur Studi', href: '#program', hint: 'S2, S3, Reguler, dan by research' },
+      { label: 'Konsentrasi Keahlian', href: '#konsentrasi', hint: 'PJOr, PKO, IKOr, dan MOr' },
+      { label: 'Kurikulum', href: '#kurikulum', hint: 'Penelusur mata kuliah dan sks' },
+      { label: 'Capaian Pembelajaran', href: '#cpl', hint: 'Sikap, pengetahuan, keterampilan' },
+      { label: 'Landasan Keilmuan', href: '#landasan', hint: 'Teori dan rujukan primer' },
+    ],
+  },
+  { label: 'Dosen', href: '#dosen' },
+  { label: 'Riset', href: '#riset' },
+  {
+    label: 'Admisi',
+    href: '#admisi',
+    children: [
+      { label: 'Alur Pendaftaran', href: '#admisi', hint: 'Lima langkah mendaftar' },
+      { label: 'Persyaratan & Biaya', href: '#persyaratan', hint: 'Syarat, skor bahasa, biaya' },
+      { label: 'Tanya Jawab', href: '#faq', hint: 'Pertanyaan yang sering muncul' },
+    ],
+  },
+  { label: 'Kontak', href: '#kontak' },
+];
+
+/** Angka kunci pada beranda. `number` dianimasikan, `text` ditampilkan apa adanya. */
 export const heroStats = [
-  { value: '1997', label: 'Jenjang Magister berdiri' },
-  { value: '2005', label: 'Jenjang Doktor berdiri' },
-  { value: 'Unggul', label: 'Peringkat akreditasi LAMDIK' },
-  { value: 'AQAS', label: 'Akreditasi internasional' },
-  { value: '4', label: 'Konsentrasi keahlian' },
+  { number: 1997, from: 1950, label: 'Jenjang Magister berdiri' },
+  { number: 2005, from: 1950, label: 'Jenjang Doktor berdiri' },
+  { text: 'Unggul', label: 'Akreditasi LAMDIK' },
+  { text: 'AQAS', label: 'Akreditasi internasional' },
+  { number: 4, from: 0, label: 'Konsentrasi keahlian' },
+  { number: 16, from: 0, label: 'Staf pengajar' },
 ] as const;
+
+/** Kartu jelajah, padanan kisi "Program Studi" pada laman SPs UPI. */
+export const hubCards = [
+  { id: 'profil', title: 'Profil Prodi', text: 'Sejarah, akreditasi, dan pengelola program studi.' },
+  { id: 'visi-misi', title: 'Visi & Misi', text: 'Arah pengembangan jenjang Magister dan Doktor.' },
+  { id: 'program', title: 'Program & Jalur', text: 'Fakta kunci S2 dan S3 serta dua jalur studi.' },
+  { id: 'konsentrasi', title: 'Konsentrasi Keahlian', text: 'Empat peminatan beserta mata kuliah pilihannya.' },
+  { id: 'kurikulum', title: 'Kurikulum', text: 'Telusuri mata kuliah, bobot sks, dan semester.' },
+  { id: 'dosen', title: 'Staf Pengajar', text: 'Sebelas guru besar dan lima doktor.' },
+  { id: 'riset', title: 'Riset & Jejaring', text: 'Sorotan penelitian dan agenda internasional.' },
+  { id: 'admisi', title: 'Admisi', text: 'Alur pendaftaran, persyaratan, dan biaya.' },
+] as const;
+
+export const academicLinks = [
+  { label: 'SPOT', href: 'https://spot.upi.edu/' },
+  { label: 'SPADA', href: 'https://spada.upi.edu/' },
+  { label: 'Portal SIAK Mahasiswa', href: 'https://student.upi.edu/' },
+  { label: 'Siptama', href: 'https://siptama-sps.upi.edu/' },
+  { label: 'Portal Kurikulum', href: 'https://kurikulum.upi.edu/struktur/prodi/P136' },
+  { label: 'Mandala', href: 'https://mandala.upi.edu/' },
+];
+
+export const universityLinks = [
+  { label: 'Website Utama UPI', href: 'https://www.upi.edu/' },
+  { label: 'Sekolah Pascasarjana UPI', href: 'https://sps.upi.edu/' },
+  { label: 'Laman Prodi di SPs UPI', href: 'https://sps.upi.edu/por/' },
+  { label: 'Penerimaan Mahasiswa Baru', href: 'https://pmb.upi.edu/' },
+  { label: 'Perpustakaan', href: 'https://perpustakaan.upi.edu/' },
+  { label: 'Portal Jurnal', href: 'https://ejournal.upi.edu/' },
+  { label: 'Repository', href: 'http://repository.upi.edu/' },
+];

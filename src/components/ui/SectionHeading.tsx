@@ -29,19 +29,19 @@ export function SectionHeading({
     <header className={className}>
       <Reveal className="flex items-center gap-4">
         <span
-          className={`numeral text-[1.375rem] italic leading-none ${dark ? 'text-champagne-300' : 'text-crimson-600'}`}
+          className={`numeral text-[1.375rem] italic leading-none ${dark ? 'text-sun-300' : 'text-royal-600'}`}
           aria-hidden="true"
         >
           {index}
         </span>
-        <span className={`h-px w-10 ${dark ? 'bg-champagne-300/40' : 'bg-ink-900/25'}`} aria-hidden="true" />
-        <span className={`eyebrow ${dark ? 'text-champagne-200/80' : 'text-taupe-600'}`}>{eyebrow}</span>
+        <span className={`h-px w-10 ${dark ? 'bg-sun-300/40' : 'bg-navy-900/25'}`} aria-hidden="true" />
+        <span className={`eyebrow ${dark ? 'text-sun-200/80' : 'text-mute-600'}`}>{eyebrow}</span>
       </Reveal>
       <Reveal delay={80}>
         <h2
           id={id}
-          className={`display mt-6 text-[clamp(2.375rem,4.6vw,4rem)] text-balance ${
-            dark ? 'text-ivory-50 [&_em]:text-champagne-300' : 'text-ink-900 [&_em]:text-crimson-600'
+          className={`display mt-6 text-[clamp(1.875rem,3.4vw,2.875rem)] text-balance ${
+            dark ? 'text-paper-50 [&_em]:text-sun-300' : 'text-navy-900 [&_em]:text-royal-600'
           }`}
         >
           {title}
@@ -51,7 +51,7 @@ export function SectionHeading({
         <Reveal delay={160}>
           <p
             className={`mt-6 max-w-[38rem] text-[1.0625rem] leading-[1.75] text-pretty ${
-              dark ? 'text-ivory-200/75' : 'text-taupe-600'
+              dark ? 'text-paper-200/75' : 'text-mute-600'
             }`}
           >
             {lead}

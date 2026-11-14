@@ -6,38 +6,37 @@
 @theme {
   --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui,
     -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Cormorant Garamond Variable", "Cormorant Garamond", "Iowan Old Style",
-    "Palatino Linotype", Georgia, serif;
+  --font-display: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --color-ink-950: #0b0708;
-  --color-ink-900: #130c0e;
-  --color-ink-800: #1c1215;
-  --color-ink-700: #2a1c20;
+  --color-navy-950: #050a1c;
+  --color-navy-900: #0a1230;
+  --color-navy-800: #121d47;
+  --color-navy-700: #1c2b62;
 
-  --color-oxblood-950: #24070d;
-  --color-oxblood-900: #3a0b15;
-  --color-oxblood-800: #53101d;
-  --color-oxblood-700: #6e1526;
-  --color-crimson-600: #9a1b2f;
-  --color-crimson-500: #b5263c;
+  --color-deep-950: #0a163f;
+  --color-deep-900: #0f2166;
+  --color-deep-800: #162e8a;
+  --color-deep-700: #1d3ba8;
+  --color-royal-600: #2a3fd6;
+  --color-royal-500: #4a5cf0;
 
-  --color-brass-700: #765829;
-  --color-brass-600: #96753f;
-  --color-brass-500: #b8935a;
-  --color-brass-400: #cdae78;
-  --color-champagne-300: #e3cfa5;
-  --color-champagne-200: #eee1c5;
-  --color-champagne-100: #f6edd9;
+  --color-gold-700: #7c5a0c;
+  --color-gold-600: #9d7412;
+  --color-gold-500: #c99a2e;
+  --color-gold-400: #e0b548;
+  --color-sun-300: #f5cf58;
+  --color-sun-200: #f9e08f;
+  --color-sun-100: #fdf1c8;
 
-  --color-ivory-50: #fcfaf5;
-  --color-ivory-100: #f6f1e7;
-  --color-ivory-200: #eee7d9;
-  --color-ivory-300: #e1d8c6;
+  --color-paper-50: #ffffff;
+  --color-paper-100: #f6f8fd;
+  --color-paper-200: #edf1fa;
+  --color-paper-300: #dbe3f3;
 
-  --color-taupe-700: #463c40;
-  --color-taupe-600: #5d5256;
-  --color-taupe-500: #786c70;
-  --color-taupe-400: #a3989b;
+  --color-mute-700: #334155;
+  --color-mute-600: #475569;
+  --color-mute-500: #64748b;
+  --color-mute-400: #94a3b8;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
@@ -49,15 +48,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
+    scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
 
   body {
     font-family: var(--font-sans);
-    background: var(--color-ink-900);
-    color: var(--color-ink-900);
+    background: var(--color-paper-100);
+    color: var(--color-navy-900);
     font-feature-settings: "kern", "liga", "calt";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -66,12 +65,12 @@
   }
 
   ::selection {
-    background: var(--color-crimson-600);
-    color: var(--color-champagne-100);
+    background: var(--color-royal-600);
+    color: var(--color-sun-100);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-brass-500);
+    outline: 2px solid var(--color-gold-500);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -116,22 +115,21 @@
 
   .display {
     font-family: var(--font-display);
-    font-weight: 500;
-    letter-spacing: -0.018em;
-    line-height: 1.02;
-    font-feature-settings: "kern", "liga", "dlig", "lnum";
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
   }
   .display em {
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-style: normal;
   }
 
   /* Angka bergaya huruf display, mis. statistik dan nomor lintasan */
   .numeral {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-feature-settings: "lnum", "tnum";
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    font-style: normal !important;
+    font-feature-settings: "tnum";
+    letter-spacing: -0.03em;
   }
 
   .btn {
@@ -159,41 +157,49 @@
   .btn:hover svg {
     transform: translate(3px, -3px);
   }
-  .btn[data-arrow="down"]:hover svg {
-    transform: translateY(3px);
+  .btn[data-arrow="right"]:hover svg {
+    transform: translateX(4px);
   }
   .btn:active {
     transform: scale(0.98);
   }
   .btn-gold {
-    background: var(--color-champagne-300);
-    color: var(--color-ink-950);
+    background: var(--color-sun-300);
+    color: var(--color-navy-950);
   }
   .btn-gold:hover {
-    background: var(--color-champagne-100);
+    background: var(--color-sun-100);
+  }
+  .btn-royal {
+    background: linear-gradient(135deg, var(--color-royal-500), var(--color-royal-600));
+    color: #fff;
+    box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--color-royal-600) 70%, transparent);
+  }
+  .btn-royal:hover {
+    background: linear-gradient(135deg, var(--color-royal-600), var(--color-deep-700));
   }
   .btn-ink {
-    background: var(--color-ink-900);
-    color: var(--color-ivory-100);
+    background: var(--color-navy-900);
+    color: var(--color-paper-100);
   }
   .btn-ink:hover {
-    background: var(--color-oxblood-800);
+    background: var(--color-deep-800);
   }
   .btn-line-light {
-    border: 1px solid color-mix(in srgb, var(--color-champagne-300) 38%, transparent);
-    color: var(--color-champagne-100);
+    border: 1px solid color-mix(in srgb, var(--color-sun-300) 38%, transparent);
+    color: var(--color-sun-100);
   }
   .btn-line-light:hover {
-    border-color: var(--color-champagne-300);
-    background: color-mix(in srgb, var(--color-champagne-300) 8%, transparent);
+    border-color: var(--color-sun-300);
+    background: color-mix(in srgb, var(--color-sun-300) 8%, transparent);
   }
   .btn-line-dark {
-    border: 1px solid color-mix(in srgb, var(--color-ink-900) 24%, transparent);
-    color: var(--color-ink-900);
+    border: 1px solid color-mix(in srgb, var(--color-navy-900) 24%, transparent);
+    color: var(--color-navy-900);
   }
   .btn-line-dark:hover {
-    border-color: var(--color-ink-900);
-    background: color-mix(in srgb, var(--color-ink-900) 4%, transparent);
+    border-color: var(--color-navy-900);
+    background: color-mix(in srgb, var(--color-navy-900) 4%, transparent);
   }
 
   /* Tautan teks dengan garis bawah yang "digambar" saat hover */
@@ -268,22 +274,6 @@
 /* ------------------------------------------------------------------ */
 /* Gerak                                                                */
 /* ------------------------------------------------------------------ */
-
-/* Muncul saat masuk viewport. Hanya aktif bila JavaScript tersedia. */
-.js [data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, 26px, 0);
-  transition:
-    opacity 1s var(--ease-out-expo),
-    transform 1s var(--ease-out-expo);
-  transition-delay: var(--d, 0ms);
-  will-change: opacity, transform;
-}
-.js [data-reveal][data-visible] {
-  opacity: 1;
-  transform: none;
-  will-change: auto;
-}
 
 /* Hero: baris judul naik dari balik "topeng" */
 .line-mask {
@@ -390,10 +380,6 @@
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
   }
-  .js [data-reveal] {
-    opacity: 1;
-    transform: none;
-  }
   .lane-run {
     display: none;
   }
@@ -403,8 +389,39 @@
   .no-print {
     display: none !important;
   }
-  .js [data-reveal] {
+  [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* Efek kilau melingkar pada tepi kartu (border beam) */
+@keyframes border-beam {
+  to {
+    offset-distance: 100%;
+  }
+}
+.border-beam {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  mask:
+    linear-gradient(transparent, transparent),
+    linear-gradient(white, white);
+  mask-clip: padding-box, border-box;
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+.border-beam::after {
+  content: "";
+  position: absolute;
+  aspect-ratio: 1;
+  width: var(--size);
+  background: linear-gradient(to left, var(--color-from), var(--color-to), transparent);
+  offset-anchor: 90% 50%;
+  offset-path: rect(0 auto auto 0 round var(--size));
+  animation: border-beam var(--duration) linear infinite;
+  animation-delay: var(--delay);
 }

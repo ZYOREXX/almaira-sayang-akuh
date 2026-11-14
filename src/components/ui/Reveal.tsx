@@ -1,24 +1,5 @@
-import { createElement, useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
-
-let observer: IntersectionObserver | null = null;
-
-function getObserver(): IntersectionObserver | null {
-  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return null;
-  if (!observer) {
-    observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.setAttribute('data-visible', '');
-            observer?.unobserve(entry.target);
-          }
-        }
-      },
-      { rootMargin: '0px 0px -7% 0px', threshold: 0.06 },
-    );
-  }
-  return observer;
-}
+import { motion } from 'motion/react';
+import type { ReactNode } from 'react';
 
 type RevealProps = {
   as?: 'div' | 'section' | 'article' | 'li' | 'p' | 'header' | 'figure' | 'aside';
@@ -28,30 +9,19 @@ type RevealProps = {
   children: ReactNode;
 };
 
-/** Membungkus konten agar muncul halus ketika masuk ke area pandang. */
+/** Muncul dengan efek blur-fade (Framer Motion) ketika elemen masuk ke area pandang. */
 export function Reveal({ as = 'div', delay = 0, className, children }: RevealProps) {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = getObserver();
-    if (!io) {
-      el.setAttribute('data-visible', '');
-      return;
-    }
-    io.observe(el);
-    return () => io.unobserve(el);
-  }, []);
-
-  return createElement(
-    as,
-    {
-      ref,
-      'data-reveal': '',
-      className,
-      style: delay ? ({ '--d': `${delay}ms` } as CSSProperties) : undefined,
-    },
-    children,
+  const Component = motion[as];
+  return (
+    <Component
+      data-reveal=""
+      className={className}
+      initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '0px 0px -7% 0px', amount: 0.05 }}
+      transition={{ duration: 0.8, delay: delay / 1000, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </Component>
   );
 }
