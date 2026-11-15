@@ -7,8 +7,8 @@ import { Reveal } from './ui/Reveal';
 function LinkList({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <nav aria-label={title}>
-      <h3 className="display text-[1.125rem] text-paper-50">{title}</h3>
-      <ul className="mt-5 space-y-3 text-[0.9063rem] text-paper-200/80">
+      <h3 className="eyebrow text-mute-500">{title}</h3>
+      <ul className="mt-5 space-y-3 text-[0.9063rem] text-mute-600">
         {links.map((link) => (
           <li key={link.href}>
             <a
@@ -33,17 +33,17 @@ export function Contact() {
     <footer id="kontak" className="relative bg-paper-100 pt-20 lg:pt-28">
       {/* Ajakan penutup */}
       <div className="shell relative z-10">
-        <Reveal className="grain relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#1d6fd0] via-royal-600 to-deep-950 px-6 py-14 text-center text-paper-50 shadow-[0_40px_90px_-40px_rgba(15,33,102,0.75)] sm:px-12 lg:py-20">
+        <Reveal className="grain relative isolate overflow-hidden rounded-[2rem] bg-paper-50 ring-1 ring-navy-900/12 px-6 py-14 text-center text-navy-900 shadow-[0_40px_90px_-40px_rgba(0,0,0,0.9)] sm:px-12 lg:py-20">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(55%_80%_at_50%_0%,rgba(245,207,88,0.22),transparent_65%)]"
+            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(55%_80%_at_50%_0%,rgba(226,176,74,0.14),transparent_65%)]"
           />
           <BorderBeam size={300} duration={14} />
-          <p className="eyebrow relative text-sun-200">Mulai dari sini</p>
+          <p className="eyebrow relative text-royal-600">Mulai dari sini</p>
           <h2 className="display relative mx-auto mt-5 max-w-3xl text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.08] text-balance">
-            Setiap riset besar dimulai dari <span className="text-sun-300">satu pertanyaan.</span>
+            Setiap riset besar dimulai dari <span className="text-mute-500">satu pertanyaan.</span>
           </h2>
-          <p className="relative mx-auto mt-5 max-w-xl text-[1.0313rem] leading-[1.75] text-paper-200/85">
+          <p className="relative mx-auto mt-5 max-w-xl text-[1.0313rem] leading-[1.75] text-mute-600">
             Sampaikan pertanyaan Anda kepada pengelola Prodi, atau langsung mendaftar pada gelombang yang sedang dibuka.
           </p>
           <div className="relative mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -61,27 +61,24 @@ export function Contact() {
       </div>
 
       {/* Kaki halaman tiga kolom */}
-      <div className="grain relative isolate -mt-24 overflow-hidden bg-navy-900 pt-44 text-paper-50">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(50%_60%_at_100%_0%,rgba(42,63,214,0.35),transparent_70%)]"
-        />
+      <div className="grain relative isolate -mt-24 overflow-hidden border-t border-navy-900/10 bg-paper-200 pt-44 text-navy-900">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 " />
         <div className="shell relative grid gap-12 pb-16 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
             <div className="flex items-center gap-4">
-              <span className="grid size-12 place-items-center rounded-xl bg-gradient-to-br from-royal-500 to-deep-800 text-sun-300">
+              <span className="grid size-12 place-items-center rounded-full text-navy-900 ring-1 ring-navy-900/20">
                 <Emblem className="size-9" />
               </span>
               <div className="leading-none">
                 <p className="display text-[1.25rem]">{site.shortName}</p>
-                <p className="mt-2 text-[0.75rem] text-paper-200/65">
+                <p className="mt-2 text-[0.75rem] text-navy-800/65">
                   {site.school} · {site.university}
                 </p>
               </div>
             </div>
 
-            <h3 className="display mt-10 text-[1.125rem]">Kontak Kami</h3>
-            <ul className="mt-5 space-y-4 text-[0.9063rem] leading-[1.7] text-paper-200/85">
+            <h3 className="eyebrow mt-10 text-mute-500">Kontak Kami</h3>
+            <ul className="mt-5 space-y-4 text-[0.9063rem] leading-[1.7] text-navy-800/85">
               <li className="flex gap-3.5">
                 <MapPin className="mt-1 size-4 shrink-0 text-sun-300" strokeWidth={1.75} aria-hidden="true" />
                 <address className="not-italic">
@@ -125,18 +122,18 @@ export function Contact() {
           </div>
         </div>
 
-        <div className="relative border-t border-paper-50/10">
-          <div className="shell flex flex-col gap-6 py-7 text-[0.8125rem] leading-relaxed text-paper-200/55 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative border-t border-navy-900/10">
+          <div className="shell flex flex-col gap-6 py-7 text-[0.8125rem] leading-relaxed text-navy-800/55 lg:flex-row lg:items-center lg:justify-between">
             <p className="max-w-3xl">
               © 2026 {site.name}, {site.school} {site.university}. Data merujuk laman resmi SPs UPI dan Portal Kurikulum
               UPI (diakses {site.dataAccessed}); informasi terbaru pada laman resmi tetap menjadi acuan.
             </p>
             <a
               href="#beranda"
-              className="no-print inline-flex shrink-0 items-center gap-3 self-start font-semibold text-paper-50 lg:self-auto"
+              className="no-print inline-flex shrink-0 items-center gap-3 self-start font-semibold text-navy-900 lg:self-auto"
             >
               Kembali ke atas
-              <span className="grid size-10 place-items-center rounded-full border border-paper-50/25 transition-colors duration-300 hover:border-sun-300 hover:text-sun-300">
+              <span className="grid size-10 place-items-center rounded-full border border-navy-900/25 transition-colors duration-300 hover:border-sun-300 hover:text-sun-300">
                 <ArrowUp className="size-4" strokeWidth={1.75} aria-hidden="true" />
               </span>
             </a>

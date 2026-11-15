@@ -8,35 +8,38 @@
     -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --color-navy-950: #050a1c;
-  --color-navy-900: #0a1230;
-  --color-navy-800: #121d47;
-  --color-navy-700: #1c2b62;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-deep-950: #0a163f;
-  --color-deep-900: #0f2166;
-  --color-deep-800: #162e8a;
-  --color-deep-700: #1d3ba8;
-  --color-royal-600: #2a3fd6;
-  --color-royal-500: #4a5cf0;
+  /* Tema gelap: "paper" = permukaan, "navy" = tinta terang di atasnya. */
+  --color-navy-950: #ffffff;
+  --color-navy-900: #f2f2f0;
+  --color-navy-800: #dcdcd8;
+  --color-navy-700: #c2c2bd;
 
-  --color-gold-700: #7c5a0c;
-  --color-gold-600: #9d7412;
-  --color-gold-500: #c99a2e;
-  --color-gold-400: #e0b548;
-  --color-sun-300: #f5cf58;
-  --color-sun-200: #f9e08f;
-  --color-sun-100: #fdf1c8;
+  --color-deep-950: #0b0b0d;
+  --color-deep-900: #121214;
+  --color-deep-800: #1a1a1d;
+  --color-deep-700: #242428;
+  --color-royal-600: #e0a94a;
+  --color-royal-500: #f0c676;
 
-  --color-paper-50: #ffffff;
-  --color-paper-100: #f6f8fd;
-  --color-paper-200: #edf1fa;
-  --color-paper-300: #dbe3f3;
+  --color-gold-700: #c9a45a;
+  --color-gold-600: #d4b06a;
+  --color-gold-500: #e0a94a;
+  --color-gold-400: #f0c676;
+  --color-sun-300: #f0c676;
+  --color-sun-200: #f5d99a;
+  --color-sun-100: #fbeccb;
 
-  --color-mute-700: #334155;
-  --color-mute-600: #475569;
-  --color-mute-500: #64748b;
-  --color-mute-400: #94a3b8;
+  --color-paper-50: #101012;
+  --color-paper-100: #060607;
+  --color-paper-200: #0b0b0d;
+  --color-paper-300: #1d1d21;
+
+  --color-mute-700: #c9c9c5;
+  --color-mute-600: #a3a3a0;
+  --color-mute-500: #85858a;
+  --color-mute-400: #5c5c62;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
@@ -66,7 +69,7 @@
 
   ::selection {
     background: var(--color-royal-600);
-    color: var(--color-sun-100);
+    color: #0a0a0b;
   }
 
   :focus-visible {
@@ -106,18 +109,19 @@
   }
 
   .eyebrow {
+    font-family: var(--font-mono);
     font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.24em;
+    font-weight: 400;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     line-height: 1.4;
   }
 
   .display {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.12;
+    font-weight: 300;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
   }
   .display em {
     font-style: normal;
@@ -126,7 +130,7 @@
   /* Angka bergaya huruf display, mis. statistik dan nomor lintasan */
   .numeral {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 300;
     font-style: normal !important;
     font-feature-settings: "tnum";
     letter-spacing: -0.03em;
@@ -141,9 +145,9 @@
     padding: 0.75rem 1.75rem;
     border-radius: 999px;
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0;
+    font-size: 0.875rem;
     white-space: nowrap;
     transition:
       background-color 0.4s var(--ease-out-expo),
@@ -163,35 +167,25 @@
   .btn:active {
     transform: scale(0.98);
   }
-  .btn-gold {
-    background: var(--color-sun-300);
-    color: var(--color-navy-950);
-  }
-  .btn-gold:hover {
-    background: var(--color-sun-100);
-  }
+  .btn-gold,
+  .btn-ink,
   .btn-royal {
-    background: linear-gradient(135deg, var(--color-royal-500), var(--color-royal-600));
-    color: #fff;
-    box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--color-royal-600) 70%, transparent);
+    background: #f4f4f2;
+    color: #0a0a0b;
   }
+  .btn-gold:hover,
+  .btn-ink:hover,
   .btn-royal:hover {
-    background: linear-gradient(135deg, var(--color-royal-600), var(--color-deep-700));
-  }
-  .btn-ink {
-    background: var(--color-navy-900);
-    color: var(--color-paper-100);
-  }
-  .btn-ink:hover {
-    background: var(--color-deep-800);
+    background: #ffffff;
+    box-shadow: 0 0 40px -8px rgba(255, 255, 255, 0.45);
   }
   .btn-line-light {
-    border: 1px solid color-mix(in srgb, var(--color-sun-300) 38%, transparent);
-    color: var(--color-sun-100);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #f2f2f0;
   }
   .btn-line-light:hover {
-    border-color: var(--color-sun-300);
-    background: color-mix(in srgb, var(--color-sun-300) 8%, transparent);
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.05);
   }
   .btn-line-dark {
     border: 1px solid color-mix(in srgb, var(--color-navy-900) 24%, transparent);
@@ -424,4 +418,14 @@
   offset-path: rect(0 auto auto 0 round var(--size));
   animation: border-beam var(--duration) linear infinite;
   animation-delay: var(--delay);
+}
+
+/* Jendela panorama pada hero: denah lapangan bergerak perlahan */
+@keyframes venue-pan {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.venue-pan {
+  animation: venue-pan 70s linear infinite;
 }

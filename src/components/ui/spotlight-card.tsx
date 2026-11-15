@@ -10,7 +10,7 @@ type SpotlightCardProps = {
 };
 
 /** Spotlight Card: sorot cahaya lembut yang mengikuti kursor (pola Aceternity UI di 21st.dev). */
-export function SpotlightCard({ children, className, color = 'rgba(74, 92, 240, 0.14)' }: SpotlightCardProps) {
+export function SpotlightCard({ children, className, color = 'rgba(224, 169, 74, 0.10)' }: SpotlightCardProps) {
   const x = useMotionValue(-400);
   const y = useMotionValue(-400);
   const background = useMotionTemplate`radial-gradient(340px circle at ${x}px ${y}px, ${color}, transparent 75%)`;

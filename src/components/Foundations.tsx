@@ -7,12 +7,9 @@ export function Foundations() {
     <section
       id="landasan"
       aria-labelledby="judul-landasan"
-      className="grain relative isolate bg-deep-950 text-paper-50"
+      className="grain relative isolate bg-deep-950 text-navy-900"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_100%_0%,rgba(74,92,240,0.4),transparent_70%)]"
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 " />
       <div className="shell relative py-24 lg:py-36">
         <div className="grid gap-x-16 gap-y-8 lg:grid-cols-12 lg:items-end">
           <SectionHeading
@@ -20,7 +17,6 @@ export function Foundations() {
             index="05"
             eyebrow="Landasan keilmuan"
             id="judul-landasan"
-            tone="dark"
             title={
               <>
                 Enam kajian inti, <em>enam tradisi</em> teori
@@ -28,7 +24,7 @@ export function Foundations() {
             }
           />
           <Reveal delay={140} className="lg:col-span-5">
-            <p className="text-[1.0313rem] leading-[1.8] text-paper-200/75">
+            <p className="text-[1.0313rem] leading-[1.8] text-navy-800/75">
               Setiap mata kuliah inti berdiri di atas teori yang telah teruji puluhan tahun. Pemetaan berikut
               memperlihatkan dari mana percakapan ilmiah di ruang kuliah berangkat, lengkap dengan rujukan primernya.
             </p>
@@ -50,17 +46,17 @@ export function Foundations() {
                   <span className="rounded-full border border-sun-300/35 px-3 py-1 text-[0.6875rem] font-semibold tracking-[0.1em] text-sun-300 tabular-nums">
                     {item.code}
                   </span>
-                  <span className="text-[0.8125rem] leading-snug text-paper-200/60">{item.course}</span>
+                  <span className="text-[0.8125rem] leading-snug text-navy-800/60">{item.course}</span>
                 </div>
                 <h3 className="display mt-6 text-[1.875rem] leading-[1.1] text-balance transition-colors duration-500 group-hover:text-sun-200 sm:text-[2.25rem]">
                   {item.theory}
                 </h3>
-                <p className="mt-5 text-[0.9688rem] leading-[1.8] text-paper-200/78">{item.summary}</p>
+                <p className="mt-5 text-[0.9688rem] leading-[1.8] text-navy-800/78">{item.summary}</p>
                 <div className="mt-7 border-l border-sun-300/30 pl-5">
                   <p className="eyebrow text-[0.625rem] text-sun-300/80">Rujukan</p>
                   <ul className="mt-3 space-y-2.5">
                     {item.references.map((reference) => (
-                      <li key={reference} lang="en" className="text-[0.8125rem] leading-[1.65] text-paper-200/60">
+                      <li key={reference} lang="en" className="text-[0.8125rem] leading-[1.65] text-navy-800/60">
                         {reference}
                       </li>
                     ))}
@@ -72,7 +68,7 @@ export function Foundations() {
         </ol>
 
         <Reveal className="mt-10">
-          <p className="max-w-3xl text-[0.8125rem] leading-relaxed text-paper-200/55">
+          <p className="max-w-3xl text-[0.8125rem] leading-relaxed text-navy-800/55">
             Pemetaan ini bersifat orientasi akademik: teori dan rujukan yang lazim dipakai pada tiap bidang kajian.
             Bahan ajar yang mengikat tetap tercantum pada Rencana Pembelajaran Semester (RPS) masing-masing mata kuliah.
           </p>

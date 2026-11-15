@@ -178,7 +178,7 @@ export function Admission() {
 
             <Reveal
               delay={90}
-              className="grain relative overflow-hidden rounded-2xl bg-deep-900 p-8 text-paper-50 sm:p-10"
+              className="grain relative overflow-hidden rounded-2xl bg-deep-900 p-8 text-navy-900 sm:p-10"
             >
               <div className="relative">
                 <h3 className="display text-[1.75rem]">Biaya pendaftaran dan seleksi</h3>
@@ -188,12 +188,12 @@ export function Admission() {
                       key={fee.level}
                       className="flex items-baseline justify-between gap-4 border-b border-sun-300/20 py-4"
                     >
-                      <dt className="text-[0.9375rem] text-paper-200/85">{fee.level}</dt>
+                      <dt className="text-[0.9375rem] text-navy-800/85">{fee.level}</dt>
                       <dd className="numeral text-[1.75rem] text-sun-200">{fee.amount}</dd>
                     </div>
                   ))}
                 </dl>
-                <p className="mt-4 text-[0.8125rem] leading-relaxed text-paper-200/65">
+                <p className="mt-4 text-[0.8125rem] leading-relaxed text-navy-800/65">
                   Merujuk laman PMB SPs UPI ({site.dataAccessed}) dan dapat berubah pada gelombang berikutnya.
                 </p>
                 <div className="mt-6 flex flex-col gap-3 text-sm font-semibold text-sun-300">

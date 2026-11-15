@@ -7,14 +7,16 @@ pembelajaran, landasan keilmuan, staf pengajar, riset, dan informasi admisi.
 
 ## Sekilas
 
-- **Tata letak:** mengikuti struktur laman Program Studi SPs UPI (bilah utilitas, menu
-  dropdown, banner, kisi kartu "Selengkapnya", kaki halaman tiga kolom), khusus untuk
-  Prodi Pendidikan Olahraga, dengan palet biru dan emas.
-- **Tipografi:** Plus Jakarta Sans, dihos sendiri (tanpa permintaan ke pihak ketiga).
+- **Tata letak:** mengikuti struktur laman Program Studi SPs UPI (menu dropdown, kisi kartu
+  "Selengkapnya", kaki halaman tiga kolom), khusus untuk Prodi Pendidikan Olahraga.
+- **Gaya visual:** tema gelap sinematik dengan aksen emas. Hero menampilkan "jendela"
+  panorama berisi denah arena multi-cabang (atletik, sepak bola, basket, bulu tangkis,
+  renang, voli) dengan ukuran resmi, bergerak perlahan.
+- **Tipografi:** Plus Jakarta Sans (tipis) dan JetBrains Mono untuk label, dihos sendiri (tanpa permintaan ke pihak ketiga).
 - **Animasi:** Framer Motion (`motion`) untuk kemunculan saat gulir, dropdown, menu
   seluler, dan garis kemajuan baca; menghormati `prefers-reduced-motion`.
-- **Komponen UI:** `src/components/ui/` memuat number ticker, border beam, spotlight card,
-  dan dot pattern, ditulis mengikuti pola komponen sumber terbuka yang terdaftar di
+- **Komponen UI:** `src/components/ui/` memuat number ticker, border beam, dan spotlight
+  card, ditulis mengikuti pola komponen sumber terbuka yang terdaftar di
   21st.dev (Magic UI, Aceternity UI). Registri 21st.dev mewajibkan login, sehingga
   komponen tidak diunduh lewat `npx shadcn add`.
 - **Interaktif:** tab jenjang, penelusur kurikulum dengan pencarian, saringan dosen, dan

@@ -5,7 +5,7 @@
   "lang": "id",
   "start_url": ".",
   "display": "browser",
-  "background_color": "#0a1230",
-  "theme_color": "#0a1230",
+  "background_color": "#060607",
+  "theme_color": "#060607",
   "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

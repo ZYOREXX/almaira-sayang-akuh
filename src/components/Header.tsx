@@ -1,4 +1,4 @@
-import { ArrowUpRight, ChevronDown, Instagram, Mail, Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { navGroups, site } from '../data/site';
@@ -47,43 +47,6 @@ export function Header() {
   return (
     <>
       <header className="no-print fixed inset-x-0 top-0 z-50">
-        {/* Bilah utilitas */}
-        <div
-          className={`hidden overflow-hidden bg-navy-900 text-paper-200 transition-[max-height] duration-500 ease-out-expo lg:block ${
-            scrolled ? 'max-h-0' : 'max-h-10'
-          }`}
-        >
-          <div className="shell flex h-10 items-center justify-between text-[0.75rem]">
-            <p className="tracking-wide text-paper-200/80">
-              {site.school} · {site.university}
-            </p>
-            <ul className="flex items-center gap-6">
-              <li>
-                <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2 hover:text-sun-300">
-                  <Mail className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-                  {site.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={site.instagram.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 hover:text-sun-300"
-                >
-                  <Instagram className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-                  {site.instagram.handle}
-                </a>
-              </li>
-              <li>
-                <a href={site.links.sps} target="_blank" rel="noopener noreferrer" className="hover:text-sun-300">
-                  Laman SPs UPI
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
         {/* Navigasi utama */}
         <div
           className={`relative border-b bg-paper-50/90 text-navy-900 backdrop-blur-xl backdrop-saturate-150 transition-shadow duration-500 ${
@@ -97,7 +60,7 @@ export function Header() {
               aria-label={`${site.name} ${site.school} ${site.universityShort}, kembali ke awal halaman`}
               onClick={() => setOpen(false)}
             >
-              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-royal-500 to-deep-900 text-sun-300 shadow-lg shadow-royal-600/25">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full text-navy-900 ring-1 ring-navy-900/20">
                 <Emblem className="size-8" />
               </span>
               <span className="min-w-0 leading-none">
@@ -125,7 +88,7 @@ export function Header() {
                           aria-haspopup="true"
                           onClick={() => setMenu(isOpen ? null : group.label)}
                           onKeyDown={(e) => e.key === 'Escape' && setMenu(null)}
-                          className={`inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.875rem] font-semibold transition-colors duration-300 ${
+                          className={`inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.875rem] font-medium transition-colors duration-300 ${
                             isOpen ? 'bg-royal-600/8 text-royal-600' : 'hover:bg-navy-900/5'
                           }`}
                         >
@@ -139,7 +102,7 @@ export function Header() {
                       ) : (
                         <a
                           href={group.href}
-                          className="inline-flex rounded-full px-3.5 py-2 text-[0.875rem] font-semibold transition-colors duration-300 hover:bg-navy-900/5"
+                          className="inline-flex rounded-full px-3.5 py-2 text-[0.875rem] font-medium transition-colors duration-300 hover:bg-navy-900/5"
                         >
                           {group.label}
                         </a>
@@ -162,7 +125,7 @@ export function Header() {
                                     className="group flex items-center justify-between gap-4 rounded-xl px-4 py-3 transition-colors duration-200 hover:bg-paper-200"
                                   >
                                     <span>
-                                      <span className="block text-[0.875rem] font-semibold">{child.label}</span>
+                                      <span className="block text-[0.875rem] font-medium">{child.label}</span>
                                       <span className="mt-0.5 block text-[0.75rem] text-mute-500">{child.hint}</span>
                                     </span>
                                     <ArrowUpRight
@@ -188,7 +151,7 @@ export function Header() {
                 href={site.links.admisi}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-royal hidden min-h-11 px-5 py-2 sm:inline-flex"
+                className="btn btn-ink hidden min-h-10 px-5 py-2 sm:inline-flex"
               >
                 Daftar
                 <ArrowUpRight className="size-4" strokeWidth={2} aria-hidden="true" />
@@ -215,7 +178,7 @@ export function Header() {
           {/* Garis kemajuan baca */}
           <motion.span
             aria-hidden="true"
-            className="absolute inset-x-0 -bottom-px h-0.5 origin-left bg-gradient-to-r from-royal-600 via-royal-500 to-sun-300"
+            className="absolute inset-x-0 -bottom-px h-0.5 origin-left bg-gradient-to-r from-transparent via-royal-600 to-royal-500"
             style={{ scaleX: progress }}
           />
         </div>
@@ -297,7 +260,7 @@ export function Header() {
                 })}
               </ul>
               <div className="mt-auto flex flex-col gap-4 pt-8">
-                <a href={site.links.admisi} target="_blank" rel="noopener noreferrer" className="btn btn-royal w-full">
+                <a href={site.links.admisi} target="_blank" rel="noopener noreferrer" className="btn btn-ink w-full">
                   Portal Admisi UPI
                   <ArrowUpRight className="size-4" strokeWidth={2} aria-hidden="true" />
                 </a>

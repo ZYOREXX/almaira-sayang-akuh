@@ -90,16 +90,6 @@ export const navGroups: NavGroup[] = [
   { label: 'Kontak', href: '#kontak' },
 ];
 
-/** Angka kunci pada beranda. `number` dianimasikan, `text` ditampilkan apa adanya. */
-export const heroStats = [
-  { number: 1997, from: 1950, label: 'Jenjang Magister berdiri' },
-  { number: 2005, from: 1950, label: 'Jenjang Doktor berdiri' },
-  { text: 'Unggul', label: 'Akreditasi LAMDIK' },
-  { text: 'AQAS', label: 'Akreditasi internasional' },
-  { number: 4, from: 0, label: 'Konsentrasi keahlian' },
-  { number: 16, from: 0, label: 'Staf pengajar' },
-] as const;
-
 /** Kartu jelajah, padanan kisi "Program Studi" pada laman SPs UPI. */
 export const hubCards = [
   { id: 'profil', title: 'Profil Prodi', text: 'Sejarah, akreditasi, dan pengelola program studi.' },

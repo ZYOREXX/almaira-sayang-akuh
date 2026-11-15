@@ -122,7 +122,7 @@ export function Profile() {
               aria-label={`Visi dan misi ${levelLabels[level].long}`}
               className="grid gap-px overflow-hidden rounded-2xl bg-navy-900/12 ring-1 ring-navy-900/12 lg:grid-cols-12"
             >
-              <figure className="grain relative bg-deep-900 p-8 text-paper-50 sm:p-12 lg:col-span-7 lg:p-16">
+              <figure className="grain relative bg-deep-900 p-8 text-navy-900 sm:p-12 lg:col-span-7 lg:p-16">
                 <div key={level} className="swap-in relative">
                   <span className="display block text-[5rem] leading-[0.6] text-sun-300/70" aria-hidden="true">
                     “

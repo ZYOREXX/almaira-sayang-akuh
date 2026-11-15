@@ -41,7 +41,7 @@ export function SectionHeading({
         <h2
           id={id}
           className={`display mt-6 text-[clamp(1.875rem,3.4vw,2.875rem)] text-balance ${
-            dark ? 'text-paper-50 [&_em]:text-sun-300' : 'text-navy-900 [&_em]:text-royal-600'
+            dark ? 'text-paper-50 [&_em]:text-sun-300' : 'text-navy-900 [&_em]:text-mute-500'
           }`}
         >
           {title}
