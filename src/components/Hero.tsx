@@ -12,6 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 import { hubCards, site } from '../data/site';
 import { NumberTicker } from './ui/number-ticker';
 import { Reveal } from './ui/Reveal';
@@ -46,106 +47,251 @@ const telemetry = [
   { label: 'DOSEN', number: 16, from: 0 },
 ] as const;
 
-export function Hero() {
-  return (
-    <section
-      id="beranda"
-      aria-labelledby="judul-utama"
-      className="relative isolate overflow-hidden bg-paper-100 text-navy-900"
-    >
-      <div className="flex min-h-[100svh] flex-col pt-28 lg:pt-32">
-        {/* Judul */}
-        <div className="shell text-center">
-          <motion.p {...rise(0.1)} className="eyebrow inline-flex items-center gap-3 text-mute-500">
-            <span
-              className="size-1.5 rounded-full bg-royal-600 shadow-[0_0_12px_2px_rgba(224,169,74,0.7)]"
-              aria-hidden="true"
-            />
-            Magister &amp; Doktor · Sekolah Pascasarjana UPI
-          </motion.p>
-          <h1
-            id="judul-utama"
-            className="display mt-6 text-[clamp(2.5rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.045em]"
-          >
-            <motion.span {...rise(0.2)} className="block">
-              Pendidikan Olahraga,
-            </motion.span>
-            <motion.span {...rise(0.32)} className="block text-[0.62em] tracking-[-0.035em] text-mute-500">
-              tempat gerak menjadi ilmu.
-            </motion.span>
-          </h1>
-        </div>
+/** Lima bab cerita: satu arena untuk tiap ranah kajian Prodi. */
+const chapters = [
+  {
+    label: 'Pembuka',
+    venue: 'Lintasan atletik · 400 m',
+    title: 'Pendidikan Olahraga,',
+    sub: 'tempat gerak menjadi ilmu.',
+  },
+  {
+    label: 'Pedagogi',
+    venue: 'Sepak bola · 105 × 68 m',
+    title: 'Setiap taktik',
+    sub: 'lahir dari pemahaman.',
+  },
+  {
+    label: 'Kepelatihan',
+    venue: 'Bola basket · 28 × 15 m',
+    title: 'Setiap lompatan',
+    sub: 'adalah data.',
+  },
+  {
+    label: 'Ilmu keolahragaan',
+    venue: 'Kolam renang · 50 × 25 m',
+    title: 'Tubuh yang diukur,',
+    sub: 'kesehatan yang dijaga.',
+  },
+  {
+    label: 'Manajemen',
+    venue: 'Bola voli · 18 × 9 m',
+    title: 'Kebijakan menata',
+    sub: 'seluruh arena.',
+  },
+];
 
-        {/* Jendela panorama */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.8, delay: 0.45, ease }}
-          aria-hidden="true"
-          className="relative mx-auto mt-10 w-[min(92vw,78rem)] flex-1 lg:mt-12"
-        >
-          <div className="relative mx-auto aspect-[2.1/1] max-h-[40svh] w-full sm:aspect-[3.3/1]">
-            {/* bingkai */}
-            <div className="absolute inset-0 overflow-hidden rounded-[999px] bg-[#0a0a0c] shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.55),inset_0_0_18px_1px_rgba(255,255,255,0.18),inset_0_0_60px_10px_rgba(0,0,0,0.9),0_0_0_10px_#0b0b0d,0_0_0_11px_rgba(255,255,255,0.07),0_40px_120px_-20px_rgba(224,169,74,0.18)]">
-              {/* cakrawala cahaya */}
-              <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_118%,rgba(224,169,74,0.55),rgba(160,80,30,0.25)_38%,transparent_66%)]" />
-              <div className="absolute inset-0 [perspective:900px]">
-                <div className="absolute inset-x-0 top-[-6%] h-[185%] origin-top [transform:rotateX(52deg)]">
-                  <VenueStrip className="venue-pan h-full max-w-none" />
+const LAST = chapters.length - 1;
+
+export function Hero() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const progress = useRef(0);
+  const [active, setActive] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  // Posisi gulir di dalam bagian cerita, dipetakan ke 0..LAST
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = sectionRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const span = rect.height - window.innerHeight;
+      const p = span > 0 ? Math.min(1, Math.max(0, -rect.top / span)) : 0;
+      progress.current = p * LAST;
+      setActive(Math.round(p * LAST));
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  // Adegan 3D dimuat malas; dilewati bila pengguna meminta gerak dikurangi atau WebGL tidak tersedia
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const section = sectionRef.current;
+    if (!canvas || !section) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let disposed = false;
+    let scene: { setRunning: (v: boolean) => void; dispose: () => void } | undefined;
+    let io: IntersectionObserver | undefined;
+    import('../lib/storyScene')
+      .then(({ createStoryScene }) => {
+        if (disposed) return;
+        scene = createStoryScene(canvas, () => progress.current);
+        setReady(true);
+        io = new IntersectionObserver(([entry]) => scene?.setRunning(entry.isIntersecting));
+        io.observe(section);
+      })
+      .catch(() => {
+        /* WebGL tidak tersedia: tampilan statis tetap dipakai */
+      });
+    return () => {
+      disposed = true;
+      io?.disconnect();
+      scene?.dispose();
+    };
+  }, []);
+
+  const goTo = (index: number) => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const span = el.offsetHeight - window.innerHeight;
+    window.scrollTo({ top: el.offsetTop + (span * index) / LAST, behavior: 'smooth' });
+  };
+
+  return (
+    <section id="beranda" aria-labelledby="judul-utama" className="relative isolate bg-paper-100 text-navy-900">
+      <div ref={sectionRef} className="relative h-[520svh]">
+        <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
+          {/* Latar statis (tanpa WebGL) dan kanvas 3D */}
+          <div aria-hidden="true" className="absolute inset-0 -z-10">
+            <div className="absolute inset-x-0 top-1/2 mx-auto w-[min(92vw,78rem)] -translate-y-1/2">
+              <div className="relative mx-auto aspect-[2.1/1] w-full overflow-hidden rounded-[999px] bg-[#0a0a0c] shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.4)] sm:aspect-[3.3/1]">
+                <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_118%,rgba(224,169,74,0.55),rgba(160,80,30,0.25)_38%,transparent_66%)]" />
+                <div className="absolute inset-0 [perspective:900px]">
+                  <div className="absolute inset-x-0 top-[-6%] h-[185%] origin-top [transform:rotateX(52deg)]">
+                    <VenueStrip className="venue-pan h-full max-w-none" />
+                  </div>
                 </div>
               </div>
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#0a0a0c_0%,transparent_18%,transparent_82%,#0a0a0c_100%)]" />
-              <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#0a0a0c_0%,transparent_45%)]" />
             </div>
+            <canvas
+              ref={canvasRef}
+              className={`absolute inset-0 size-full transition-opacity duration-[1800ms] ${ready ? 'opacity-100' : 'opacity-0'}`}
+            />
+            <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_45%,transparent_40%,rgba(6,6,7,0.85)_100%)]" />
+            <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-paper-100 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-paper-100 via-paper-100/70 to-transparent" />
           </div>
-          {/* pantulan lantai */}
-          <div className="mx-auto mt-3 h-16 w-[70%] rounded-[100%] bg-[radial-gradient(closest-side,rgba(224,169,74,0.16),transparent)] blur-xl" />
-        </motion.div>
 
-        {/* Baris aksi */}
-        <motion.div {...rise(0.9)} className="shell mt-auto grid items-end gap-8 pb-6 lg:grid-cols-[1fr_auto_1fr]">
-          <p className="max-w-[22rem] text-[0.8125rem] leading-[1.7] text-mute-500">
-            <strong className="block font-medium text-navy-900">Dari lapangan ke jurnal.</strong>
-            Pedagogi, kepelatihan, sains olahraga, dan kebijakan dalam satu tradisi riset sejak 1997.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a href="#jelajah" className="btn btn-ink min-h-12" data-arrow="right">
-              Jelajahi Prodi
-              <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
-            </a>
-            <a
-              href={site.links.admisi}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn min-h-12 text-mute-600 hover:text-navy-900"
-            >
-              Informasi admisi
-              <ArrowUpRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
-              <span className="sr-only">(membuka tab baru)</span>
-            </a>
+          {/* Teks tiap bab */}
+          <div className="shell relative flex-1 pt-28 lg:pt-32">
+            {chapters.map((chapter, i) => {
+              const shown = active === i;
+              const Heading = i === 0 ? 'h1' : 'h2';
+              return (
+                <div
+                  key={chapter.label}
+                  aria-hidden={!shown}
+                  className={`absolute inset-x-5 top-28 text-center transition-[opacity,transform,filter] duration-[900ms] ease-out-expo sm:inset-x-8 lg:top-32 ${
+                    shown ? 'opacity-100 blur-0' : 'pointer-events-none translate-y-4 opacity-0 blur-md'
+                  }`}
+                >
+                  <p className="eyebrow inline-flex items-center gap-3 text-mute-500">
+                    <span
+                      className="size-1.5 rounded-full bg-royal-600 shadow-[0_0_12px_2px_rgba(224,169,74,0.7)]"
+                      aria-hidden="true"
+                    />
+                    {i === 0 ? 'Magister & Doktor · SPs UPI' : `0${i + 1} · ${chapter.label}`}
+                  </p>
+                  <Heading
+                    id={i === 0 ? 'judul-utama' : undefined}
+                    className="display mt-6 text-[clamp(2.5rem,6.2vw,5.25rem)] leading-[1.02] tracking-[-0.045em]"
+                  >
+                    <span className="block">{chapter.title}</span>
+                    <span className="block text-[0.62em] tracking-[-0.035em] text-mute-500">{chapter.sub}</span>
+                  </Heading>
+                  <p className="mt-6 font-mono text-[0.6875rem] tracking-[0.2em] text-mute-400 uppercase">
+                    {chapter.venue}
+                  </p>
+                </div>
+              );
+            })}
           </div>
-          <p className="text-[0.8125rem] leading-[1.7] text-mute-500 lg:text-right">
-            <strong className="block font-medium text-navy-900">Program Studi Pendidikan Olahraga</strong>
-            <a href={`mailto:${site.email}`} className="hover:text-navy-900">
-              {site.email}
-            </a>
-          </p>
-        </motion.div>
 
-        {/* Telemetri */}
-        <motion.dl
-          {...rise(1.05)}
-          className="shell flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-t border-navy-900/10 py-4 font-mono text-[0.6875rem] tracking-[0.14em] lg:justify-between"
-        >
-          {telemetry.map((item) => (
-            <div key={item.label} className="flex items-baseline gap-2">
-              <dt className="text-mute-400">{item.label}</dt>
-              <dd className="text-navy-800">
-                {'number' in item ? <NumberTicker value={item.number} from={item.from} delay={1.2} /> : item.text}
-              </dd>
+          {/* Garis waktu bab */}
+          <nav
+            aria-label="Bab cerita"
+            className="absolute top-1/2 right-5 hidden -translate-y-1/2 lg:right-10 lg:block"
+          >
+            <ol className="space-y-4">
+              {chapters.map((chapter, i) => (
+                <li key={chapter.label}>
+                  <button
+                    type="button"
+                    onClick={() => goTo(i)}
+                    aria-current={active === i ? 'step' : undefined}
+                    className="group flex w-full items-center justify-end gap-3 font-mono text-[0.625rem] tracking-[0.18em] uppercase"
+                  >
+                    <span
+                      className={`transition-[opacity,color] duration-500 ${
+                        active === i ? 'text-navy-900 opacity-100' : 'text-mute-500 opacity-0 group-hover:opacity-100'
+                      }`}
+                    >
+                      {chapter.label}
+                    </span>
+                    <span
+                      className={`h-px transition-[width,background-color] duration-500 ease-out-expo ${
+                        active === i ? 'w-10 bg-royal-600' : 'w-4 bg-navy-900/30 group-hover:w-6'
+                      }`}
+                    />
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          {/* Baris aksi */}
+          <motion.div
+            {...rise(0.6)}
+            className="shell relative mt-auto grid items-end gap-6 pb-6 lg:grid-cols-[1fr_auto_1fr]"
+          >
+            <p className="hidden max-w-[22rem] text-[0.8125rem] leading-[1.7] text-mute-500 lg:block">
+              <strong className="block font-medium text-navy-900">Dari lapangan ke jurnal.</strong>
+              Pedagogi, kepelatihan, sains olahraga, dan kebijakan dalam satu tradisi riset sejak 1997.
+            </p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+              <a href="#jelajah" className="btn btn-ink min-h-12" data-arrow="right">
+                Jelajahi Prodi
+                <ArrowRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
+              </a>
+              <a
+                href={site.links.admisi}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn min-h-12 text-mute-600 hover:text-navy-900"
+              >
+                Informasi admisi
+                <ArrowUpRight className="size-4" strokeWidth={1.75} aria-hidden="true" />
+                <span className="sr-only">(membuka tab baru)</span>
+              </a>
             </div>
-          ))}
-        </motion.dl>
+            <p className="hidden text-[0.8125rem] leading-[1.7] text-mute-500 lg:block lg:text-right">
+              <strong className="block font-medium text-navy-900">
+                {active < LAST ? 'Gulir untuk menjelajah' : 'Lanjut ke profil Prodi'}
+              </strong>
+              <span className="font-mono text-[0.6875rem] tracking-[0.18em]">
+                BAB 0{active + 1} / 0{chapters.length}
+              </span>
+            </p>
+          </motion.div>
+
+          {/* Telemetri */}
+          <motion.dl
+            {...rise(0.75)}
+            className="shell relative flex flex-wrap items-center justify-center gap-x-8 gap-y-2 border-t border-navy-900/10 py-4 font-mono text-[0.6875rem] tracking-[0.14em] lg:justify-between"
+          >
+            {telemetry.map((item) => (
+              <div key={item.label} className="flex items-baseline gap-2">
+                <dt className="text-mute-400">{item.label}</dt>
+                <dd className="text-navy-800">
+                  {'number' in item ? <NumberTicker value={item.number} from={item.from} delay={1} /> : item.text}
+                </dd>
+              </div>
+            ))}
+          </motion.dl>
+        </div>
       </div>
 
       {/* Kisi jelajah */}

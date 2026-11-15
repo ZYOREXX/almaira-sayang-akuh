@@ -9,9 +9,12 @@ pembelajaran, landasan keilmuan, staf pengajar, riset, dan informasi admisi.
 
 - **Tata letak:** mengikuti struktur laman Program Studi SPs UPI (menu dropdown, kisi kartu
   "Selengkapnya", kaki halaman tiga kolom), khusus untuk Prodi Pendidikan Olahraga.
-- **Gaya visual:** tema gelap sinematik dengan aksen emas. Hero menampilkan "jendela"
-  panorama berisi denah arena multi-cabang (atletik, sepak bola, basket, bulu tangkis,
-  renang, voli) dengan ukuran resmi, bergerak perlahan.
+- **Gaya visual:** tema gelap sinematik dengan aksen emas.
+- **Hero bercerita (three.js):** satu adegan 3D yang digerakkan gulir. Kamera berpindah
+  melewati lima arena (atletik, sepak bola, basket, renang, voli) yang digambar dengan
+  proporsi ukuran resmi; tiap bab mewakili satu ranah kajian. Adegan dimuat malas dari
+  `src/lib/storyScene.ts`; tanpa WebGL atau dengan `prefers-reduced-motion`, tampil
+  versi statis.
 - **Tipografi:** Plus Jakarta Sans (tipis) dan JetBrains Mono untuk label, dihos sendiri (tanpa permintaan ke pihak ketiga).
 - **Animasi:** Framer Motion (`motion`) untuk kemunculan saat gulir, dropdown, menu
   seluler, dan garis kemajuan baca; menghormati `prefers-reduced-motion`.
@@ -26,7 +29,7 @@ pembelajaran, landasan keilmuan, staf pengajar, riset, dan informasi admisi.
 
 ## Teknologi
 
-React 19, TypeScript, Vite 6, Tailwind CSS 4, dan Framer Motion. Tidak ada backend; hasil build berupa
+React 19, TypeScript, Vite 6, Tailwind CSS 4, Framer Motion, dan three.js. Tidak ada backend; hasil build berupa
 berkas statis di folder `dist/`.
 
 ## Menjalankan di komputer sendiri
