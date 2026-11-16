@@ -13,7 +13,9 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { concentrations } from '../data/programs';
 import { hubCards, site } from '../data/site';
+import { FogVeil } from './FogVeil';
 import { NumberTicker } from './ui/number-ticker';
 import { Reveal } from './ui/Reveal';
 import { SpotlightCard } from './ui/spotlight-card';
@@ -89,6 +91,9 @@ export function Hero() {
   const progress = useRef(0);
   const [active, setActive] = useState(0);
   const [ready, setReady] = useState(false);
+  const [veil, setVeil] = useState(false);
+  const [pick, setPick] = useState(0);
+  const orbit = useRef(0);
 
   // Posisi gulir di dalam bagian cerita, dipetakan ke 0..LAST
   useEffect(() => {
@@ -128,8 +133,14 @@ export function Hero() {
     import('../lib/storyScene')
       .then(({ createStoryScene }) => {
         if (disposed) return;
-        scene = createStoryScene(canvas, () => progress.current);
+        scene = createStoryScene(
+          canvas,
+          () => progress.current,
+          () => orbit.current,
+        );
         setReady(true);
+        // Tirai kabut hanya muncul bila pengunjung masih di awal halaman
+        if (window.scrollY < 40) setVeil(true);
         io = new IntersectionObserver(([entry]) => scene?.setRunning(entry.isIntersecting));
         io.observe(section);
       })
@@ -153,7 +164,12 @@ export function Hero() {
   return (
     <section id="beranda" aria-labelledby="judul-utama" className="relative isolate bg-paper-100 text-navy-900">
       <div ref={sectionRef} className="relative h-[520svh]">
-        <div className="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
+        <div
+          className="sticky top-0 flex h-[100svh] flex-col overflow-hidden"
+          onPointerMove={(e) => {
+            if (e.pointerType === 'mouse') orbit.current = (e.clientX / window.innerWidth - 0.5) * 0.5;
+          }}
+        >
           {/* Latar statis (tanpa WebGL) dan kanvas 3D */}
           <div aria-hidden="true" className="absolute inset-0 -z-10">
             <div className="absolute inset-x-0 top-1/2 mx-auto w-[min(92vw,78rem)] -translate-y-1/2">
@@ -174,6 +190,8 @@ export function Hero() {
             <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-paper-100 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-paper-100 via-paper-100/70 to-transparent" />
           </div>
+
+          {veil ? <FogVeil onDone={() => setVeil(false)} /> : null}
 
           {/* Teks tiap bab */}
           <div className="shell relative flex-1 pt-28 lg:pt-32">
@@ -208,6 +226,63 @@ export function Hero() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Ruang pamer: pilih konsentrasi pada bab terakhir */}
+          <div
+            aria-hidden={active !== LAST}
+            className={`absolute inset-x-5 bottom-[14.5rem] z-10 mx-auto max-w-[44rem] transition-[opacity,transform,filter] duration-[900ms] ease-out-expo sm:bottom-40 ${
+              active === LAST ? 'opacity-100 blur-0' : 'pointer-events-none translate-y-6 opacity-0 blur-md'
+            }`}
+          >
+            <div className="rounded-3xl bg-navy-900/[0.06] p-5 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)] ring-1 ring-navy-900/15 backdrop-blur-2xl backdrop-saturate-150 sm:p-7">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="eyebrow text-mute-500">Pilih konsentrasi</p>
+                <div role="tablist" aria-label="Konsentrasi keahlian" className="flex gap-1.5">
+                  {concentrations.map((item, i) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={pick === i}
+                      tabIndex={active === LAST ? 0 : -1}
+                      onClick={() => setPick(i)}
+                      className={`rounded-full px-3.5 py-1.5 font-mono text-[0.6875rem] tracking-[0.12em] uppercase transition-colors duration-300 ${
+                        pick === i
+                          ? 'bg-navy-900 text-paper-100'
+                          : 'text-mute-600 ring-1 ring-navy-900/15 hover:text-navy-900'
+                      }`}
+                    >
+                      {item.abbr}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div key={pick} className="swap-in mt-5 grid gap-4 sm:grid-cols-[1.1fr_1fr] sm:gap-8">
+                <div>
+                  <h3 className="display text-[1.5rem] leading-[1.15] sm:text-[1.75rem]">
+                    {concentrations[pick].name}
+                  </h3>
+                  <p className="mt-2 text-[0.8125rem] leading-[1.6] text-mute-600">{concentrations[pick].focus}</p>
+                </div>
+                <ul className="hidden space-y-1.5 text-[0.8125rem] leading-snug text-mute-700 sm:block">
+                  {concentrations[pick].courses.slice(0, 3).map((course) => (
+                    <li key={course} className="flex gap-2.5">
+                      <span aria-hidden="true" className="mt-[0.5em] size-1 shrink-0 rounded-full bg-royal-600" />
+                      {course}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <a
+                href="#konsentrasi"
+                tabIndex={active === LAST ? 0 : -1}
+                className="mt-5 inline-flex items-center gap-2 text-[0.8125rem] font-medium text-navy-900"
+              >
+                <span className="link-draw">Lihat rincian konsentrasi</span>
+                <ArrowRight className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
           {/* Garis waktu bab */}

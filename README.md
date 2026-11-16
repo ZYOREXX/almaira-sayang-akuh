@@ -15,6 +15,9 @@ pembelajaran, landasan keilmuan, staf pengajar, riset, dan informasi admisi.
   proporsi ukuran resmi; tiap bab mewakili satu ranah kajian. Adegan dimuat malas dari
   `src/lib/storyScene.ts`; tanpa WebGL atau dengan `prefers-reduced-motion`, tampil
   versi statis.
+- **Pembuka dan penutup cerita:** tirai kabut yang diusap untuk menyingkap arena (dapat
+  dilewati), kamera yang mengikuti gerakan kursor, dan panel kaca buram pada bab terakhir
+  untuk memilih konsentrasi.
 - **Tipografi:** Plus Jakarta Sans (tipis) dan JetBrains Mono untuk label, dihos sendiri (tanpa permintaan ke pihak ketiga).
 - **Animasi:** Framer Motion (`motion`) untuk kemunculan saat gulir, dropdown, menu
   seluler, dan garis kemajuan baca; menghormati `prefers-reduced-motion`.

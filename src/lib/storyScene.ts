@@ -84,7 +84,7 @@ const venues: ((s: Seg) => void)[] = [
 
 export const CHAPTERS = venues.length;
 
-export function createStoryScene(canvas: HTMLCanvasElement, getT: () => number) {
+export function createStoryScene(canvas: HTMLCanvasElement, getT: () => number, getOrbit: () => number = () => 0) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
   renderer.setClearColor(BG);
@@ -185,6 +185,7 @@ export function createStoryScene(canvas: HTMLCanvasElement, getT: () => number) 
   let running = true;
   let frame = 0;
   let smooth = getT();
+  let orbit = 0;
   let ballX = smooth * SPACING;
   for (let i = 0; i < TRAIL; i++) trailPositions.set([ballX, 0.8, 0], i * 3);
   const clock = new THREE.Clock();
@@ -198,7 +199,8 @@ export function createStoryScene(canvas: HTMLCanvasElement, getT: () => number) 
 
     // Kamera: mulai dari atas, lalu turun dan mengitari tiap arena
     const lift = Math.max(0, 1 - smooth * 1.4);
-    const angle = -0.55 + smooth * 0.5 + Math.sin(time * 0.12) * 0.08;
+    orbit += (getOrbit() - orbit) * 0.05;
+    const angle = -0.55 + smooth * 0.5 + Math.sin(time * 0.12) * 0.08 + orbit;
     const radius = (camera.aspect < 1 ? 58 : 42) - Math.min(smooth, 1) * 4;
     const height = 17 + lift * lift * 40 + Math.sin(time * 0.3) * 0.5;
     target.set(smooth * SPACING, 0, 0);
