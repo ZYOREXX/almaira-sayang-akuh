@@ -1,0 +1,11 @@
+{
+  "name": "Pascasarjana Pendidikan Olahraga UPI",
+  "short_name": "POR SPs UPI",
+  "description": "Program Magister (S2) dan Doktor (S3) Pendidikan Olahraga, Sekolah Pascasarjana Universitas Pendidikan Indonesia.",
+  "lang": "id",
+  "start_url": ".",
+  "display": "browser",
+  "background_color": "#060607",
+  "theme_color": "#060607",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

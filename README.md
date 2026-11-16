@@ -1,20 +1,114 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Pascasarjana Pendidikan Olahraga UPI
 
-# Run and deploy your AI Studio app
+Website akademik Program Studi Pendidikan Olahraga jenjang Magister (S2) dan Doktor (S3),
+Sekolah Pascasarjana Universitas Pendidikan Indonesia. Satu halaman panjang yang memuat
+profil, visi dan misi, program, konsentrasi keahlian, penelusur kurikulum, capaian
+pembelajaran, landasan keilmuan, staf pengajar, riset, dan informasi admisi.
 
-This contains everything you need to run your app locally.
+## Sekilas
 
-View your app in AI Studio: https://ai.studio/apps/56b83b28-7e1e-4f6e-acfa-e235e3a05757
+- **Tata letak:** mengikuti struktur laman Program Studi SPs UPI (menu dropdown, kisi kartu
+  "Selengkapnya", kaki halaman tiga kolom), khusus untuk Prodi Pendidikan Olahraga.
+- **Gaya visual:** tema gelap sinematik dengan aksen emas.
+- **Hero bercerita (three.js):** satu adegan 3D yang digerakkan gulir. Kamera berpindah
+  melewati lima arena (atletik, sepak bola, basket, renang, voli) yang digambar dengan
+  proporsi ukuran resmi; tiap bab mewakili satu ranah kajian. Adegan dimuat malas dari
+  `src/lib/storyScene.ts`; tanpa WebGL atau dengan `prefers-reduced-motion`, tampil
+  versi statis.
+- **Pembuka dan penutup cerita:** tirai kabut yang diusap untuk menyingkap arena (dapat
+  dilewati), kamera yang mengikuti gerakan kursor, dan panel kaca buram pada bab terakhir
+  untuk memilih konsentrasi.
+- **Tipografi:** Plus Jakarta Sans (tipis) dan JetBrains Mono untuk label, dihos sendiri (tanpa permintaan ke pihak ketiga).
+- **Animasi:** Framer Motion (`motion`) untuk kemunculan saat gulir, dropdown, menu
+  seluler, dan garis kemajuan baca; menghormati `prefers-reduced-motion`.
+- **Komponen UI:** `src/components/ui/` memuat number ticker, border beam, dan spotlight
+  card, ditulis mengikuti pola komponen sumber terbuka yang terdaftar di
+  21st.dev (Magic UI, Aceternity UI). Registri 21st.dev mewajibkan login, sehingga
+  komponen tidak diunduh lewat `npx shadcn add`.
+- **Interaktif:** tab jenjang, penelusur kurikulum dengan pencarian, saringan dosen, dan
+  akordeon tanya jawab.
+- **SEO:** HTML diprerender saat build, lengkap dengan meta Open Graph, data terstruktur
+  schema.org (organisasi, program, FAQ), `robots.txt`, dan `sitemap.xml`.
 
-## Run Locally
+## Teknologi
 
-**Prerequisites:**  Node.js
+React 19, TypeScript, Vite 6, Tailwind CSS 4, Framer Motion, dan three.js. Tidak ada backend; hasil build berupa
+berkas statis di folder `dist/`.
 
+## Menjalankan di komputer sendiri
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Prasyarat: Node.js 20 atau lebih baru.
+
+```bash
+npm install
+npm run dev        # server pengembangan di http://localhost:3000
+```
+
+## Build dan pemasangan
+
+```bash
+SITE_URL="https://alamat-situs-anda" npm run build
+npm run preview    # meninjau hasil build di http://localhost:4173
+```
+
+`SITE_URL` bersifat opsional. Bila diisi, build menulis canonical URL, `og:url`, alamat
+absolut gambar pratinjau, serta `sitemap.xml`. Unggah isi folder `dist/` ke layanan hosting
+statis mana pun (Vercel, Netlify, GitHub Pages, atau server kampus). Seluruh aset dirujuk
+secara relatif, sehingga situs juga berjalan di dalam sub-folder.
+
+| Perintah          | Fungsi                                                     |
+| ----------------- | ---------------------------------------------------------- |
+| `npm run dev`     | Server pengembangan dengan pemuatan ulang otomatis         |
+| `npm run build`   | Build klien, build SSR, lalu prerender ke `dist/`          |
+| `npm run preview` | Menyajikan folder `dist/` untuk pemeriksaan akhir          |
+| `npm run lint`    | Pemeriksaan tipe TypeScript                                |
+
+## Hosting gratis
+
+**Vercel (disarankan).** Berkas `vercel.json` sudah disiapkan.
+
+1. Buka <https://vercel.com/new> dan masuk dengan akun GitHub.
+2. Pilih repo ini lalu klik **Deploy**; pengaturan build terbaca otomatis.
+3. Vercel memasang branch `main` sebagai situs produksi. Canonical URL dan `sitemap.xml`
+   terisi otomatis dari alamat produksi Vercel.
+
+**GitHub Pages.** Workflow `.github/workflows/pages.yml` memasang situs setiap ada push
+ke `main`. Aktifkan di **Settings > Pages > Source: GitHub Actions**.
+
+## Memperbarui konten
+
+Seluruh isi halaman disimpan terpisah dari tampilan, di folder `src/data/`:
+
+| Berkas          | Isi                                                          |
+| --------------- | ------------------------------------------------------------ |
+| `site.ts`       | Identitas, kontak, tautan resmi, navigasi, angka pada hero   |
+| `programs.ts`   | Visi dan misi, fakta jenjang, jalur studi, konsentrasi       |
+| `curriculum.ts` | Struktur kurikulum S2 dan S3 beserta bobot sks               |
+| `outcomes.ts`   | Capaian Pembelajaran Lulusan                                 |
+| `theories.ts`   | Pemetaan mata kuliah inti ke teori dan rujukannya            |
+| `faculty.ts`    | Staf pengajar                                                |
+| `research.ts`   | Sorotan penelitian, ranah kajian, agenda internasional       |
+| `admission.ts`  | Alur pendaftaran, persyaratan, skor bahasa, biaya, FAQ       |
+
+Mengubah berkas-berkas tersebut sudah cukup untuk memperbarui halaman, data terstruktur,
+dan hasil pencarian kurikulum.
+
+## Sumber data
+
+Fakta pada situs dihimpun pada November 2026 dari laman resmi berikut:
+
+- Laman Prodi di SPs UPI: <https://sps.upi.edu/por/>
+- Informasi PMB SPs UPI: <https://sps.upi.edu/pendaftaran-mahasiswa-baru/>
+- Portal Kurikulum UPI: <https://kurikulum.upi.edu/struktur/prodi/P136> (S2) dan
+  <https://kurikulum.upi.edu/struktur/prodi/P137> (S3)
+
+## Catatan sebelum dipublikasikan
+
+- **Verifikasi data.** Biaya, jadwal gelombang, dan struktur kurikulum dapat berubah.
+  Mohon dicocokkan kembali dengan pengelola Prodi sebelum situs dirilis.
+- **Logo.** Lambang pada situs adalah ilustrasi lintasan atletik, bukan logo resmi UPI.
+  Ganti komponen `src/components/ui/Emblem.tsx` bila logo resmi boleh digunakan.
+- **Gelar dosen.** Nama dan gelar mengikuti laman resmi Prodi; koreksi dapat dilakukan
+  di `src/data/faculty.ts`.
+- **Landasan keilmuan.** Pemetaan teori pada bagian 05 bersifat orientasi akademik dan
+  bukan pengganti RPS mata kuliah.

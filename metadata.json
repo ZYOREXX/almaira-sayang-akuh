@@ -1,6 +1,6 @@
 {
-  "name": "Untukmu, Sayang",
-  "description": "Sebuah surat cinta interaktif dan penuh dengan kehangatan untuk pasangan tercinta.",
+  "name": "Pascasarjana Pendidikan Olahraga UPI",
+  "description": "Website akademik Program Studi Pendidikan Olahraga jenjang Magister (S2) dan Doktor (S3), Sekolah Pascasarjana Universitas Pendidikan Indonesia.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
