@@ -2,62 +2,185 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Papila Swimming School - Sekolah Renang untuk Semua Usia</title>
-  <meta name="description" content="Papila Swimming School: sekolah renang yang aman, menyenangkan, dan terukur untuk bayi, anak, remaja, dan dewasa.">
-  <meta property="og:title" content="Papila Swimming School - Sekolah Renang untuk Semua Usia">
-  <meta property="og:description" content="Papila Swimming School: sekolah renang yang aman, menyenangkan, dan terukur untuk bayi, anak, remaja, dan dewasa.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Papila Swimming School | Sekolah Renang untuk Semua Usia</title>
+  <meta name="description" content="Sekolah renang yang aman, menyenangkan, dan terukur untuk bayi, anak, remaja, dan dewasa. Pelatih bersertifikat dan banyak pilihan kolam.">
+  <meta name="theme-color" content="#06224a">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
-  <meta name="theme-color" content="#1572e8">
+  <meta property="og:site_name" content="Papila Swimming School">
+  <meta property="og:title" content="Papila Swimming School | Sekolah Renang untuk Semua Usia">
+  <meta property="og:description" content="Sekolah renang yang aman, menyenangkan, dan terukur untuk bayi, anak, remaja, dan dewasa. Pelatih bersertifikat dan banyak pilihan kolam.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Raleway:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="home">
-  <header id="site-header"></header>
-  <main>
-    <section id="home" class="hero" aria-label="Slider utama"></section>
+  <a class="skip-link" href="#konten">Langsung ke konten</a>
+  <header id="site-header" class="header"></header>
+  <noscript><p style="padding:96px 16px 16px;text-align:center">Aktifkan JavaScript untuk melihat seluruh isi situs ini.</p></noscript>
+  <main id="konten">
+    <section id="beranda" class="hero" aria-label="Beranda"></section>
 
-    <section id="tentang" class="section" ><div id="about-block"></div></section>
+    <div class="stats-wrap"><div class="container"><div class="scoreboard" data-stats></div></div></div>
 
-    <div id="stats" class="stats dark"></div>
+    <section id="tentang" class="section">
+      <div class="container about" id="about-home"></div>
+    </section>
 
-    <section id="layanan" class="section">
+    <section class="partners-band" aria-label="Standar dan kemitraan">
       <div class="container">
-        <div class="title-center"><h2>Layanan Kami</h2></div>
-        <div id="service-cards" class="card-grid"></div>
+        <p class="partners-title">Standar &amp; kemitraan</p>
+        <div class="marquee" id="partners"></div>
+      </div>
+    </section>
+
+    <section id="keunggulan" class="section section-soft">
+      <div class="container">
+        <div class="sec-head center">
+          <span class="eyebrow">Kenapa memilih kami</span>
+          <h2 class="sec-title">Belajar renang yang aman, terarah, dan menyenangkan</h2>
+          <p class="lead">Setiap kelas dirancang supaya siswa merasa aman lebih dulu, lalu berkembang bertahap sesuai usia dan kemampuannya.</p>
+        </div>
+        <div class="features" data-features></div>
+      </div>
+    </section>
+
+    <section id="program" class="section">
+      <div class="container">
+        <div class="sec-head">
+          <span class="eyebrow">Program</span>
+          <h2 class="sec-title">Pilih kelas sesuai usia dan kemampuan</h2>
+          <p class="lead">Kurikulum bertahap dari pengenalan air hingga teknik empat gaya. Gunakan filter usia untuk menemukan program yang pas.</p>
+        </div>
+        <div class="chips scroll-x" id="program-filter" role="group" aria-label="Filter program berdasarkan usia"></div>
+        <p class="filter-info" id="program-info" aria-live="polite"></p>
+        <div class="prog-grid" id="program-grid"></div>
+      </div>
+    </section>
+
+    <section id="lokasi" class="section section-soft">
+      <div class="container">
+        <div class="sec-head">
+          <span class="eyebrow">Lokasi</span>
+          <h2 class="sec-title">Kolam renang mitra di beberapa kota</h2>
+          <p class="lead">Pilih kota, cari kolam terdekat dari rumah, lalu buka rute atau langsung pilih kolam tersebut di formulir pendaftaran.</p>
+        </div>
+        <div id="lokasi-app"></div>
+      </div>
+    </section>
+
+    <section id="alur" class="section">
+      <div class="container">
+        <div class="sec-head center">
+          <span class="eyebrow">Cara bergabung</span>
+          <h2 class="sec-title">Empat langkah mulai belajar</h2>
+        </div>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </section>
+
+    <section id="kelas" class="section section-soft">
+      <div class="container">
+        <div class="sec-head center">
+          <span class="eyebrow">Format kelas</span>
+          <h2 class="sec-title">Pilih suasana belajar yang paling cocok</h2>
+          <p class="lead">Semua format memakai kurikulum yang sama. Bedanya ada pada jumlah siswa per pelatih.</p>
+        </div>
+        <div class="formats" id="formats"></div>
       </div>
     </section>
 
     <section id="tim" class="section">
       <div class="container">
-        <div class="title-center"><h2>Tim Kami</h2></div>
-        <div id="team-grid" class="team-grid"></div>
+        <div class="sec-head split">
+          <div>
+            <span class="eyebrow">Tim kami</span>
+            <h2 class="sec-title">Pelatih yang sabar dan berpengalaman</h2>
+          </div>
+          <div class="carousel-nav">
+            <button type="button" class="icon-btn outline" id="team-prev" aria-label="Geser ke kiri"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <button type="button" class="icon-btn outline" id="team-next" aria-label="Geser ke kanan"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+        <div class="team-row" id="team-row"></div>
+        <div class="section-foot"><a class="btn btn-outline" href="tim.html">Lihat semua tim</a></div>
       </div>
     </section>
 
-    <section id="galeri" class="section">
+    <section id="galeri" class="section section-soft">
       <div class="container">
-        <div class="title-center"><h2>Galeri</h2></div>
-        <div id="gallery-filters" class="filters pill"></div>
-        <div id="gallery-grid" class="gallery-grid" data-limit="6"></div>
-        <div class="center mt-32"><button id="gallery-more" class="btn btn-ghost-pill">Muat Lebih Banyak</button></div>
+        <div class="sec-head center">
+          <span class="eyebrow">Galeri</span>
+          <h2 class="sec-title">Momen di kolam bersama kami</h2>
+        </div>
+        <div class="chips scroll-x g-filters" id="gallery-filter" role="group" aria-label="Filter galeri"></div>
+        <div class="g-grid" id="gallery-grid" data-step="8"></div>
+        <div class="section-foot"><button type="button" class="btn btn-outline" id="gallery-more">Muat lebih banyak</button></div>
+      </div>
+    </section>
+
+    <section id="testimoni" class="section testi-band">
+      <div class="container">
+        <div class="sec-head split">
+          <div>
+            <span class="eyebrow">Testimoni</span>
+            <h2 class="sec-title">Cerita dari keluarga siswa</h2>
+          </div>
+          <div class="carousel-nav">
+            <button type="button" class="icon-btn outline" id="testi-prev" aria-label="Testimoni sebelumnya"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <button type="button" class="icon-btn outline" id="testi-next" aria-label="Testimoni berikutnya"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+        <div class="testi-track" id="testi-track"></div>
       </div>
     </section>
 
     <section id="berita" class="section">
       <div class="container">
-        <div class="title-center"><h2>Berita Terbaru</h2></div>
-        <div id="news-grid" class="news-grid"></div>
-        <div class="center mt-32"><a href="berita.html" class="btn btn-ghost-pill">Arsip Berita</a></div>
+        <div class="sec-head split">
+          <div>
+            <span class="eyebrow">Berita &amp; artikel</span>
+            <h2 class="sec-title">Kabar terbaru dan tips renang</h2>
+          </div>
+          <a class="btn btn-outline" href="berita.html">Semua artikel</a>
+        </div>
+        <div class="news-grid" id="news-grid"></div>
       </div>
     </section>
 
-    <section id="kontak" class="contact"></section>
+    <section id="faq" class="section section-soft">
+      <div class="container faq">
+        <div class="faq-aside">
+          <span class="eyebrow">Tanya jawab</span>
+          <h2 class="sec-title">Pertanyaan yang sering diajukan</h2>
+          <p class="lead">Belum menemukan jawabannya? Admin kami siap membantu lewat WhatsApp.</p>
+          <div class="faq-help">
+            <b>Masih ada pertanyaan?</b>
+            <p>Tanyakan jadwal, biaya, atau program yang cocok untuk usia peserta.</p>
+            <a class="btn btn-wa" data-wa="Halo Admin, saya punya pertanyaan tentang kelas renang.">Chat admin</a>
+          </div>
+        </div>
+        <div class="acc" id="faq-list"></div>
+      </div>
+    </section>
+
+    <section id="daftar" class="contact">
+      <div class="lane" aria-hidden="true"></div>
+      <div class="container">
+        <div class="sec-head center">
+          <span class="eyebrow">Pendaftaran</span>
+          <h2 class="sec-title">Siap memulai?</h2>
+          <p class="lead">Isi formulir untuk mendaftar atau menjadwalkan kelas percobaan. Admin akan menghubungi Anda melalui WhatsApp.</p>
+        </div>
+        <div class="contact-grid" id="daftar-app"></div>
+      </div>
+    </section>
   </main>
+
   <footer id="site-footer" class="footer"></footer>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

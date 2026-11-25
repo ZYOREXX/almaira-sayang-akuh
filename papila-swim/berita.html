@@ -2,44 +2,67 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Berita & Artikel - Papila Swimming School</title>
-  <meta name="description" content="Berita dan artikel terbaru seputar kegiatan Papila Swimming School.">
-  <meta property="og:title" content="Berita & Artikel - Papila Swimming School">
-  <meta property="og:description" content="Berita dan artikel terbaru seputar kegiatan Papila Swimming School.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Berita &amp; Artikel | Papila Swimming School</title>
+  <meta name="description" content="Berita, kegiatan, dan tips renang dari Papila Swimming School.">
+  <meta name="theme-color" content="#06224a">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
-  <meta name="theme-color" content="#1572e8">
+  <meta property="og:site_name" content="Papila Swimming School">
+  <meta property="og:title" content="Berita &amp; Artikel | Papila Swimming School">
+  <meta property="og:description" content="Berita, kegiatan, dan tips renang dari Papila Swimming School.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Raleway:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="berita">
-  <header id="site-header"></header>
-  <section id="page-title" class="page-title centered" data-title="Berita & Artikel" data-crumb="Berita"></section>
-  <main>
+  <a class="skip-link" href="#konten">Langsung ke konten</a>
+  <header id="site-header" class="header"></header>
+  <noscript><p style="padding:96px 16px 16px;text-align:center">Aktifkan JavaScript untuk melihat seluruh isi situs ini.</p></noscript>
+  <section class="page-hero center" id="page-hero">
+    <div class="container page-hero-inner">
+      <div class="page-hero-text">
+        <h1>Berita &amp; Artikel</h1>
+        <p class="page-lead">Kabar terbaru, kegiatan, dan tips seputar renang untuk anak dan keluarga.</p>
+      </div>
+      <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="index.html">Beranda</a></li><li aria-current="page">Berita</li></ol></nav>
+    </div>
+  </section>
+  <div class="lane" aria-hidden="true"></div>
+  <main id="konten">
     <section class="section">
-      <div class="container blog-layout">
-        <div>
-          <div id="post-list"></div>
-          <div class="pagination-row"><span id="pager-info"></span><div id="pager" class="pagination"></div></div>
-        </div>
-        <aside>
-          <div class="widget"><h5>Cari Artikel</h5>
-            <form id="search-form" class="search-box" role="search">
-              <input id="search-input" type="search" placeholder="Kata kunci..." aria-label="Kata kunci">
-              <button type="submit" aria-label="Cari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+      <div class="container blog">
+        <div class="blog-main" id="blog-main" aria-live="polite"></div>
+        <aside class="blog-aside" aria-label="Sidebar berita">
+          <div class="widget">
+            <h2>Cari artikel</h2>
+            <form class="search" id="blog-search" role="search">
+              <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <label class="sr-only" for="blog-search-input">Kata kunci</label>
+              <input id="blog-search-input" type="search" placeholder="Kata kunci, lalu Enter" autocomplete="off">
             </form>
           </div>
-          <div class="widget"><h5>Tags Populer</h5><div id="tag-list" class="tags"></div></div>
-          <div class="widget"><h5>Postingan Lainnya</h5><div id="recent-posts"></div></div>
-          <div class="cta-widget"><h5>GABUNG SEKARANG!</h5><p>Dapatkan promo untuk pendaftaran bulan ini.</p><a href="index.html#kontak" class="btn">Daftar</a></div>
+          <div class="widget">
+            <h2>Topik</h2>
+            <div class="chips" id="tag-list"></div>
+          </div>
+          <div class="widget">
+            <h2>Artikel terbaru</h2>
+            <div id="recent-posts"></div>
+          </div>
+          <div class="widget cta-widget">
+            <h2>Gabung sekarang!</h2>
+            <p>Kuota kelas terbatas. Daftar sekarang dan jadwalkan kelas percobaan.</p>
+            <a class="btn btn-light btn-sm" href="index.html#daftar">Daftar</a>
+          </div>
         </aside>
       </div>
     </section>
   </main>
+
   <footer id="site-footer" class="footer"></footer>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

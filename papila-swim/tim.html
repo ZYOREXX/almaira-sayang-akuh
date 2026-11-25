@@ -2,29 +2,65 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tim Pelatih - Papila Swimming School</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tim Pelatih | Papila Swimming School</title>
   <meta name="description" content="Kenalan dengan tim pelatih dan staf Papila Swimming School.">
-  <meta property="og:title" content="Tim Pelatih - Papila Swimming School">
-  <meta property="og:description" content="Kenalan dengan tim pelatih dan staf Papila Swimming School.">
+  <meta name="theme-color" content="#06224a">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
-  <meta name="theme-color" content="#1572e8">
+  <meta property="og:site_name" content="Papila Swimming School">
+  <meta property="og:title" content="Tim Pelatih | Papila Swimming School">
+  <meta property="og:description" content="Kenalan dengan tim pelatih dan staf Papila Swimming School.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Raleway:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="tim">
-  <header id="site-header"></header>
-  <section id="page-title" class="page-title" data-title="Tim Kami" data-crumb="Team"></section>
-  <main>
+  <a class="skip-link" href="#konten">Langsung ke konten</a>
+  <header id="site-header" class="header"></header>
+  <noscript><p style="padding:96px 16px 16px;text-align:center">Aktifkan JavaScript untuk melihat seluruh isi situs ini.</p></noscript>
+  <section class="page-hero" id="page-hero">
+    <div class="container page-hero-inner">
+      <div class="page-hero-text">
+        <h1>Tim Kami</h1>
+        <p class="page-lead">Kenalan dengan pelatih dan staf yang mendampingi setiap siswa di kolam.</p>
+      </div>
+      <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="index.html">Beranda</a></li><li aria-current="page">Tim Kami</li></ol></nav>
+    </div>
+  </section>
+  <div class="lane" aria-hidden="true"></div>
+  <main id="konten">
     <section class="section">
-      <div class="container"><div id="team-grid" class="team-grid cols-3"></div></div>
+      <div class="container">
+        <div class="toolbar">
+          <div class="chips scroll-x" id="team-filter" role="group" aria-label="Filter berdasarkan peran"></div>
+          <label class="search"><span class="sr-only">Cari nama</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="team-search" type="search" placeholder="Cari nama atau peran" autocomplete="off"></label>
+        </div>
+        <p class="filter-info" id="team-info" aria-live="polite"></p>
+        <div class="team-grid" id="team-grid"></div>
+        <div class="empty" id="team-empty" hidden><p>Tidak ada anggota tim yang cocok dengan pencarian.</p></div>
+      </div>
+    </section>
+
+    <section class="section-tight" aria-label="Lowongan pelatih">
+      <div class="container">
+        <div class="cta-band reveal">
+          <div>
+            <h2>Ingin bergabung sebagai pelatih?</h2>
+            <p>Kami terbuka untuk pelatih renang yang sabar, komunikatif, dan senang mengajar anak-anak.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="btn btn-light btn-lg" data-wa="Halo Admin, saya tertarik bergabung sebagai pelatih renang.">Kirim minat via WhatsApp</a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
-  <footer id="site-footer" class="footer alt"></footer>
+
+  <footer id="site-footer" class="footer"></footer>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
 </body>

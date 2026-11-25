@@ -2,34 +2,89 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tentang Kami - Papila Swimming School</title>
-  <meta name="description" content="Kenali Papila Swimming School: profil, lokasi kolam renang, dan program renang untuk semua usia.">
-  <meta property="og:title" content="Tentang Kami - Papila Swimming School">
-  <meta property="og:description" content="Kenali Papila Swimming School: profil, lokasi kolam renang, dan program renang untuk semua usia.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tentang Kami | Papila Swimming School</title>
+  <meta name="description" content="Profil, visi misi, lokasi kolam mitra, dan program renang Papila Swimming School.">
+  <meta name="theme-color" content="#06224a">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="id_ID">
-  <meta name="theme-color" content="#1572e8">
+  <meta property="og:site_name" content="Papila Swimming School">
+  <meta property="og:title" content="Tentang Kami | Papila Swimming School">
+  <meta property="og:description" content="Profil, visi misi, lokasi kolam mitra, dan program renang Papila Swimming School.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Raleway:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="tentang">
-  <header id="site-header"></header>
-  <section id="page-title" class="page-title" data-title="Tentang Kami" data-crumb="About"></section>
-  <main>
-    <section class="section"><div id="about-block"></div></section>
-    <div id="stats" class="stats"></div>
+  <a class="skip-link" href="#konten">Langsung ke konten</a>
+  <header id="site-header" class="header"></header>
+  <noscript><p style="padding:96px 16px 16px;text-align:center">Aktifkan JavaScript untuk melihat seluruh isi situs ini.</p></noscript>
+  <section class="page-hero" id="page-hero">
+    <div class="container page-hero-inner">
+      <div class="page-hero-text">
+        <h1>Tentang Kami</h1>
+        <p class="page-lead">Mengenal sekolah renang kami, lokasi kolam mitra, dan program yang tersedia untuk setiap usia.</p>
+      </div>
+      <nav aria-label="Breadcrumb"><ol class="crumbs"><li><a href="index.html">Beranda</a></li><li aria-current="page">Tentang Kami</li></ol></nav>
+    </div>
+  </section>
+  <div class="lane" aria-hidden="true"></div>
+  <main id="konten">
+    <section class="section">
+      <div class="container about" id="about-classic"></div>
+    </section>
+
+    <section class="section section-soft" aria-label="Visi dan misi">
+      <div class="container">
+        <div class="vm" id="vm"></div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Angka kami">
+      <div class="container"><div class="scoreboard" data-stats></div></div>
+    </section>
+
+    <section id="layanan" class="section section-soft">
+      <div class="container">
+        <div class="sec-head">
+          <span class="eyebrow">Layanan</span>
+          <h2 class="sec-title">Lokasi kolam &amp; program klub</h2>
+          <p class="lead">Pilih lokasi untuk melihat alamat kolam, atau pilih program untuk melihat detail kelas.</p>
+        </div>
+        <div class="svc" id="svc"></div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="container">
-        <div class="title-left"><span>Features</span><h2>Service Klub Kami</h2></div>
-        <div id="service-tabs" class="tabs"></div>
+        <div class="sec-head center">
+          <span class="eyebrow">Keunggulan</span>
+          <h2 class="sec-title">Yang membuat kelas kami berbeda</h2>
+        </div>
+        <div class="features" data-features></div>
+      </div>
+    </section>
+
+    <section class="section-tight" aria-label="Ajakan mendaftar">
+      <div class="container">
+        <div class="cta-band reveal">
+          <div>
+            <h2>Siap mulai berenang bersama kami?</h2>
+            <p>Daftar sekarang dan jadwalkan kelas percobaan untuk menentukan level yang tepat.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="btn btn-light btn-lg" href="index.html#daftar">Daftar sekarang</a>
+            <a class="btn btn-glass btn-lg" data-wa="Halo Admin, saya ingin bertanya tentang kelas renang.">Chat WhatsApp</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
-  <footer id="site-footer" class="footer alt"></footer>
+
+  <footer id="site-footer" class="footer"></footer>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
 </body>
