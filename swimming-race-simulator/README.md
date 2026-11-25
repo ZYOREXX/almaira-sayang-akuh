@@ -1,7 +1,7 @@
 # 🏊 Swimming Race Simulator
 
-Game web lomba renang gaya bebas di kolam olimpiade 50 m, 8 lintasan, tampilan top-down.
-Dibuat dengan **HTML5 Canvas**, **JavaScript modern (ES modules, tanpa framework)**, **Vite**, dan **Tailwind CSS v4**.
+Game web lomba renang gaya bebas 3D di kolam olimpiade 50 m, 8 lintasan, dengan kamera sinematik di belakang perenang.
+Dibuat dengan **Three.js (WebGL di atas HTML5 Canvas)**, **JavaScript modern (ES modules)**, **Vite**, dan **Tailwind CSS v4**. Semua model, tekstur, dan suara dibuat prosedural, tanpa file aset.
 
 ## Menjalankan secara lokal
 
@@ -22,6 +22,7 @@ Buka http://localhost:5173. Untuk build produksi: `npm run build` lalu `npm run 
 | **Dive Start** | `Enter` / `D` / tombol DIVE | Tekan tepat setelah bunyi start. Menekan saat *Take your marks* = **false start** (penalti 1 dtk). Reaksi cepat = lompatan jauh dan kecepatan masuk air tinggi. |
 | **Kayuh** | `Spasi` / klik kolam / tombol KAYUH | Tekan saat jarum indikator ritme berada di **Sweet Spot** (hijau). Zona terang = PERFECT (+7% dorongan). |
 | **Flip Turn** | `F` / tombol FLIP | Saat mendekati dinding balik, zona kuning muncul di lintasan 4. Tekan di bagian hijau (1,3–2,5 m dari dinding) untuk flip sempurna. Lupa menekan = *open turn* yang lambat. |
+| Ganti kamera | `C` / tombol 🎥 | Belakang (kejar), Siaran TV, atau Atas. |
 | Suara | `M` | |
 | Keluar ke menu | `Esc` | |
 
@@ -51,13 +52,17 @@ src/
 ├── controllers/
 │   ├── PlayerController.js   # Model ritme kayuhan, stamina, dive, flip turn pemain
 │   └── AIController.js       # Perilaku AI per tingkat
-├── render/
-│   ├── Camera.js             # Konversi meter ↔ piksel (HiDPI)
-│   ├── PoolRenderer.js       # Kolam, caustics air (Voronoi), tali lintasan, garis finis, zona flip
-│   ├── SwimmerRenderer.js    # Perenang top-down beranimasi (block, lompat, renang, flip, finis)
-│   └── Particles.js          # Cipratan, buih, riak air
+├── render3d/
+│   ├── Scene3D.js            # Renderer WebGL, cahaya, environment map, bayangan
+│   ├── Pool3D.js             # Kolam: dasar berubin, tali lintasan, start block, gantry FINISH, zona flip
+│   ├── WaterMaterials.js     # Shader air (gelombang, jejak perenang, Fresnel, kilau) & caustics dasar kolam
+│   ├── Stadium3D.js          # Tribun + penonton bersorak, atap & lampu, papan iklan, layar skor langsung
+│   ├── Swimmer3D.js          # Model perenang berangka + pose start, lompat, gaya bebas, flip turn, finis
+│   ├── Effects3D.js          # Cipratan (gravitasi), buih, cincin riak
+│   ├── CameraRig.js          # Kamera menu, start, kejar, siaran TV, atas, finis
+│   └── textures.js           # Tekstur prosedural (ubin, nomor lintasan, spanduk, penanda)
 ├── audio/Sound.js            # Efek suara sintetis Web Audio (tanpa file aset)
-└── ui/                       # HUD, menu, layar hasil dengan podium
+└── ui/                       # HUD gaya siaran, menu, layar hasil dengan podium
 ```
 
 Model fisika: setiap kayuhan menambah kecepatan (impuls), sedangkan air memberi hambatan eksponensial.

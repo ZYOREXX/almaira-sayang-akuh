@@ -16,33 +16,37 @@ const TONE_CLASS = {
   bad: 'bg-rose-500 text-white',
 };
 
-/** Memperbarui elemen DOM HUD; hanya menulis saat nilai berubah. */
+/** HUD bergaya siaran di atas adegan 3D. Hanya menulis DOM saat nilai berubah. */
 export class HUD {
   constructor() {
-    this.el = {
-      timer: $('timer'), distance: $('distance'), lap: $('lap'), position: $('position'), speed: $('speed'),
-      staminaFill: $('staminaFill'), staminaText: $('staminaText'), staminaWarn: $('staminaWarn'),
-      zoneSweet: $('zoneSweet'), zonePerfect: $('zonePerfect'), needle: $('needle'),
-      rhythmLabel: $('rhythmLabel'), streak: $('streak'), flipPrompt: $('flipPrompt'),
-      standings: $('standings'), message: $('messageText'), rating: $('rating'), hint: $('hint'),
-      warp: $('warp'), btnDive: $('btnDive'), btnFlip: $('btnFlip'), btnStroke: $('btnStroke'),
-    };
+    const ids = [
+      'hud', 'timer', 'remaining', 'lap', 'position', 'posSuffix', 'speed', 'playerName', 'raceTag', 'track',
+      'staminaFill', 'staminaText', 'zoneSweet', 'zonePerfect', 'needle', 'rhythmLabel', 'streak', 'flipPrompt',
+      'standings', 'messageText', 'rating', 'hint', 'warp', 'btnDive', 'btnFlip', 'btnStroke',
+    ];
+    this.el = Object.fromEntries(ids.map((id) => [id, $(id)]));
     this.cache = new Map();
     this.hintTimer = null;
+    this.dots = [];
+  }
+
+  show(visible) {
+    this.el.hud.classList.toggle('hidden', !visible);
   }
 
   set(key, prop, value) {
     const k = `${key}.${prop}`;
     if (this.cache.get(k) === value) return;
     this.cache.set(k, value);
-    if (prop === 'text') this.el[key].textContent = value;
-    else if (prop === 'html') this.el[key].innerHTML = value;
-    else if (prop === 'class') this.el[key].className = value;
-    else this.el[key].style[prop] = value;
+    const el = this.el[key];
+    if (prop === 'text') el.textContent = value;
+    else if (prop === 'html') el.innerHTML = value;
+    else if (prop === 'class') el.className = value;
+    else el.style[prop] = value;
   }
 
   message(text) {
-    this.set('message', 'text', text);
+    this.set('messageText', 'text', text);
   }
 
   popRating(text, tone) {
@@ -59,37 +63,61 @@ export class HUD {
     this.hintTimer = setTimeout(() => { this.el.hint.style.opacity = '0'; }, 1400);
   }
 
-  reset() {
+  /** Siapkan untuk lomba baru. */
+  reset(race) {
     this.cache.clear();
     this.el.rating.replaceChildren();
     this.message('');
     this.el.warp.classList.add('hidden');
+    if (!race) return;
+    this.set('playerName', 'text', race.player.name.toUpperCase());
+    this.set('raceTag', 'text', `${race.distance} m Gaya Bebas · Final`);
+    // Titik-titik progres per lintasan
+    this.el.track.innerHTML = '';
+    const lanes = race.swimmers.length;
+    this.dots = race.swimmers.map((s) => {
+      const top = `${((s.lane - 0.5) / lanes) * 100}%`;
+      // garis lintasan tipis
+      const line = document.createElement('div');
+      line.className = 'absolute inset-x-1 h-px bg-white/10';
+      line.style.top = top;
+      this.el.track.appendChild(line);
+      const d = document.createElement('div');
+      d.className = 'track-dot';
+      d.style.top = top;
+      d.style.background = s.capColor;
+      if (s.isPlayer) {
+        d.style.width = d.style.height = '11px';
+        d.style.boxShadow = '0 0 0 2px #ef4444, 0 0 10px #ef4444';
+        d.style.zIndex = '2';
+      }
+      this.el.track.appendChild(d);
+      return { s, d, last: '' };
+    });
   }
 
   update(race, nowSec) {
     const p = race.player;
     const ctl = race.playerCtl;
+    const racingOrDone = race.state === 'racing' || race.state === 'done';
 
-    // Waktu & jarak
-    this.set('timer', 'text', formatTime(race.state === 'racing' || race.state === 'done' ? (p.finishTime ?? race.clock) : 0));
-    this.set('distance', 'text', `${p.dist.toFixed(1)} / ${race.distance} m`);
-    const lapNo = Math.min(p.lapIndex + 1, p.lengths);
-    this.set('lap', 'text', p.lengths > 1 ? `Length ${lapNo}/${p.lengths}` : '');
+    this.set('timer', 'text', formatTime(racingOrDone ? (p.finishTime ?? race.clock) : 0));
+    this.set('remaining', 'text', (race.distance - p.dist).toFixed(p.dist > race.distance - 10 ? 1 : 0));
+    this.set('lap', 'text', p.lengths > 1 ? `Length ${Math.min(p.lapIndex + 1, p.lengths)} / ${p.lengths}` : 'Satu length · 50 m');
     this.set('speed', 'text', `${p.v.toFixed(2)} m/s`);
 
     const standings = race.standings();
     const pos = standings.indexOf(p) + 1;
-    this.set('position', 'html', race.state === 'racing' || race.state === 'done'
-      ? `${pos}<span class="text-sm text-slate-400">/8</span>`
-      : '-');
+    this.set('position', 'text', racingOrDone ? String(pos) : '-');
+    this.set('posSuffix', 'text', racingOrDone ? (pos === 1 ? 'st' : pos === 2 ? 'nd' : pos === 3 ? 'rd' : 'th') : '');
 
     // Stamina
     const st = ctl.stamina;
     this.set('staminaFill', 'width', `${st.toFixed(1)}%`);
-    const color = st > 60 ? '#22c55e' : st > 30 ? '#eab308' : '#ef4444';
-    this.set('staminaFill', 'backgroundColor', color);
+    this.set('staminaFill', 'background', st > 60
+      ? 'linear-gradient(90deg,#16a34a,#4ade80)'
+      : st > 30 ? 'linear-gradient(90deg,#ca8a04,#facc15)' : 'linear-gradient(90deg,#b91c1c,#f87171)');
     this.set('staminaText', 'text', `${Math.round(st)}%`);
-    this.set('staminaWarn', 'text', st < 30 ? '⚠ Stamina rendah — kayuhan melemah, perlambat ritme!' : '');
 
     // Indikator ritme
     const r = ctl.rhythmState(nowSec);
@@ -104,19 +132,29 @@ export class HUD {
     this.set('needle', 'opacity', swimming ? '1' : '0.3');
 
     const rs = r.rating && r.ratingAge < 1.2 ? RATING_STYLE[r.rating] : null;
-    this.set('rhythmLabel', 'text', rs ? rs.text : swimming ? 'Jaga ritme…' : '');
-    this.set('rhythmLabel', 'class', `font-bold ${rs ? rs.cls : 'text-slate-400'}`);
-    this.set('streak', 'text', r.streak >= 3 ? `🔥 Combo ×${r.streak}` : '');
+    const lowStamina = st < 30 && swimming;
+    this.set('rhythmLabel', 'text', lowStamina ? '⚠ Stamina rendah — perlambat ritme!' : rs ? rs.text : swimming ? 'Jaga ritme…' : '');
+    this.set('rhythmLabel', 'class', `font-bold ${lowStamina ? 'text-rose-300' : rs ? rs.cls : 'text-slate-300'}`);
+    this.set('streak', 'text', r.streak >= 3 ? `🔥×${r.streak}` : '');
 
-    // Flip turn prompt
+    // Flip turn
     const inZone = race.racing && swimming && !p.isFinalLength && p.distToWall <= TURN.zoneStart;
     const ideal = inZone && p.distToWall <= TURN.idealFar && p.distToWall >= TURN.idealNear;
-    this.set('flipPrompt', 'text', inZone ? (ideal ? '▶ TEKAN F SEKARANG!' : `Dinding ${p.distToWall.toFixed(1)} m — siap FLIP`) : '');
+    this.set('flipPrompt', 'text', inZone ? (ideal ? '▶ FLIP SEKARANG! (F)' : `Dinding ${p.distToWall.toFixed(1)} m`) : '');
     this.el.btnFlip.classList.toggle('is-active', ideal);
     this.el.btnDive.classList.toggle('is-active', race.racing && p.phase === 'block');
     this.el.btnStroke.classList.toggle('is-active', swimming && r.since != null && r.since >= r.perfectMin && r.since <= r.perfectMax);
 
     this.el.warp.classList.toggle('hidden', race.timeScale === 1 || race.state !== 'racing');
+
+    // Progres lintasan
+    for (const dot of this.dots) {
+      const left = `${clamp(dot.s.dist / race.distance, 0, 1) * 100}%`;
+      if (dot.last !== left) {
+        dot.d.style.left = left;
+        dot.last = left;
+      }
+    }
 
     this.renderStandings(standings, race);
   }
@@ -126,23 +164,21 @@ export class HUD {
     const key = standings.map((s) => `${s.lane}:${s.finishTime ?? ''}:${Math.floor(s.dist)}`).join('|');
     if (this.cache.get('standingsKey') === key) return;
     this.cache.set('standingsKey', key);
-    const rows = standings.map((s, i) => {
+    this.el.standings.innerHTML = standings.map((s, i) => {
       let gap = '';
       if (s.finishTime != null) gap = formatTime(s.finishTime);
       else if (race.state === 'racing' && s !== leader) gap = `-${(leader.dist - s.dist).toFixed(1)} m`;
-      const highlight = s.isPlayer ? 'ring-rose-400/60 bg-rose-950/50' : '';
+      const highlight = s.isPlayer ? 'ring-rose-400/70 bg-rose-950/60' : '';
       return `<li class="standing-row ${highlight}">
-        <span class="w-4 text-right font-black ${i < 3 ? 'text-amber-300' : 'text-slate-400'}">${i + 1}</span>
+        <span class="w-4 text-right font-display text-base font-black italic ${i < 3 ? 'text-amber-300' : 'text-slate-300'}">${i + 1}</span>
         <span class="h-3 w-3 shrink-0 rounded-full" style="background:${s.capColor}"></span>
         <span class="min-w-0 flex-1 truncate font-semibold">${escapeHtml(s.name)}</span>
-        <span class="font-mono text-[10px] text-slate-400">${gap}</span>
+        <span class="font-mono text-[10px] text-slate-300">${gap}</span>
       </li>`;
-    });
-    this.el.standings.innerHTML = rows.join('');
+    }).join('');
   }
 }
 
 export function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-

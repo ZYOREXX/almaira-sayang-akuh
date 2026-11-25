@@ -1,32 +1,24 @@
-import { WORLD } from '../config.js';
 import { EventBus } from './EventBus.js';
 import { Race } from './Race.js';
 import { Input } from './Input.js';
-import { Camera } from '../render/Camera.js';
-import { PoolRenderer } from '../render/PoolRenderer.js';
-import { SwimmerRenderer } from '../render/SwimmerRenderer.js';
-import { Particles } from '../render/Particles.js';
+import { Scene3D } from '../render3d/Scene3D.js';
+import { CAMERA_LABELS } from '../render3d/CameraRig.js';
 import { HUD } from '../ui/HUD.js';
 import { Menu } from '../ui/Menu.js';
 import { Results } from '../ui/Results.js';
 import { Sound } from '../audio/Sound.js';
 
+const DEMO = { distance: 100, level: 'sedang', playerName: 'Anda' };
+
 /**
- * Orkestrator: game loop (requestAnimationFrame), ukuran canvas,
- * dan penghubung antara Race (logika), renderer, HUD, dan audio.
+ * Orkestrator: game loop, penghubung Race (logika) ↔ Scene3D (render),
+ * HUD, menu, layar hasil, dan audio.
  */
 export class Game {
   constructor() {
-    this.canvas = document.getElementById('pool');
-    this.ctx = this.canvas.getContext('2d');
-    this.wrap = document.getElementById('canvasWrap');
-    this.stage = document.getElementById('stage');
-
+    this.canvas = document.getElementById('scene');
     this.bus = new EventBus();
-    this.camera = new Camera();
-    this.pool = new PoolRenderer(this.camera);
-    this.swimmerRenderer = new SwimmerRenderer(this.camera);
-    this.particles = new Particles(this.camera, this.bus);
+    this.scene3d = new Scene3D(this.canvas, this.bus);
     this.sound = new Sound();
     this.hud = new HUD();
 
@@ -47,21 +39,26 @@ export class Game {
     });
 
     this.btnMute = document.getElementById('btnMute');
-    this.btnQuit = document.getElementById('btnQuit');
-    this.raceTag = document.getElementById('raceTag');
+    this.btnCamera = document.getElementById('btnCamera');
+    this.camLabel = document.getElementById('camLabel');
     this.btnMute.addEventListener('click', () => this.handleAction('mute'));
-    this.btnQuit.addEventListener('click', () => this.toMenu());
+    this.btnCamera.addEventListener('click', () => this.handleAction('camera'));
+    document.getElementById('btnQuit').addEventListener('click', () => this.toMenu());
 
     this.bindEvents();
-    this.race = null;
     this.time = 0;
     this.last = performance.now();
 
-    new ResizeObserver(() => this.resize()).observe(this.stage);
+    new ResizeObserver(() => this.resize()).observe(this.canvas);
     this.resize();
-    // Lomba "demo" di belakang menu agar kolam terlihat hidup
-    this.race = new Race({ distance: 100, level: 'sedang', playerName: 'Anda' }, this.bus);
+    this.setRace(new Race(DEMO, this.bus));
     requestAnimationFrame((t) => this.frame(t));
+  }
+
+  setRace(race) {
+    this.race?.dispose();
+    this.race = race;
+    this.scene3d.setRace(race);
   }
 
   bindEvents() {
@@ -70,13 +67,14 @@ export class Game {
       if (!this.isLive) return;
       if (state === 'prep') this.hud.message('Bersiap…');
       if (state === 'marks') {
-        this.hud.message('Take your marks…');
+        this.hud.message('Take your marks');
         this.sound.marks();
       }
       if (state === 'racing') {
         this.hud.message('GO!');
         this.sound.startBeep();
         this.sound.crowdStart();
+        this.scene3d.cheer(0.6);
         setTimeout(() => { if (this.race?.state === 'racing') this.hud.message(''); }, 700);
       }
     });
@@ -103,11 +101,17 @@ export class Game {
     });
     b.on('finish', ({ swimmer }) => {
       if (!this.isLive) return;
-      if (this.race.finishOrder.length === 1) this.sound.crowdSwell(0.14);
+      if (this.race.finishOrder.length === 1) {
+        this.sound.crowdSwell(0.14);
+        this.scene3d.cheer(1);
+      }
       if (swimmer.isPlayer) {
         const place = this.race.finishOrder.length;
-        this.hud.message(place === 1 ? '🏆 JUARA!' : `Finis #${place}`);
-        if (place <= 3) this.sound.fanfare();
+        this.hud.message(place === 1 ? '🏆 Juara!' : `Finis #${place}`);
+        if (place <= 3) {
+          this.sound.fanfare();
+          this.scene3d.cheer(1);
+        }
         this.sound.splash(1);
       }
     });
@@ -119,41 +123,35 @@ export class Game {
         if (this.race?.state !== 'done' || !this.isLive) return;
         this.hud.message('');
         this.results.show(this.race);
-      }, 1200);
+      }, 2200);
     });
   }
 
   get isLive() {
-    return !!this.race && this.race.live;
+    return !!this.race?.live;
   }
 
   startRace(settings) {
     this.sound.unlock();
     this.lastSettings = settings;
-    this.race?.dispose();
-    this.particles.clear();
     this.menu.hide();
     this.results.hide();
-    this.hud.reset();
-    this.race = new Race(settings, this.bus);
-    this.race.live = true;
-    this.input.enabled = true;
-    this.btnQuit.classList.remove('hidden');
-    this.raceTag.textContent = `${settings.distance} m Gaya Bebas · ${settings.level.toUpperCase()}`;
-    this.raceTag.classList.remove('hidden');
+    const race = new Race(settings, this.bus);
+    race.live = true;
+    this.setRace(race);
+    this.hud.reset(race);
+    this.hud.show(true);
     this.hud.message('Bersiap…');
-    this.canvas.focus?.();
+    this.input.enabled = true;
   }
 
   toMenu() {
     this.sound.crowdStop();
     this.input.enabled = false;
     this.results.hide();
-    this.hud.reset();
-    this.btnQuit.classList.add('hidden');
-    this.raceTag.classList.add('hidden');
-    this.race?.dispose();
-    this.race = new Race({ distance: 100, level: 'sedang', playerName: 'Anda' }, this.bus);
+    this.hud.reset(null);
+    this.hud.show(false);
+    this.setRace(new Race(DEMO, this.bus));
     this.menu.show();
   }
 
@@ -162,6 +160,11 @@ export class Game {
       this.sound.unlock();
       this.sound.setMuted(!this.sound.muted);
       this.btnMute.textContent = this.sound.muted ? '🔇' : '🔊';
+      return;
+    }
+    if (action === 'camera') {
+      const mode = this.scene3d.rig.cycle();
+      this.camLabel.textContent = CAMERA_LABELS[mode];
       return;
     }
     if (action === 'quit') {
@@ -176,71 +179,41 @@ export class Game {
   }
 
   resize() {
-    const rect = this.stage.getBoundingClientRect();
-    const aspect = WORLD.width / WORLD.height;
-    let w = rect.width;
-    if (w / aspect > rect.height) w = rect.height * aspect;
-    w = Math.max(280, Math.floor(w));
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.camera.resize(w, dpr);
-    const h = Math.round(this.camera.cssHeight);
-    this.canvas.style.width = `${w}px`;
-    this.canvas.style.height = `${h}px`;
-    this.canvas.width = Math.round(w * dpr);
-    this.canvas.height = Math.round(h * dpr);
-    this.pool.resize(this.canvas.width, this.canvas.height, this.ctx);
+    const w = this.canvas.clientWidth || window.innerWidth;
+    const h = this.canvas.clientHeight || window.innerHeight;
+    this.scene3d.resize(w, h);
   }
 
-  /** Demo di belakang menu: AI berenang sendiri dan lomba diulang. */
-  updateDemo() {
+  /** Lomba demo di belakang menu: semua perenang otomatis. */
+  updateDemo(dt) {
     const r = this.race;
     if (r.live) return;
-    if (r.state === 'racing' && r.player.phase === 'block' && r.clock > 0.2) {
-      r.player.dive(r.clock, 0.8);
-    }
-    if (r.state === 'racing' && r.player.phase === 'swim') {
-      // pemain demo berenang otomatis dengan ritme ideal
-      r.demoTimer = (r.demoTimer ?? 0) + 1 / 60;
+    const p = r.player;
+    if (r.state === 'racing' && p.phase === 'block' && r.clock > 0.2) p.dive(r.clock, 0.8);
+    if (r.state === 'racing' && p.phase === 'swim') {
+      r.demoTimer = (r.demoTimer ?? 0) + dt;
       if (r.demoTimer > 0.46) {
         r.demoTimer = 0;
-        r.player.v = Math.min(r.player.v + 1.15, 3);
-        r.player.armTarget += Math.PI;
-        this.bus.emit('stroke', { swimmer: r.player, rating: 'ai', arm: 0 });
+        p.v = Math.min(p.v + 1.12, 3);
+        p.armTarget += Math.PI;
+        this.bus.emit('stroke', { swimmer: p, rating: 'ai', arm: Math.round(p.armTarget / Math.PI) % 2 });
       }
-      if (!r.player.isFinalLength && r.player.distToWall < 2) r.player.startTurn(0.9);
+      if (!p.isFinalLength && p.distToWall < 2) p.startTurn(0.9);
     }
-    if (r.state === 'done' && r.stateTime > 3) {
-      r.dispose();
-      this.race = new Race({ distance: 100, level: 'sedang', playerName: 'Anda' }, this.bus);
-    }
+    if (r.state === 'done' && r.stateTime > 4) this.setRace(new Race(DEMO, this.bus));
   }
 
   frame(ts) {
     const dt = Math.min((ts - this.last) / 1000, 0.1);
     this.last = ts;
     this.time += dt;
-    const race = this.race;
 
-    this.updateDemo();
-    race.update(dt);
-    this.particles.emitWakes(dt, race.swimmers);
-    this.particles.update(dt * race.timeScale);
-
-    this.render(race);
-    if (race.live) this.hud.update(race, performance.now() / 1000);
+    this.updateDemo(dt);
+    this.race.update(dt);
+    this.scene3d.update(this.race, this.time, dt);
+    this.scene3d.render();
+    if (this.race.live) this.hud.update(this.race, performance.now() / 1000);
 
     requestAnimationFrame((t) => this.frame(t));
-  }
-
-  render(race) {
-    const ctx = this.ctx;
-    const t = this.time;
-    this.pool.drawBase(ctx);
-    this.pool.drawWater(ctx, t);
-    this.pool.drawPlayerLane(ctx, race, t);
-    this.particles.draw(ctx);
-    this.pool.drawRopes(ctx, t);
-    this.pool.drawFinish(ctx, race, t);
-    this.swimmerRenderer.draw(ctx, race, t);
   }
 }

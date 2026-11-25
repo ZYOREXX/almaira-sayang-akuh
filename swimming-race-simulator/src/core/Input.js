@@ -1,6 +1,6 @@
 /**
  * Menyatukan keyboard, klik canvas, dan tombol layar sentuh menjadi aksi:
- * 'stroke' | 'dive' | 'flip' | 'quit' | 'mute'
+ * 'stroke' | 'dive' | 'flip' | 'quit' | 'mute' | 'camera'
  */
 export class Input {
   constructor({ canvas, buttons, onAction }) {
@@ -11,11 +11,11 @@ export class Input {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
       const map = {
         Space: 'stroke', Enter: 'dive', KeyD: 'dive', ArrowUp: 'dive',
-        KeyF: 'flip', Escape: 'quit', KeyM: 'mute',
+        KeyF: 'flip', Escape: 'quit', KeyM: 'mute', KeyC: 'camera',
       };
       const action = map[e.code];
       if (!action) return;
-      if (!this.enabled && action !== 'mute' && action !== 'quit') return;
+      if (!this.enabled && !['mute', 'quit', 'camera'].includes(action)) return;
       e.preventDefault();
       if (e.repeat) return; // menahan tombol tidak dihitung sebagai kayuhan
       this.fire(action);
@@ -38,7 +38,7 @@ export class Input {
   }
 
   fire(action) {
-    if (action === 'mute' || action === 'quit' || this.enabled) {
+    if (['mute', 'quit', 'camera'].includes(action) || this.enabled) {
       this.onAction(action, performance.now() / 1000);
     }
   }
