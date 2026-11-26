@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion, type PanInfo } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, type PanInfo } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { getPhoto, PORTFOLIO_DATA } from '../data/portfolio';
-import type { Achievement } from '../data/types';
+import type { Achievement, ImageRef } from '../data/types';
+import { Tilt } from '../components/Tilt';
 import { Chip, Section, SectionHeader } from '../components/ui';
 import { Icon } from '../components/Icon';
 import { OrgLogo } from '../components/Logos';
@@ -11,12 +12,53 @@ import { cn } from '../lib/utils';
 
 const AUTO_MS = 4500;
 
+/** Jeda crossfade antar-halaman sertifikat dalam satu kartu (milidetik). */
+const FADE_MS = 3200;
+
+/** Certificate scans: several pages cross-fade automatically inside the card. */
+function ScanFade({ images }: { images: ImageRef[] }) {
+  const reduce = useReducedMotion();
+  const [k, setK] = useState(0);
+  const many = images.length > 1;
+  useEffect(() => {
+    if (!many || reduce) return;
+    const t = window.setInterval(() => {
+      if (!document.hidden) setK((c) => (c + 1) % images.length);
+    }, FADE_MS);
+    return () => window.clearInterval(t);
+  }, [many, reduce, images.length]);
+  const im = images[k];
+  return (
+    <>
+      <AnimatePresence initial={false}>
+        <motion.img
+          key={im.src}
+          src={im.thumb ?? im.src}
+          alt={im.alt}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1, ease: EASE }}
+          className="absolute inset-0 h-full w-full object-contain p-3"
+        />
+      </AnimatePresence>
+      {many && (
+        <span className="absolute bottom-3 right-3 z-[1] flex gap-1 rounded-full bg-white/85 px-2 py-1.5 shadow-soft" aria-hidden="true">
+          {images.map((x, j) => (
+            <span key={x.src} className={cn('h-1.5 rounded-full transition-all duration-500', j === k ? 'w-4 bg-cerulean-600' : 'w-1.5 bg-line')} />
+          ))}
+        </span>
+      )}
+    </>
+  );
+}
+
 /** Visual of a card: certificate scan, documentation photo, or a designed summary. */
 function Visual({ a }: { a: Achievement }) {
-  if (a.visual.kind === 'scan') {
-    const im = a.visual.images[0];
-    return <img src={im.thumb ?? im.src} alt={im.alt} loading="lazy" decoding="async" draggable={false} className="absolute inset-0 h-full w-full object-contain p-3" />;
-  }
+  if (a.visual.kind === 'scan') return <ScanFade images={a.visual.images} />;
   if (a.visual.kind === 'photo') {
     const p = getPhoto(a.visual.photo);
     if (!p) return null;
@@ -47,7 +89,7 @@ function Visual({ a }: { a: Achievement }) {
 
 function Card({ a }: { a: Achievement }) {
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-[26px] border border-line bg-white shadow-soft">
+    <Tilt as="article" max={4} scale={1.02} className="flex h-full flex-col overflow-hidden rounded-[26px] border border-line bg-white shadow-soft">
       <div className={cn('relative aspect-[4/3] overflow-hidden border-b border-line', a.visual.kind === 'scan' ? 'bg-canvas' : 'bg-ink/5')}>
         <Visual a={a} />
       </div>
@@ -60,7 +102,7 @@ function Card({ a }: { a: Achievement }) {
         <p className="mt-1.5 text-[13.5px] leading-snug text-muted">{a.issuer}</p>
         <p className="mt-auto pt-5 text-[13px] font-semibold text-ink">{a.date}</p>
       </div>
-    </article>
+    </Tilt>
   );
 }
 
@@ -141,7 +183,7 @@ export function Achievements() {
       <Reveal>
         <div
           ref={viewport}
-          className="overflow-hidden"
+          className="-my-8 overflow-hidden py-8"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}

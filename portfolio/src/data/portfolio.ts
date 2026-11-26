@@ -42,6 +42,9 @@ export const PORTFOLIO_DATA = {
     'dpm-pgsd-penjas': { src: 'logos/dpm-pgsd-penjas.webp', alt: 'DPM PGSD Penjas FPOK UPI logo' },
     'hmp-pgsd-penjas': { src: 'logos/hmp-pgsd-penjas.webp', alt: 'HMP PGSD Penjas FPOK UPI logo' },
     'ukm-ibaf': { src: 'logos/ukm-ibaf.webp', alt: 'UKM Ideal Body and Fitness UPI logo' },
+    pocari: { src: 'logos/pocari.webp', alt: 'Pocari Sweat logo' },
+    // Versi ikon (persegi) logo ICSDP untuk pill kecil di Hero
+    'icsdp-mark': { src: 'logos/icsdp-mark.webp', alt: 'ICSDP emblem' },
   },
 
   /* ---------- LOGO APLIKASI RESMI (Tech Stack) ---------- */
@@ -74,12 +77,12 @@ export const PORTFOLIO_DATA = {
     name: 'Tio Ilham Wahyudi',
     suffix: 'S.Pd.',
     roles: ['Sport Education Researcher', 'Academic Writing Mentor', 'Sport Project Specialist'],
-    // FOTO UTAMA — rasio 4:5
-    portrait: { src: 'images/hero-portrait.webp', alt: 'Tio Ilham Wahyudi at the 11th ICSDP 2026, wearing batik and a conference lanyard' },
+    // FOTO UTAMA — rasio 4:5, setengah badan (object-cover object-top)
+    portrait: { src: 'images/hero-portrait.webp', alt: 'Tio Ilham Wahyudi in a suit and graduation medal in front of Villa Isola, UPI' },
     pills: [
       { logo: 'upi', label: "Fast-Track Master's", detail: 'Sport Education UPI' },
-      { icon: 'award', label: 'Cum Laude', detail: 'GPA 3.83 / 4.00', prestige: true },
-      { icon: 'mic', label: 'International Conference', detail: '& Journal Author' },
+      { logo: 'hmp-pgsd-penjas', icon: 'award', label: 'Cum Laude', detail: 'GPA 3.83 / 4.00', prestige: true },
+      { logo: 'icsdp-mark', icon: 'mic', label: 'International Conference', detail: '& Journal Author' },
     ],
   },
 
@@ -272,7 +275,7 @@ export const PORTFOLIO_DATA = {
       period: '2025',
       body: 'Technical and on-field operations coordination for a national-scale running event.',
       icon: 'flag',
-      logos: [],
+      logos: ['pocari'],
       photos: ['pocari-finish', 'pocari-crew', 'pocari-stage'],
     },
     {

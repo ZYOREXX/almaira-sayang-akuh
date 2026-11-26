@@ -37,7 +37,7 @@ export default function App() {
               rotateX: 0,
               scale: 1,
               duration: 1.15,
-              ease: 'expo.out',
+              ease: 'back.out(1.5)',
               stagger: 0.09,
               overwrite: true,
               clearProps: 'transform',

@@ -43,9 +43,10 @@ export function MagneticButton({ href, onClick, children, variant = 'primary', s
   );
   const shared = {
     className: classes,
-    style: { x, y },
+    style: { x, y, scale: 1 },
     onPointerMove: handleMove,
     onPointerLeave: reset,
+    whileHover: reduce ? undefined : { scale: 1.05 },
     whileTap: reduce ? undefined : { scale: 0.96 },
     'aria-label': ariaLabel,
   };

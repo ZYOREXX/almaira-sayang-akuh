@@ -1,3 +1,4 @@
+import { Tilt } from '../components/Tilt';
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpRight, Check, Copy, Mail } from 'lucide-react';
@@ -52,13 +53,13 @@ export function Contact() {
             <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-muted">{contact.intro}</p>
             <ul className="mt-9 grid gap-3 sm:grid-cols-3">
               {contact.areas.map((a) => (
-                <li key={a.title} className="rounded-2xl border border-line bg-canvas/70 p-4 transition-colors hover:border-cerulean-200 hover:bg-cerulean-50/60">
+                <Tilt as="li" key={a.title} max={6} scale={1.03} className="rounded-2xl border border-line bg-canvas/70 p-4 transition-colors hover:border-cerulean-200 hover:bg-cerulean-50/60">
                   <span className="grid h-9 w-9 place-items-center rounded-xl bg-white text-cerulean-600 ring-1 ring-line">
                     <Icon name={a.icon} className="h-[18px] w-[18px]" />
                   </span>
                   <p className="mt-3 text-[14px] font-bold leading-snug text-ink">{a.title}</p>
                   <p className="mt-1.5 text-[13px] leading-snug text-muted">{a.body}</p>
-                </li>
+                </Tilt>
               ))}
             </ul>
           </div>

@@ -5,6 +5,7 @@ import { Reveal } from '../components/Reveal';
 import { OrgLogo } from '../components/Logos';
 import { Icon } from '../components/Icon';
 import { useLightbox } from '../components/Lightbox';
+import { Tilt } from '../components/Tilt';
 import { cn } from '../lib/utils';
 
 function ExperienceCard({ item }: { item: ExperienceItem }) {
@@ -13,7 +14,7 @@ function ExperienceCard({ item }: { item: ExperienceItem }) {
   const items = photos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption }));
 
   return (
-    <article className="exp-card group/exp flex flex-col gap-6 md:flex-row md:items-center">
+    <Tilt as="article" max={2.5} scale={1.012} className="exp-card group/exp flex flex-col gap-6 md:flex-row md:items-center">
       {/* Official logos */}
       <div className="flex shrink-0 items-center gap-2 md:w-[188px]">
         {item.logos.length ? (
@@ -51,7 +52,7 @@ function ExperienceCard({ item }: { item: ExperienceItem }) {
           ))}
         </ul>
       )}
-    </article>
+    </Tilt>
   );
 }
 

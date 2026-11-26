@@ -3,6 +3,7 @@ import { Section } from '../components/ui';
 import { Reveal } from '../components/Reveal';
 import { ToolGrid } from '../components/Logos';
 import { Icon } from '../components/Icon';
+import { Tilt } from '../components/Tilt';
 
 export function About() {
   const { about } = PORTFOLIO_DATA;
@@ -11,10 +12,10 @@ export function About() {
     <Section id="about" tone="white">
       <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal>
-          <div className="about-photo relative mx-auto aspect-[4/5] w-full max-w-[500px] overflow-hidden rounded-2xl border border-line shadow-lift">
+          <Tilt max={5} className="about-photo relative mx-auto aspect-[4/5] w-full max-w-[500px] overflow-hidden rounded-2xl border border-line shadow-lift">
             {/* GANTI FOTO: PORTFOLIO_DATA.about.photo */}
             <img src={about.photo.src} alt={about.photo.alt} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-top" />
-          </div>
+          </Tilt>
         </Reveal>
 
         <div className="min-w-0">
@@ -37,7 +38,7 @@ export function About() {
           </div>
 
           <Reveal className="mt-12">
-            <div className="rounded-[24px] border border-line bg-canvas p-6 sm:p-7">
+            <Tilt max={3} scale={1.015} className="rounded-[24px] border border-line bg-canvas p-6 sm:p-7">
               <p className="font-display text-[13px] font-bold uppercase tracking-[0.14em] text-ink">Fun fact &amp; quick highlights</p>
               <ul className="mt-5 grid gap-5 sm:grid-cols-2">
                 {about.highlights.map((h) => (
@@ -52,7 +53,7 @@ export function About() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Tilt>
           </Reveal>
         </div>
       </div>

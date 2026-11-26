@@ -1,6 +1,7 @@
 import { PORTFOLIO_DATA } from '../data/portfolio';
 import type { Logo, Tool } from '../data/types';
 import { cn } from '../lib/utils';
+import { Tilt } from './Tilt';
 
 /** Official logo from PORTFOLIO_DATA.logos, shown on a clean white tile. */
 export function OrgLogo({ id, className, tile = true }: { id: string; className?: string; tile?: boolean }) {
@@ -20,12 +21,12 @@ export function ToolGrid({ ids }: { ids: string[] }) {
         const t = tools[id];
         if (!t) return null;
         return (
-          <li key={id} className="tool-tile group/tool">
+          <Tilt as="li" key={id} max={10} scale={1.06} className="tool-tile group/tool">
             <span className="grid h-12 w-12 place-items-center transition-transform duration-500 ease-out group-hover/tool:-translate-y-1 group-hover/tool:scale-110">
               <img src={t.logo} alt={`${t.name} logo`} loading="lazy" decoding="async" className="max-h-12 max-w-12 object-contain" />
             </span>
             <span className="mt-2 text-center text-[12px] font-semibold leading-tight text-ink/85">{t.name}</span>
-          </li>
+          </Tilt>
         );
       })}
     </ul>

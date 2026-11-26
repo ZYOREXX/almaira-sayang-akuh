@@ -9,6 +9,7 @@ import { Dialog } from '../components/Dialog';
 import { OrgLogo } from '../components/Logos';
 import { PhotoSlider } from '../components/PhotoSlider';
 import { EASE, Reveal } from '../components/Reveal';
+import { Tilt } from '../components/Tilt';
 import { cn } from '../lib/utils';
 import { WorkDetail } from './WorkDetail';
 
@@ -85,16 +86,15 @@ export function Works() {
           const cover = getPhoto(w.images[0]);
           const selected = i === active;
           return (
+            <Tilt key={w.id} max={7} scale={1.04} className="rounded-2xl">
             <motion.button
-              key={w.id}
               type="button"
               role="tab"
               aria-selected={selected}
               onClick={() => setActive(i)}
-              whileHover={{ y: -4 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: EASE }}
-              className={cn('relative overflow-hidden rounded-2xl border bg-white text-left shadow-soft transition-colors', selected ? 'border-cerulean-300' : 'border-line hover:border-cerulean-200')}
+              className={cn('relative block w-full overflow-hidden rounded-2xl border bg-white text-left shadow-soft transition-colors', selected ? 'border-cerulean-300' : 'border-line hover:border-cerulean-200')}
             >
               <span className={cn('relative block aspect-[16/10] overflow-hidden', cover?.fit === 'contain' ? 'bg-canvas' : 'bg-ink/5')}>
                 {cover && (
@@ -114,6 +114,7 @@ export function Works() {
               </span>
               {selected && <motion.span layoutId="work-tab" className="absolute inset-x-0 bottom-0 h-[3px] bg-cerulean-600" transition={{ duration: 0.5, ease: EASE }} />}
             </motion.button>
+            </Tilt>
           );
         })}
       </div>

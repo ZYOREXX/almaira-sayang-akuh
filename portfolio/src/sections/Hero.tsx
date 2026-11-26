@@ -8,17 +8,18 @@ import { cn } from '../lib/utils';
 import { MagneticButton } from '../components/MagneticButton';
 import { Icon } from '../components/Icon';
 import { OrgLogo } from '../components/Logos';
+import { Tilt } from '../components/Tilt';
 
 /** Dark-glass badge beside the portrait; floats gently. */
 function HeroPill({ pill, delay, className }: { pill: Pill; delay: number; className?: string }) {
   return (
     <div data-h="pill" className={className}>
       <motion.div
-        className="hero-pill-dark"
+        className="block"
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 6 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
-        whileHover={{ scale: 1.04 }}
       >
+        <Tilt max={8} scale={1.06} className="tilt-dark hero-pill-dark">
         {pill.logo ? (
           <OrgLogo id={pill.logo} className="h-10 w-10 shrink-0 !rounded-xl !p-1" />
         ) : (
@@ -30,6 +31,7 @@ function HeroPill({ pill, delay, className }: { pill: Pill; delay: number; class
           <span className={cn('block text-[14px] font-bold', pill.prestige ? 'text-amber-200' : 'text-white')}>{pill.label}</span>
           <span className="mt-0.5 block text-[12.5px] font-medium text-slate-300">{pill.detail}</span>
         </span>
+        </Tilt>
       </motion.div>
     </div>
   );
@@ -97,12 +99,12 @@ export function Hero() {
             <HeroPill pill={p3} delay={1.2} className="mr-8" />
           </div>
           <figure data-h="photo" className="mx-auto w-full max-w-[340px]">
-            <div className="rounded-[30px] border border-white/20 bg-white/5 p-2.5 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-md">
+            <Tilt max={6} scale={1.035} className="tilt-dark rounded-[30px] border border-white/20 bg-white/5 p-2.5 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-md">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[22px]">
                 {/* GANTI FOTO UTAMA: PORTFOLIO_DATA.hero.portrait */}
-                <img src={hero.portrait.src} alt={hero.portrait.alt} className="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+                <img src={hero.portrait.src} alt={hero.portrait.alt} className="absolute inset-0 h-full w-full object-cover object-top" loading="eager" decoding="async" />
               </div>
-            </div>
+            </Tilt>
           </figure>
           <div className="hidden lg:flex lg:items-start">
             <HeroPill pill={p2} delay={0.6} className="ml-2" />
