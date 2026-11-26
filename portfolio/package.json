@@ -1,0 +1,31 @@
+{
+  "name": "tio-ilham-wahyudi-portfolio",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Premium academic sport-science portfolio of Tio Ilham Wahyudi, S.Pd. (React, Tailwind CSS, Framer Motion, GSAP ScrollTrigger).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@gsap/react": "2.1.2",
+    "framer-motion": "11.18.2",
+    "gsap": "3.15.1",
+    "lucide-react": "0.468.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.7.0",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.9.3",
+    "vite": "5.4.21"
+  }
+}
