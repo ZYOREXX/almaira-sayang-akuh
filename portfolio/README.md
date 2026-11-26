@@ -4,6 +4,10 @@ Website portofolio akademik bertema **Premium Academic Sport-Science & Interacti
 
 **Teknologi:** React 18 · Vite 5 · Tailwind CSS 3 · Framer Motion 11 · GSAP 3 + ScrollTrigger (`@gsap/react`) · Lucide Icons · logo merek asli dari Simple Icons.
 
+**Font:** Plus Jakarta Sans (judul), Montserrat (label), Inter (teks) — semuanya dari Google Fonts.
+
+**Struktur halaman:** `#home` Hero · `#about` About & software stack · `#experience` Experience & leadership · `#works` Selected works (data asli dari abstrak ICSDP 2026 & artikel Jurnal Porkes 2025) · `#achievements` 12 kartu prestasi & sertifikat · `#contact` Kontak + signature footer.
+
 ---
 
 ## 1. Menjalankan di komputer
@@ -33,20 +37,20 @@ Semua teks, foto, sertifikat, dan link sosial ada di **`src/data/portfolio.ts`**
 
 | Yang ingin diganti | Lokasi di `PORTFOLIO_DATA` |
 | --- | --- |
-| Foto profil (rasio 4:5) | `profile.portrait.src` |
-| Foto kegiatan (ICSDP, Pocari, Papila, SWIPE, forum) | `photos` → setiap foto punya `src`, `thumb`, `alt`, `caption` |
-| Urutan & ukuran kotak galeri | `gallery.items` (`span`: `big`, `wide`, `tall`, `normal`) |
-| Scan sertifikat | `certificates.featured[n].image` (masih `null` = tampil kartu ringkasan) |
+| Foto hero (rasio 4:5) | `hero.portrait.src` |
+| Foto di section About | `about.photo.src` |
+| Foto kegiatan (ICSDP, Pocari, Papila, SWIPE, forum) | `photos` → `src`, `thumb`, `alt`, `caption` |
+| Data penelitian & modal abstrak | `works` |
+| 12 kartu prestasi / sertifikat | `achievements` (`visual`: `scan`, `photo`, atau `emblem`) |
 | Link LinkedIn, GitHub, Instagram, Threads, Google Scholar, ORCID | `contact.socials[n].url` (masih `'#'`) |
-| Publikasi, abstrak, statistik | `publications` |
 
 **Langkah mengganti foto**
 
-1. Simpan file di `public/images/` (contoh: `public/images/sertifikat-tpon.jpg`).
-2. Tulis path **tanpa garis miring di depan**: `src: 'images/sertifikat-tpon.jpg'`.
+1. Simpan file di `public/images/` (contoh: `public/images/foto-baru.jpg`).
+2. Tulis path **tanpa garis miring di depan**: `src: 'images/foto-baru.jpg'`.
 3. `thumb` opsional (versi kecil agar ringan). Jika tidak ada, hapus barisnya.
 
-Sertifikat yang masih menunggu scan: **TPON (KEMENPORA)**, **Certificate of Presenter ICSDP 2026**, dan **Stadium Generale Universiti Malaya × UPI**.
+Kartu tanpa scan (`visual: { kind: 'emblem' }`): *Guest Lecture 2024 (FPOK UPI)* dan *Cum Laude Graduate*. Ganti dengan `kind: 'scan'` bila scan tersedia.
 
 ## 4. Struktur folder
 
@@ -56,20 +60,19 @@ portfolio/
 ├─ src/
 │  ├─ data/portfolio.ts  ← PORTFOLIO_DATA (edit di sini)
 │  ├─ data/brandIcons.ts ← logo software & media sosial (SVG)
-│  ├─ components/        ← SpotlightCard, MagneticButton, Counter, ParallaxImage,
-│  │                       Lightbox, Dialog, TabFilter, StatViz, BrandLogo
-│  └─ sections/          ← Nav, Hero, Pillars, Publications, SwipeProject,
-│                          SwipeSimulator, Experience, Gallery, Certificates,
-│                          Toolkit, Contact, Footer
+│  ├─ components/        ← SpotlightCard, MagneticButton, Counter, WordFill,
+│  │                       LogoDock, MetricCard, Lightbox, Dialog, StatViz, BrandLogo
+│  └─ sections/          ← Nav, Hero, About, Experience, Works, WorkDetail,
+│                          SwipeSimulator, Achievements, Contact, Footer
 └─ index.html
 ```
 
 ## 5. Animasi & interaksi
 
-- **GSAP + ScrollTrigger:** entrance hero bertahap, counter angka (IPK 3.83, n = 32, p < 0.001, d = 2.495), parallax foto, reveal 3D saat scroll, garis progres timeline, dan slide horizontal kartu sertifikat.
-- **Framer Motion:** `whileHover`/`whileTap` pada kartu Bento, `layoutId` untuk tab filter & menu aktif, `AnimatePresence` untuk dialog, lightbox, menu mobile, dan toast.
-- **Komponen interaktif:** spotlight + 3D tilt card, tombol magnetik dengan shimmer, marquee & dock logo, simulator antarmuka SWIPE (stopwatch, lap/flag, nada peluit).
-- Pengunjung yang mengaktifkan *reduce motion* di sistemnya otomatis mendapat versi tanpa animasi berat.
+- **GSAP + ScrollTrigger:** hero masuk bertahap lalu "mundur" saat di-scroll, kalimat About terisi kata demi kata mengikuti scroll, tumpukan kartu Works naik saat masuk layar, counter angka, reveal 3D bertahap, dan tanda tangan nama di footer.
+- **Framer Motion:** pill hero melayang, navbar kapsul dengan indikator `layoutId`, tumpukan kartu Works yang berganti urutan, `AnimatePresence` untuk modal, lightbox, dan menu mobile, serta `whileHover`/`whileTap` pada kartu.
+- **Interaksi lain:** kartu spotlight + 3D tilt, tombol magnetik, dock logo, dan simulator antarmuka SWIPE di modal proyek.
+- Pengunjung yang mengaktifkan *reduce motion* otomatis mendapat versi tanpa animasi berat.
 
 ## 6. Catatan logo
 

@@ -1,4 +1,4 @@
-import type { Photo, PortfolioData } from './types';
+import type { Photo, PortfolioData, Work } from './types';
 
 /* ============================================================================
    PORTFOLIO_DATA — SEMUA KONTEN, FOTO & LINK DIATUR DI FILE INI
@@ -7,155 +7,116 @@ import type { Photo, PortfolioData } from './types';
    1. Simpan file gambar di folder:   portfolio/public/images/
    2. Tulis path TANPA garis miring di depan, contoh:
           src: 'images/foto-baru.jpg'
-   3. `thumb` (opsional) = versi kecil untuk kartu & galeri agar ringan.
+   3. `thumb` (opsional) = versi kecil untuk kartu & thumbnail agar ringan.
       Jika tidak ada, hapus baris `thumb` → `src` dipakai di semua tempat.
-   4. Sertifikat dengan `image: null` tampil sebagai kartu ringkasan.
-      Setelah scan tersedia, ganti `null` dengan objek gambar, contoh:
-          image: { src: 'images/sertifikat-tpon.jpg', alt: 'Sertifikat TPON' },
+   4. Prestasi tanpa scan memakai `visual: { kind: 'emblem', code: '...' }`.
+      Setelah scan tersedia, ganti menjadi:
+          visual: { kind: 'scan', images: [{ src: 'images/scan.jpg', alt: '...' }] }
 
    MENGGANTI LINK MEDIA SOSIAL
    - Lihat `contact.socials` di bagian paling bawah. Ganti '#' dengan URL
      lengkap, contoh: url: 'https://www.linkedin.com/in/username'
-   - Link yang masih '#' tetap tampil, tetapi tidak berpindah halaman.
 
-   Teks memakai bahasa Inggris akademik. Simbol statistik seperti ₀₁ dan −
-   (tanda minus asli) sengaja dipakai agar tampil rapi.
+   Data penelitian di bagian WORKS diambil dari berkas asli: abstrak ICSDP
+   2026 (.docx) dan artikel Jurnal Porkes Vol. 8 No. 1 (2025).
    ============================================================================ */
 
 export const PORTFOLIO_DATA = {
-  /* ---------- Navigasi (id = id section pada halaman) ---------- */
+  /* ---------- Navigasi (id = id section) ---------- */
   nav: [
-    { id: 'research', label: 'Research' },
-    { id: 'project', label: 'SWIPE' },
+    { id: 'home', label: 'Home' },
+    { id: 'about', label: 'About' },
     { id: 'experience', label: 'Experience' },
-    { id: 'gallery', label: 'Gallery' },
-    { id: 'credentials', label: 'Credentials' },
-    { id: 'toolkit', label: 'Toolkit' },
+    { id: 'works', label: 'Works' },
+    { id: 'achievements', label: 'Achievements' },
+    { id: 'contact', label: 'Contact' },
   ],
 
-  /* ---------- A. HERO ---------- */
-  profile: {
+  /* ---------- SECTION 1 · HERO ---------- */
+  hero: {
+    eyebrow: 'Academic & Sport-Science Portfolio',
+    title: 'Welcome to my portfolio',
     name: 'Tio Ilham Wahyudi',
     suffix: 'S.Pd.',
     roles: ['Sport Education Researcher', 'Academic Writing Mentor', 'Sport Project Specialist'],
-    tagline:
-      'Bridging evidence-based sport science, reputable academic publishing, and dynamic sports event management.',
-    affiliation: 'Sport Education · Universitas Pendidikan Indonesia',
-    focus: ['Motor development', 'Sportspersonship & character', 'PE pedagogy', 'Sport project management'],
+    tagline: 'Bridging evidence-based sport science, reputable academic publishing, and dynamic sports event management.',
     // FOTO PROFIL — rasio 4:5. PNG/WebP berlatar transparan paling serasi dengan bingkai kaca.
     portrait: {
       src: 'images/profile-cutout.webp',
       alt: 'Formal portrait of Tio Ilham Wahyudi in a black suit and tie',
     },
-    status: { label: "Fast-Track Master's Student", detail: 'Sport Education · UPI' },
+    pills: [
+      { icon: 'graduation', label: "Fast-Track Master's Student", detail: 'Sport Education · UPI', prestige: true },
+      { icon: 'award', label: 'Bachelor of Physical Education', detail: 'Cum Laude · GPA 3.83', prestige: true },
+      { icon: 'mic', label: 'International Conference & Reputable Journal Author', detail: 'ICSDP 2026 · Jurnal Porkes 2025' },
+    ],
   },
 
-  prestigeBadges: [
-    { icon: 'graduation', label: "Fast-Track Master's Student in Sport Education", detail: 'Universitas Pendidikan Indonesia (UPI)' },
-    { icon: 'award', label: 'Bachelor of Physical Education', detail: 'Cum Laude · GPA 3.83 / 4.00' },
-    { icon: 'mic', label: 'Sole Author at 11th ICSDP 2026', detail: '& Reputable Journal Author' },
-  ],
-
-  heroStats: [
-    {
-      label: 'Cumulative GPA',
-      value: 3.83,
-      decimals: 2,
-      suffix: ' / 4.00',
-      note: 'Cum Laude · Bachelor of Physical Education',
-      prestige: true,
+  /* ---------- SECTION 2 · ABOUT ---------- */
+  about: {
+    eyebrow: 'About me',
+    heading: 'About me',
+    // Kalimat besar ini "terisi" kata demi kata saat di-scroll.
+    statement:
+      'I connect evidence-based sport science with practice: researching motor development and sportspersonship, mentoring reputable academic writing, and coaching and running sport on the field.',
+    body: "I am a fast-track Master's student in Sport Education at Universitas Pendidikan Indonesia. My research focuses on children's motor development and character in sport; I mentor students writing for SINTA-indexed journals and international proceedings, and I work as a swimming coach and sports event committee member.",
+    // FOTO ABOUT — rasio 4:5 (boleh foto berbeda dari hero).
+    photo: {
+      src: 'images/profile-cutout.webp',
+      alt: 'Tio Ilham Wahyudi, formal portrait',
     },
-    {
-      label: 'Intervention sample',
-      value: 32,
-      decimals: 0,
-      prefix: 'n = ',
-      note: 'Grade IV students, 12 sessions · Jurnal Porkes 2025',
-    },
-    {
-      label: 'Statistical significance',
-      value: 0.001,
-      from: 1,
-      decimals: 3,
-      prefix: 'p = ',
-      display: 'p < 0.001',
-      note: 'Gains in dynamic balance and agility',
-    },
-    {
-      label: "Effect size (Cohen's d)",
-      value: 2.495,
-      decimals: 3,
-      prefix: 'd = ',
-      note: 'Very large effect on dynamic balance',
-    },
-  ],
-
-  /* ---------- B. CORE PILLARS ---------- */
-  summary:
-    'A young academic and physical-education practitioner focused on motor development, sport psychology and character, modern PE pedagogy, and sport project management. I connect advanced quantitative analysis with what happens in classrooms, pools and race courses.',
-
-  pillars: [
-    {
-      icon: 'journal',
-      title: 'Reputable Journal & Conference Mentoring',
-      body: 'Guidance on writing scientific articles, analysing quantitative data, mapping the literature bibliometrically, and publishing in reputable outlets.',
-      tags: ['SINTA', 'Scopus', 'International Proceedings', 'Quantitative Analysis', 'Bibliometric Mapping'],
-    },
-    {
-      icon: 'research',
-      title: 'Sport Science & Motor Development Research',
-      body: 'Experimental designs, correlational studies, bootstrapping and Bayesian analysis, and evaluation of PJOK (physical education) learning.',
-      tags: ['Experimental Design', 'Correlational Studies', 'Bootstrapping', 'Bayesian Inference', 'PJOK Evaluation'],
-    },
-    {
-      icon: 'event',
-      title: 'Sports Event & Coaching Operations',
-      body: 'Operational management of national-scale sporting events, and swimming coaching built on sport-science principles.',
-      tags: ['National Running Events', 'Field Operations', 'Swimming Coaching'],
-      photos: ['swim-coaching', 'pocari-stage'],
-    },
-  ],
+    metrics: [
+      { label: 'GPA · Cum Laude', value: 3.83, decimals: 2, note: 'Bachelor of Physical Education', prestige: true },
+      { label: 'Scientific works', value: 2, decimals: 0, note: 'ICSDP 2026 · Jurnal Porkes 2025' },
+      { label: 'National PKP2 Finalist', display: 'PKP2', note: 'PKM-KC 2025 · SWIPE' },
+    ],
+    stack: [
+      { title: 'Quantitative Analytics', icon: 'sigma', tools: ['spss', 'stata', 'smartpls', 'python', 'excel'] },
+      { title: 'Bibliometrics & Publishing', icon: 'network', tools: ['vosviewer', 'pop', 'mendeley', 'googlescholar', 'orcid'] },
+      { title: 'Creative Media', icon: 'palette', tools: ['canva', 'lightroom', 'capcut', 'picsart', 'snapseed', 'powerpoint'] },
+    ],
+    personas: [
+      {
+        icon: 'research',
+        title: 'Data-Driven Researcher',
+        body: 'Correlational and experimental designs analysed with bootstrapping and Bayesian inference.',
+        points: ['SPSS 27 · SmartPLS · Python', 'Bootstrap BCa & Bayes factors', 'VOSviewer bibliometric mapping'],
+      },
+      {
+        icon: 'waves',
+        title: 'Field Sport Practitioner',
+        body: 'Swimming coaching and field operations for national-scale and campus sport events.',
+        points: ['Papila Swim Club coach', 'Pocari Sweat Run Indonesia 2025', 'PORDOSKA · UPI Half Marathon'],
+      },
+    ],
+  },
 
   /* ---------- FOTO KEGIATAN (didaftarkan sekali, dipakai di banyak section) ---------- */
   photos: {
+    'icsdp-screen': {
+      src: 'images/icsdp-screen.webp',
+      thumb: 'images/icsdp-screen-sm.webp',
+      alt: 'Opening screen of the 11th International Conference of Sport for Development and Peace listing keynote and invited speakers',
+      caption: '11th ICSDP 2026 · Keynote & invited speakers',
+    },
     'icsdp-group': {
       src: 'images/icsdp-group.webp',
       thumb: 'images/icsdp-group-sm.webp',
       alt: 'Speakers, committee and participants of the 11th ICSDP 2026 in the auditorium of the School of Postgraduate Studies, UPI',
       caption: '11th ICSDP 2026 · Auditorium, School of Postgraduate Studies, UPI',
     },
-    'icsdp-screen': {
-      src: 'images/icsdp-screen.webp',
-      thumb: 'images/icsdp-screen-sm.webp',
-      alt: 'Opening screen of the 11th International Conference of Sport for Development and Peace listing keynote and invited speakers',
-      caption: 'Keynote & invited speakers · Sport and Physical Education for Equity and Social Cohesion',
-    },
     'icsdp-session': {
       src: 'images/icsdp-session.webp',
       thumb: 'images/icsdp-session-sm.webp',
       alt: 'Participants in batik attending a session of ICSDP 2026',
-      caption: 'Conference session · 24–25 November 2026',
+      caption: '11th ICSDP 2026 · Conference session, 24–25 November 2026',
     },
-    'pocari-crew': {
-      src: 'images/pocari-crew.webp',
-      thumb: 'images/pocari-crew-sm.webp',
-      alt: 'Field operations crew in blue Pocari Sweat vests on the race course',
-      caption: 'Field operations crew · Pocari Sweat Run Indonesia 2025',
-      position: '50% 35%',
-    },
-    'pocari-stage': {
-      src: 'images/pocari-stage.webp',
-      thumb: 'images/pocari-stage-sm.webp',
-      alt: 'Illuminated half-marathon start stage of Pocari Sweat Run Indonesia at night',
-      caption: 'Half-marathon start stage · Pocari Sweat Run Indonesia 2025',
-      position: '50% 55%',
-    },
-    'swim-coaching': {
-      src: 'images/swim-coaching.webp',
-      thumb: 'images/swim-coaching-sm.webp',
-      alt: 'Swimming coach in the pool with young swimmers wearing goggles',
-      caption: 'Pool session with young swimmers · Papila Swim Club',
-      position: '50% 65%',
+    'porkes-article': {
+      src: 'images/porkes-article.webp',
+      thumb: 'images/porkes-article-sm.webp',
+      alt: 'First page of the Jurnal Porkes article on rhythmic movement learning, balance and agility',
+      caption: 'Jurnal Porkes Vol. 8 No. 1 (2025), pp. 01–09 · first page',
+      fit: 'contain',
     },
     'swipe-prototype': {
       src: 'images/swipe-prototype.webp',
@@ -171,168 +132,65 @@ export const PORTFOLIO_DATA = {
       caption: 'SWIPE electronics schematic · ESP-32, OLED, RTC, 3 W speaker, Li-ion battery',
       fit: 'contain',
     },
-    'forum-cohort': {
-      src: 'images/forum-cohort.webp',
-      thumb: 'images/forum-cohort-sm.webp',
-      alt: 'Sport education students and lecturer seated together in a UPI lounge',
-      caption: 'Sport education cohort · Universitas Pendidikan Indonesia',
-    },
     'forum-workshop': {
       src: 'images/forum-workshop.webp',
       thumb: 'images/forum-workshop-sm.webp',
       alt: 'Students working on laptops on the floor during a research writing session at FPOK UPI',
       caption: 'Research & writing session · FPOK UPI',
     },
+    'forum-cohort': {
+      src: 'images/forum-cohort.webp',
+      thumb: 'images/forum-cohort-sm.webp',
+      alt: 'Sport education students and lecturer seated together in a UPI lounge',
+      caption: 'Sport education cohort · Universitas Pendidikan Indonesia',
+    },
+    'swim-coaching': {
+      src: 'images/swim-coaching.webp',
+      thumb: 'images/swim-coaching-sm.webp',
+      alt: 'Swimming coach in the pool with young swimmers wearing goggles',
+      caption: 'Pool session with young swimmers · Papila Swim Club',
+      position: '50% 65%',
+    },
+    'pocari-crew': {
+      src: 'images/pocari-crew.webp',
+      thumb: 'images/pocari-crew-sm.webp',
+      alt: 'Field operations crew in blue Pocari Sweat vests on the race course',
+      caption: 'Field operations crew · Pocari Sweat Run Indonesia 2025',
+      position: '50% 35%',
+    },
+    'pocari-stage': {
+      src: 'images/pocari-stage.webp',
+      thumb: 'images/pocari-stage-sm.webp',
+      alt: 'Illuminated half-marathon start stage of Pocari Sweat Run Indonesia at night',
+      caption: 'Half-marathon start stage · Pocari Sweat Run Indonesia 2025',
+      position: '50% 55%',
+    },
   },
 
-  /* ---------- C. PUBLICATIONS ----------
-     Abstrak di bawah adalah ringkasan dari data penelitian.
-     Ganti dengan abstrak resmi dari naskah Anda bila diperlukan. */
-  publications: [
-    {
-      id: 'icsdp',
-      kind: 'International Conference Paper',
-      venue: '11th ICSDP 2026',
-      venueFull: '11th International Conference of Sport for Development and Peace (ICSDP) 2026',
-      authorship: 'Sole & Corresponding Author',
-      year: '2026',
-      title:
-        'Creative Thinking in Movement and Sportspersonship Orientation Among Fifth-Grade Elementary School Students: A Correlational Study in Physical Education',
-      byline: 'Tio Ilham Wahyudi',
-      affiliation:
-        'Department of Sports Education, School of Postgraduate Studies, Universitas Pendidikan Indonesia (UPI)',
-      design: 'Cross-sectional correlational design',
-      instruments: ['TCAM', 'Indonesian MSOS'],
-      metrics: [
-        { label: 'Sample (n)', value: 31, decimals: 0 },
-        { label: 'Pearson r', value: -0.125, decimals: 3 },
-        { label: 'p-value', value: 0.504, decimals: 3 },
-        { label: 'Bayes BF₀₁', value: 5.759, decimals: 3 },
-      ],
-      ci: { low: -0.471, high: 0.279, estimate: -0.125, resamples: 5000 },
-      bayes: { bf01: 5.759, posteriorMean: -0.114 },
-      finding:
-        'Moderate evidence that creative movement and sportspersonship orientation develop along independent pathways.',
-      abstract: [
-        'Creativity in movement and sportspersonship are both treated as targets of elementary physical education, yet whether they develop together has rarely been tested. This study examined the relationship between creative thinking in movement and sportspersonship orientation among fifth-grade elementary school students.',
-        'A cross-sectional correlational design was used with 31 fifth-grade students. Creative movement was measured with the Thinking Creatively in Action and Movement (TCAM) test, and sportspersonship with the Indonesian version of the Multidimensional Sportspersonship Orientations Scale (MSOS).',
-        'The association was weak, negative and non-significant (r = −0.125, p = 0.504), and the bootstrapped 95% BCa confidence interval [−0.471, 0.279] spans zero. A Bayesian correlation favoured the null hypothesis (BF₀₁ = 5.759; posterior mean r = −0.114), indicating moderate evidence that creative movement and sportspersonship develop along independent pathways. Physical education programmes may therefore need to target each outcome deliberately rather than expect one to carry the other.',
-      ],
-      notes: [
-        ['Design', 'Cross-sectional correlational study'],
-        ['Participants', '31 fifth-grade elementary school students'],
-        ['Instruments', 'Thinking Creatively in Action and Movement (TCAM); Indonesian Multidimensional Sportspersonship Orientations Scale (MSOS)'],
-        ['Frequentist', 'Pearson r = −0.125; p = 0.504'],
-        ['Bootstrap', '5,000 resamples; 95% BCa CI [−0.471, 0.279]'],
-        ['Bayesian', 'BF₀₁ = 5.759; posterior mean r = −0.114'],
-        ['Inference', 'Moderate evidence for independent developmental pathways'],
-      ],
-      photos: ['icsdp-screen', 'icsdp-group', 'icsdp-session'],
-    },
-    {
-      id: 'porkes',
-      kind: 'Peer-Reviewed Journal Article',
-      venue: 'Jurnal Porkes',
-      venueFull: 'Jurnal Porkes',
-      citation: 'Vol. 8, No. 1, pp. 01–09 · April 2025',
-      authorship: 'First & Corresponding Author',
-      year: '2025',
-      title: 'Effect of Rhythmic Movement Learning on Improving Dynamic Balance and Agility',
-      titleAlt: 'Pengaruh Pembelajaran Aktivitas Gerak Berirama terhadap Peningkatan Keseimbangan dan Kelincahan Gerak',
-      byline: 'Tio Ilham Wahyudi, Ricky Wibowo & Mukhlisin',
-      affiliation: 'FPOK, Universitas Pendidikan Indonesia (UPI)',
-      design: 'Pre-experimental one-group pretest–posttest',
-      instruments: ['Modified Bass Test of Dynamic Balance', 'T-Test (TKSI Phase B)'],
-      metrics: [
-        { label: 'Sample (n)', value: 32, decimals: 0 },
-        { label: 'Sessions', value: 12, decimals: 0 },
-        { label: 'p-value', value: 0.001, from: 1, decimals: 3, display: '< 0.001' },
-        { label: "Cohen's d", value: 2.495, decimals: 3 },
-      ],
-      effects: [
-        { outcome: 'Dynamic balance', t: 't(31) = −38.906', p: 'p < 0.001', d: 2.495, ngain: 0.437, magnitude: 'Very large effect' },
-        { outcome: 'Agility', t: 't(31) = 9.291', p: 'p < 0.001', d: 0.68, ngain: 0.314, magnitude: 'Medium effect' },
-      ],
-      finding: 'Rhythmic movement learning produced significant gains in both dynamic balance and agility.',
-      abstract: [
-        'Rhythmic movement activities are part of the elementary physical education curriculum, but their measurable effect on fundamental motor qualities needs empirical support. This study tested the effect of rhythmic movement learning on dynamic balance and agility in fourth-grade elementary school students.',
-        'A pre-experimental one-group pretest–posttest design was applied to 32 fourth-grade students who completed 12 intervention sessions. Dynamic balance was measured with the Modified Bass Test of Dynamic Balance, and agility with the T-Test from the TKSI Phase B battery.',
-        "Both outcomes improved significantly. Dynamic balance: t(31) = −38.906, p < 0.001, N-Gain = 0.437, Cohen's d = 2.495 (very large effect). Agility: t(31) = 9.291, p < 0.001, N-Gain = 0.314, Cohen's d = 0.680 (medium effect). Rhythmic movement learning offers a practical way to build balance and agility within regular PE lessons.",
-      ],
-      notes: [
-        ['Design', 'Pre-experimental, one-group pretest–posttest'],
-        ['Participants', '32 fourth-grade elementary school students'],
-        ['Intervention', '12 sessions of rhythmic movement learning'],
-        ['Instruments', 'Modified Bass Test of Dynamic Balance; T-Test (TKSI Phase B)'],
-        ['Dynamic balance', "t(31) = −38.906; p < 0.001; N-Gain = 0.437; Cohen's d = 2.495 (very large)"],
-        ['Agility', "t(31) = 9.291; p < 0.001; N-Gain = 0.314; Cohen's d = 0.680 (medium)"],
-      ],
-    },
-  ],
-
-  /* ---------- D. FEATURED PROJECT — PKM-KC 2025 SWIPE ---------- */
-  swipe: {
-    program: 'PKM-KC 2025',
-    acronym: 'SWIPE',
-    title: 'Smart Whistle Integrated with Precision Electronics',
-    summary:
-      'A multifunctional whistle with WhistleSync technology that helps physical education teachers and sport coaches work more effectively: one handheld device that signals, times and tracks laps.',
-    subtitleId: 'Inovasi Peluit Multifungsi dengan Teknologi WhistleSync untuk Efektivitas Guru dan Pelatih Olahraga',
-    achievements: [
-      {
-        label: 'PKM-KC 2025 National Funding',
-        detail: 'Program Kreativitas Mahasiswa – Karsa Cipta · Kemendikbudristek',
-        prestige: true,
-      },
-      {
-        label: 'National PKP2 Stage',
-        detail: 'Represented Universitas Pendidikan Indonesia at the PKM progress review (PKP2)',
-      },
-    ],
-    role: 'Member of the Research & Physical Education Development Team (PGSD Penjas, FPOK UPI)',
-    specs: [
-      { icon: 'cpu', label: 'ESP-32', detail: 'Microcontroller' },
-      { icon: 'monitor', label: 'OLED Display', detail: 'Split, lap & running time' },
-      { icon: 'clock', label: 'RTC Module', detail: 'Real-time clock' },
-      { icon: 'speaker', label: 'Mini Speaker 3W', detail: 'Audible whistle tones' },
-      { icon: 'battery', label: 'Lithium-ion Battery', detail: 'Rechargeable power' },
-      { icon: 'timer', label: 'Stopwatch & Lap/Flag Timer', detail: 'Timing on the field' },
-      { icon: 'sliders', label: 'Tone Mode Selector', detail: 'Selectable signals' },
-    ],
-    team: [
-      { name: 'Siti Zakiatul Balqis', role: 'Team Leader', unit: 'Physical Education (Penjas)' },
-      { name: 'Tio Ilham Wahyudi', role: 'Research & PE Development', unit: 'PGSD Penjas', self: true },
-      { name: 'Alifa Prayudio Dava Nugroho', unit: 'Industrial Automation & Robotics Education' },
-      { name: 'Raihan Tristan Pakpahan', unit: 'Physical, Health & Recreation Education (PJKR)' },
-      { name: 'Amelia Putri Sylfia', unit: 'Visual Communication Design (DKV)' },
-    ],
-    photos: ['swipe-prototype', 'swipe-schematic'],
-  },
-
-  /* ---------- E. EXPERIENCE ---------- */
+  /* ---------- SECTION 3 · EXPERIENCE & LEADERSHIP ---------- */
   experience: [
     {
       role: 'Swimming Coach',
       org: 'Papila Swim Club',
       period: 'Ongoing',
       ongoing: true,
-      body: 'Coaches swimming technique and physical conditioning for young athletes with a sport-science approach.',
+      body: "Develops swimmers' technique and physical conditioning with a sport-science approach.",
       icon: 'waves',
-      photo: 'swim-coaching',
+      photos: ['swim-coaching'],
     },
     {
       role: 'Field Operations Committee',
       org: 'Pocari Sweat Run Indonesia',
       period: '2025',
-      body: 'Coordinated on-field operations at a national-scale running event.',
+      body: 'Technical and on-field operations coordination for a national-scale running event.',
       icon: 'flag',
-      photo: 'pocari-crew',
+      photos: ['pocari-crew', 'pocari-stage'],
     },
     {
       role: 'Badminton Branch Committee',
       org: 'PORDOSKA UPI',
       period: '2024',
-      body: 'Ran the badminton branch of Pekan Olahraga Dosen dan Karyawan, the UPI faculty and staff sports week.',
+      body: 'Organising committee for the badminton branch of Pekan Olahraga Dosen dan Karyawan, the UPI faculty and staff sports week.',
       icon: 'trophy',
     },
     {
@@ -345,147 +203,352 @@ export const PORTFOLIO_DATA = {
       role: 'Field Operations Committee',
       org: 'Festival Gerak PGSD Penjas UPI',
       period: '2024',
-      body: 'Field operations for the PGSD Physical Education movement festival.',
+      body: 'Managed participant flow and kept the festival’s sport activities running smoothly.',
       icon: 'sparkles',
     },
-  ],
-  leadership: [
-    { org: 'Dewan Perwakilan Mahasiswa (DPM)', unit: 'PGSD Penjas, FPOK UPI', note: 'Student Representative Council' },
-    { org: 'UKM IBAF UPI', unit: 'Universitas Pendidikan Indonesia', note: 'Student Activity Unit' },
+    {
+      role: 'Organizational Leadership',
+      org: 'DPM PGSD Penjas FPOK UPI & UKM IBAF UPI',
+      body: 'Student legislation for the study programme (Dewan Perwakilan Mahasiswa) and development of a campus sport unit (Unit Kegiatan Mahasiswa).',
+      icon: 'users',
+    },
   ],
 
-  /* ---------- GALLERY (urutan & ukuran kotak di tampilan "All") ---------- */
-  gallery: {
-    filters: [
-      { id: 'all', label: 'All' },
-      { id: 'icsdp', label: '11th ICSDP 2026' },
-      { id: 'pocari', label: 'Pocari Sweat Run 2025' },
-      { id: 'papila', label: 'Papila Swim Club' },
-      { id: 'swipe', label: 'PKM-KC SWIPE' },
-      { id: 'forum', label: 'Academic Forums' },
-    ],
-    items: [
-      { photo: 'icsdp-group', category: 'icsdp', span: 'big' },
-      { photo: 'icsdp-screen', category: 'icsdp', span: 'wide' },
-      { photo: 'icsdp-session', category: 'icsdp', span: 'normal' },
-      { photo: 'pocari-crew', category: 'pocari', span: 'tall' },
-      { photo: 'pocari-stage', category: 'pocari', span: 'tall' },
-      { photo: 'swim-coaching', category: 'papila', span: 'tall' },
-      { photo: 'swipe-prototype', category: 'swipe', span: 'normal' },
-      { photo: 'swipe-schematic', category: 'swipe', span: 'wide' },
-      { photo: 'forum-cohort', category: 'forum', span: 'wide' },
-      { photo: 'forum-workshop', category: 'forum', span: 'wide' },
-    ],
-  },
+  /* ---------- SECTION 4 · SELECTED WORKS (data dari berkas asli) ---------- */
+  works: [
+    {
+      type: 'conference',
+      id: 'icsdp',
+      label: 'ICSDP 2026',
+      kind: 'International Conference Paper',
+      title:
+        'Creative Thinking in Movement and Sportspersonship Orientation Among Fifth-Grade Elementary School Students: A Correlational Study in Physical Education',
+      venue: '11th International Conference of Sport for Development and Peace (ICSDP) 2026',
+      role: 'Sole & Corresponding Author',
+      year: '2026',
+      byline: 'Tio Ilham Wahyudi',
+      affiliation: 'Department of Sports Education, School of Postgraduate Studies, Universitas Pendidikan Indonesia, Bandung',
+      summary:
+        'A cross-sectional study of 31 fifth-grade students at MI Asy-Syuhada (Bandung Regency) asking whether creative movement and sportspersonship develop together. Bootstrapped and Bayesian correlations point to independent pathways.',
+      tags: ['TCAM', 'Indonesian MSOS', 'SPSS 27', 'Bootstrap BCa', 'Bayesian'],
+      metrics: [
+        { label: 'Sample (n)', value: 31, decimals: 0 },
+        { label: 'Pearson r', value: -0.125, decimals: 3 },
+        { label: 'p-value', value: 0.504, decimals: 3 },
+        { label: 'BF₀₁', value: 5.759, decimals: 3 },
+      ],
+      images: ['icsdp-screen', 'icsdp-group', 'icsdp-session'],
+      cta: 'Read Full Abstract & Methodology',
+      // Abstrak asli (bahasa Inggris) dari berkas ICSDP 2026.
+      abstract: [
+        'Physical Education, Sports, and Health (PJOK) in elementary schools plays a strategic role in simultaneously fostering cognitive-creative and affective-social domains, yet the empirical relationship between these two domains among children aged 10–11 years remains underexplored. This exploratory study aimed to analyze the relationship between creative thinking in movement and sportsmanship orientation among elementary school students.',
+        'The research employed a quantitative approach with a cross-sectional correlational design involving 31 fifth-grade students from MI Asy-Syuhada, Katapang District, Bandung Regency, selected through a total sampling technique. Movement creativity data were collected using the Thinking Creatively in Action and Movement (TCAM), while sportsmanship orientation was assessed using the Indonesian version of the Multidimensional Sportspersonship Orientations Scale (MSOS). Data analysis was conducted using SPSS 27, comprising descriptive statistics, the Shapiro–Wilk normality test, Pearson correlation with 5,000 bootstrap resamples (95% BCa CI), Bayesian correlation, and Spearman correlation with bootstrapping for non-normally distributed TCAM dimensions.',
+        'The results showed that sportsmanship orientation was in the high category (M = 75.77; SD = 8.99), whereas movement creativity was in the moderate category (M = 19.61; SD = 4.27). No significant relationship was found between movement creativity and sportsmanship orientation (r = −0.125; p = 0.504; 95% BCa CI [−0.471, 0.279]), nor across the three TCAM dimensions individually. Bayesian analysis yielded BF01 = 5.759 with a posterior mean r = −0.114 (95% credible interval [−0.440, 0.219]), providing moderate evidence for the independence of both variables.',
+        'These findings indicate that in late elementary school age, both domains develop through distinct pathways, suggesting that PJOK teachers should design explicit interventions through open-ended movement tasks and structured character education. Future studies are recommended to involve larger samples with direct observation-based assessments of sporting behavior.',
+      ],
+      keywords: ['Bayes factor', 'correlational study', 'elementary physical education', 'movement creativity', 'sportsmanship orientation'],
+      method: [
+        ['Design', 'Quantitative, cross-sectional correlational (exploratory)'],
+        ['Participants', '31 fifth-grade students, MI Asy-Syuhada, Katapang District, Bandung Regency (ages 10–11)'],
+        ['Sampling', 'Total sampling'],
+        ['Instruments', 'Thinking Creatively in Action and Movement (TCAM); Indonesian Multidimensional Sportspersonship Orientations Scale (MSOS)'],
+        ['Software', 'IBM SPSS Statistics 27'],
+        ['Analysis', 'Descriptives; Shapiro–Wilk; Pearson r with 5,000 bootstrap resamples (95% BCa CI); Bayesian correlation; bootstrapped Spearman for non-normal TCAM dimensions'],
+      ],
+      descriptives: [
+        { variable: 'Sportsmanship orientation (MSOS)', mean: 75.77, sd: 8.99, level: 'High' },
+        { variable: 'Movement creativity (TCAM)', mean: 19.61, sd: 4.27, level: 'Moderate' },
+      ],
+      ci: { low: -0.471, high: 0.279, estimate: -0.125, resamples: 5000 },
+      bayes: { bf01: 5.759, posteriorMean: -0.114, credible: [-0.44, 0.219] },
+      implication:
+        'Both domains develop through distinct pathways at late elementary age, so PJOK teachers should plan explicit interventions: open-ended movement tasks for creativity and structured character education for sportsmanship.',
+    },
+    {
+      type: 'journal',
+      id: 'porkes',
+      label: 'Jurnal Porkes 2025',
+      kind: 'Peer-Reviewed Journal Article',
+      title: 'Pengaruh Pembelajaran Aktivitas Gerak Berirama terhadap Peningkatan Keseimbangan dan Kelincahan Gerak',
+      titleAlt: 'Effect of Rhythmic Movement Learning on Improving Dynamic Balance and Agility',
+      venue: 'Jurnal Porkes',
+      role: 'First & Corresponding Author',
+      year: '2025',
+      byline: 'Tio Ilham Wahyudi, Ricky Wibowo & Mukhlisin',
+      affiliation: 'PGSD Pendidikan Jasmani, Faculty of Sport and Health Education (FPOK), Universitas Pendidikan Indonesia',
+      citation: 'Vol. 8, No. 1, pp. 01–09 · April 2025',
+      link: 'https://e-journal.hamzanwadi.ac.id/index.php/porkes',
+      summary:
+        'A 12-session rhythmic movement programme set to Tabola-Bale music for 32 fourth graders at SDN 205 Neglasari, Bandung, produced significant gains in dynamic balance and agility.',
+      tags: ['One-group pretest–posttest', 'Modified Bass Test', 'TKSI Phase B T-Test', "Cohen's d", 'N-Gain'],
+      metrics: [
+        { label: 'Sample (n)', value: 32, decimals: 0 },
+        { label: 'Sessions', value: 12, decimals: 0 },
+        { label: 'd · balance', value: 2.495, decimals: 3 },
+        { label: 'd · agility', value: 0.68, decimals: 3 },
+      ],
+      images: ['porkes-article'],
+      cta: 'Read Full Abstract & Methodology',
+      // Abstrak asli (bahasa Inggris) dari artikel Jurnal Porkes.
+      abstract: [
+        'Balance and agility are fundamental motor components that support movement proficiency and physical performance among elementary school students. This study aimed to examine the effect of rhythmic movement learning on improving students’ dynamic balance and agility.',
+        "The research employed a quantitative approach using a pre-experimental method with a One-Group Pretest-Posttest design. The sample consisted of 32 fourth-grade students from SDN 205 Neglasari, Bandung City, selected through a total sampling technique. Data were collected using the Modified Bass Test of Dynamic Balance to assess dynamic balance and the TKSI Phase B T-Test to measure agility. Data analysis was conducted using descriptive statistics, the Shapiro-Wilk normality test, and a paired sample t-test, and Cohen's d effect size analysis.",
+        'The results showed a significant improvement in dynamic balance (t(31) = −38.906; p < 0.001; N-Gain = 0.437; d = 2.495) and agility (t(31) = 9.291; p < 0.001; N-Gain = 0.314; d = 0.680). These findings indicate that rhythmic movement learning can be an effective and engaging physical education approach for enhancing motor skill development among elementary school students.',
+      ],
+      keywords: ['agility', 'dynamic balance', 'elementary school', 'physical education', 'rhythmic movement activities'],
+      method: [
+        ['Design', 'Quantitative, pre-experimental one-group pretest–posttest'],
+        ['Participants', '32 fourth-grade students, SDN 205 Neglasari, Bandung City (ages 9–11, mean 10)'],
+        ['Sampling', 'Total sampling'],
+        ['Intervention', '12 sessions over 4 weeks · 3 sessions per week · 90 minutes each, accompanied by Tabola-Bale music'],
+        ['Instruments', 'Modified Bass Test of Dynamic Balance; T-Test from Tes Kebugaran Siswa Indonesia (TKSI) Phase B'],
+        ['Analysis', "Descriptives; Shapiro–Wilk; paired-sample t-test; Cohen's d; N-Gain"],
+      ],
+      program: [
+        { sessions: '1–3', focus: 'Basic movement mastery', content: 'Marching, single step, double step, double step + bicep curls' },
+        { sessions: '4–6', focus: 'Combinations with arm coordination', content: 'Chest press, heel & toe touch, V-step, pumping, knee up, leg curl' },
+        { sessions: '7–9', focus: 'Combinations with changes of direction', content: 'Combined sequences, mambo step and box step with clapping' },
+        { sessions: '10–12', focus: 'Complex sequences & evaluation', content: 'Lunges, grapevine + flex, full routine integration and final assessment' },
+      ],
+      descriptives: [
+        {
+          measure: 'Dynamic balance',
+          unit: 'Modified Bass Test score',
+          domain: [40, 80],
+          ticks: [40, 50, 60, 70, 80],
+          pre: { mean: 52.56, sd: 7.161, min: 43, max: 69 },
+          post: { mean: 72.59, sd: 8.809, min: 60, max: 92 },
+        },
+        {
+          measure: 'Agility',
+          unit: 'T-Test time (s)',
+          lowerIsBetter: true,
+          domain: [14, 19],
+          ticks: [14, 15, 16, 17, 18, 19],
+          pre: { mean: 17.43, sd: 2.744, min: 12.98, max: 25.48 },
+          post: { mean: 15.78, sd: 2.065, min: 12.41, max: 20.11 },
+        },
+      ],
+      effects: [
+        { outcome: 'Dynamic balance', t: 't(31) = −38.906', p: 'p < 0.001', d: 2.495, ngain: 0.437, magnitude: 'Very large effect' },
+        { outcome: 'Agility', t: 't(31) = 9.291', p: 'p < 0.001', d: 0.68, ngain: 0.314, magnitude: 'Medium effect' },
+      ],
+      conclusion:
+        'Rhythmic movement learning had a positive effect on dynamic balance and agility. PJOK teachers can integrate it gradually, as in this study (12 meetings, three per week, 90 minutes each); future work should add a control group, a wider sample and comparisons with other learning models.',
+    },
+    {
+      type: 'project',
+      id: 'swipe',
+      label: 'PKM-KC SWIPE',
+      kind: 'Sport-Tech Hardware · PKM-KC 2025',
+      title: 'SWIPE: Smart Whistle Integrated with Precision Electronics',
+      venue: 'Program Kreativitas Mahasiswa – Karsa Cipta (PKM-KC) 2025',
+      role: 'Member, Research & PE Development Team',
+      year: '2025',
+      subtitleId: 'Inovasi Peluit Multifungsi dengan Teknologi WhistleSync untuk Efektivitas Guru dan Pelatih Olahraga',
+      summary:
+        'A multifunctional whistle with WhistleSync technology that lets PE teachers and coaches signal, time and track laps from one handheld device. Nationally funded and taken to the national PKP2 stage.',
+      tags: ['ESP-32', 'OLED Display', 'RTC Module', 'Mini Speaker 3W', 'Li-ion Battery', 'Stopwatch & Lap/Flag', 'Tone Mode'],
+      metrics: [
+        { label: 'Funding', display: 'National', note: 'Kemendikbudristek' },
+        { label: 'Stage reached', display: 'PKP2', note: 'National finalist' },
+      ],
+      images: ['swipe-prototype', 'swipe-schematic'],
+      cta: 'View Specifications & Try the Interface',
+      achievements: [
+        { label: 'PKM-KC 2025 National Funding', detail: 'Program Kreativitas Mahasiswa – Karsa Cipta · Kemendikbudristek', prestige: true },
+        { label: 'National PKP2 Finalist', detail: 'Represented Universitas Pendidikan Indonesia at the PKM progress review (PKP2)' },
+      ],
+      specs: [
+        { icon: 'cpu', label: 'ESP-32', detail: 'Microcontroller' },
+        { icon: 'monitor', label: 'OLED Display', detail: 'Split, lap & running time' },
+        { icon: 'clock', label: 'RTC Module', detail: 'Real-time clock' },
+        { icon: 'speaker', label: 'Mini Speaker 3W', detail: 'Audible whistle tones' },
+        { icon: 'battery', label: 'Lithium-ion Battery', detail: 'Rechargeable power' },
+        { icon: 'timer', label: 'Stopwatch & Lap/Flag Timer', detail: 'Timing on the field' },
+        { icon: 'sliders', label: 'Tone Mode Selector', detail: 'Selectable signals' },
+      ],
+      team: [
+        { name: 'Siti Zakiatul Balqis', role: 'Team Leader', unit: 'Physical Education (Penjas)' },
+        { name: 'Tio Ilham Wahyudi', role: 'Research & PE Development', unit: 'PGSD Penjas', self: true },
+        { name: 'Alifa Prayudio Dava Nugroho', unit: 'Industrial Automation & Robotics Education' },
+        { name: 'Raihan Tristan Pakpahan', unit: 'Physical, Health & Recreation Education (PJKR)' },
+        { name: 'Amelia Putri Sylfia', unit: 'Visual Communication Design (DKV)' },
+      ],
+    },
+    {
+      type: 'service',
+      id: 'mentoring',
+      label: 'Writing & Data Mentoring',
+      kind: 'Academic Service',
+      title: 'Academic Writing & Data Analysis Mentoring',
+      venue: 'Reputable journals (SINTA) & international proceedings',
+      role: 'Mentor',
+      year: 'Ongoing',
+      summary:
+        'Guidance for researchers and students from research question to submission: writing reputable articles, statistical analysis in SPSS, SmartPLS and Bayesian frameworks, and bibliometric mapping with VOSviewer.',
+      tags: ['SINTA journals', 'International proceedings', 'SPSS', 'SmartPLS', 'Bayesian', 'VOSviewer'],
+      metrics: [],
+      images: ['forum-workshop', 'forum-cohort'],
+      cta: 'See Mentoring Services',
+      services: [
+        { icon: 'pen', title: 'Reputable article writing', body: 'Structuring and revising manuscripts for SINTA-indexed journals and international conference proceedings.' },
+        { icon: 'sigma', title: 'Statistical analysis', body: 'Analysis plans and reporting in SPSS and SmartPLS, including bootstrapping and Bayesian correlation.' },
+        { icon: 'network', title: 'Bibliometric mapping', body: 'Literature searches with Publish or Perish and co-occurrence maps in VOSviewer to position a study.' },
+      ],
+      tools: ['spss', 'smartpls', 'python', 'vosviewer', 'pop', 'mendeley'],
+    },
+  ] satisfies Work[],
 
-  /* ---------- F. CERTIFICATE SHOWCASE ---------- */
-  certificates: {
-    featured: [
-      {
-        id: 'tpon',
-        title: 'Tenaga Penggerak Olahraga Nasional (TPON)',
-        subtitle: 'National Sport Mobiliser Certification',
-        issuer: 'Ministry of Youth and Sports (KEMENPORA), Republic of Indonesia',
-        date: 'July 2026',
-        meta: '34 JP',
-        category: 'National Certification',
-        icon: 'medal',
-        code: 'TPON · 34 JP',
-        prestige: true,
-        prestigeLabel: 'KEMENPORA RI',
-        focus: 'Sport-culture policy, physical literacy, community sport management, and first aid for sports injuries.',
-        image: null, // ← ganti dengan scan sertifikat TPON
-      },
-      {
-        id: 'icsdp-presenter',
-        title: 'Certificate of Presenter',
-        subtitle: '11th International Conference of Sport for Development and Peace (ICSDP 2026)',
-        issuer: 'School of Postgraduate Studies, Universitas Pendidikan Indonesia',
-        date: '24–25 November 2026',
-        category: 'International Conference',
-        icon: 'presentation',
-        code: 'ICSDP 2026',
-        focus: 'Presented a sole-authored correlational study on creative movement and sportspersonship.',
-        image: null, // ← ganti dengan scan sertifikat presenter ICSDP
-      },
-      {
-        id: 'ai-ready',
-        title: 'Certificate of Completion: AI Ready ASEAN',
-        issuer: 'ASEAN Foundation & Google.org',
-        date: 'September 2026',
-        meta: '15 modules · 12 hours',
-        category: 'International Certification',
-        icon: 'bot',
-        code: 'AI Ready ASEAN',
-        focus: 'Generative AI, AI ethics and academic plagiarism, data security, and building simple AI-based tools.',
-        image: {
-          src: 'images/cert-ai-ready.webp',
-          thumb: 'images/cert-ai-ready-sm.webp',
-          alt: 'AI Ready ASEAN certificate of completion presented to Tio Ilham Wahyudi, 8 September 2026',
-          caption: 'AI Ready ASEAN · Certificate of Completion',
-        },
-        more: [
-          {
-            src: 'images/cert-ai-ready-modules.webp',
-            alt: 'List of the 15 completed AI Ready ASEAN learning modules',
-            caption: 'AI Ready ASEAN · 15 completed modules',
-          },
-        ],
-      },
-      {
-        id: 'stadium-generale',
-        title: 'Stadium Generale: “Sport Leadership and Policy”',
-        issuer: 'Adjunct Professor Program · Universiti Malaya & FPOK UPI',
-        date: 'November 2023',
-        category: 'Stadium Generale',
-        icon: 'landmark',
-        code: 'Universiti Malaya × UPI',
-        image: null, // ← ganti dengan scan sertifikat stadium generale
-      },
-      {
-        id: 'meaningful-pe',
-        title: 'Guest Lecture: “Meaningful PE: A Background on Its Rationale and Design”',
-        issuer: 'Sports Education Study Program, School of Postgraduate Studies, UPI',
-        date: '14 October 2026',
-        category: 'Guest Lecture',
-        icon: 'school',
-        code: 'Meaningful PE',
-        image: {
-          src: 'images/cert-meaningful-pe.webp',
-          thumb: 'images/cert-meaningful-pe-sm.webp',
-          alt: 'Certificate of appreciation for the guest lecture Meaningful PE, School of Postgraduate Studies UPI',
-          caption: 'Meaningful PE · Certificate of Appreciation',
-        },
-      },
-    ],
-    additional: [
-      {
-        title: 'Cybersecurity Training for MSMEs (Modules 1–3)',
-        issuer: 'MicroMentor by Mercy Corps & Mastercard Center for Inclusive Growth',
-        date: 'May 2023',
+  /* ---------- SECTION 5 · ACHIEVEMENTS & CERTIFICATIONS (12 kartu) ---------- */
+  achievements: [
+    {
+      id: 'tpon',
+      title: 'Tenaga Penggerak Olahraga Nasional (TPON)',
+      issuer: 'Ministry of Youth and Sports (KEMENPORA), Republic of Indonesia',
+      date: '20 July 2026',
+      category: 'National Certification',
+      icon: 'medal',
+      meta: ['No. BO.00.00/7.20.178/SET/VII/2026', '34 JP · online, 7–15 July 2026'],
+      note: 'Sport-culture policy, inclusion, community sport management, physical literacy, sport psychology, nutrition, and first aid for sports injuries.',
+      prestige: true,
+      badge: 'E-signed · BSrE–BSSN',
+      visual: {
+        kind: 'scan',
         images: [
-          { src: 'images/cert-cyber-1.webp', alt: 'Cybersecurity Training for MSMEs module 1 certificate', caption: 'Module 1 · Know What You Have and Update Your Defenses' },
-          { src: 'images/cert-cyber-2.webp', alt: 'Cybersecurity Training for MSMEs module 2 certificate', caption: 'Module 2 · Beyond Simple Passwords and Prevent Phishing and Malware' },
-          { src: 'images/cert-cyber-3.webp', alt: 'Cybersecurity Training for MSMEs module 3 certificate', caption: 'Module 3 · Backup and Recover' },
+          { src: 'images/cert-tpon.webp', thumb: 'images/cert-tpon-sm.webp', alt: 'KEMENPORA certificate for the TPON training awarded to Tio Ilham Wahyudi', caption: 'TPON certificate · KEMENPORA RI · 20 July 2026' },
+          { src: 'images/cert-tpon-structure.webp', thumb: 'images/cert-tpon-structure-sm.webp', alt: 'Course structure of the 2026 TPON training listing ten modules', caption: 'TPON 2026 · course structure (10 modules)' },
         ],
       },
-      {
-        title: 'Guest Lecture: “Enhancing Teacher Skills and Innovative Pedagogical Approaches in Physical Education”',
-        issuer: 'FPOK UPI',
-        date: 'October 2024',
-        images: [],
+    },
+    {
+      id: 'icsdp',
+      title: '11th ICSDP 2026 · Certificate of Participation',
+      issuer: 'Sport Education Study Program, School of Postgraduate Studies, UPI',
+      date: '24–25 November 2026',
+      category: 'International Conference',
+      icon: 'presentation',
+      meta: ['Bandung · signed by the Rector of UPI'],
+      note: 'Sole and corresponding author of the accepted paper on creative movement and sportspersonship orientation.',
+      visual: {
+        kind: 'scan',
+        images: [{ src: 'images/cert-icsdp.webp', thumb: 'images/cert-icsdp-sm.webp', alt: 'Certificate of participation in the 11th International Conference of Sport for Development and Peace 2026', caption: '11th ICSDP 2026 · Certificate of Participation' }],
       },
-    ],
-  },
-
-  /* ---------- G. SKILLS & TECH STACK (id logo: lihat src/data/brandIcons.ts) ---------- */
-  skills: [
-    { title: 'Data & Quantitative Analytics', icon: 'sigma', tools: ['spss', 'stata', 'smartpls', 'python', 'excel'] },
-    { title: 'Bibliometrics & Academic Publishing', icon: 'network', tools: ['vosviewer', 'pop', 'mendeley', 'googlescholar', 'orcid'] },
-    { title: 'Creative Media & Visual Design', icon: 'palette', tools: ['canva', 'lightroom', 'capcut', 'picsart', 'snapseed', 'powerpoint'] },
+    },
+    {
+      id: 'stadium-generale',
+      title: 'Stadium Generale: “Sport Leadership and Policy”',
+      issuer: 'Adjunct Professor Program · Universiti Malaya & FPOK UPI',
+      date: '14 November 2023',
+      category: 'Stadium Generale',
+      icon: 'landmark',
+      meta: ['No. 180/UN40.F6/DL.17/2023'],
+      note: 'Organised by the PETE for Elementary School Study Program, Faculty of Sport and Health Education.',
+      visual: {
+        kind: 'scan',
+        images: [{ src: 'images/cert-stadium-generale.webp', thumb: 'images/cert-stadium-generale-sm.webp', alt: 'Participant certificate for the Stadium Generale Sport Leadership and Policy, UPI and Universiti Malaya', caption: 'Stadium Generale · Sport Leadership and Policy · 14 November 2023' }],
+      },
+    },
+    {
+      id: 'pkm-kc',
+      title: 'PKM-Karsa Cipta National Funding & PKP2 Finalist',
+      issuer: 'Kemendikbudristek & Universitas Pendidikan Indonesia',
+      date: '2025',
+      category: 'National Research Grant',
+      icon: 'trophy',
+      note: 'SWIPE smart-whistle innovation for PE teachers and coaches.',
+      prestige: true,
+      visual: { kind: 'photo', photo: 'swipe-prototype' },
+    },
+    {
+      id: 'ai-ready',
+      title: 'AI Ready ASEAN · 15 Learning Modules Completed',
+      issuer: 'ASEAN Foundation & Google.org',
+      date: '8 September 2026',
+      category: 'International Certification',
+      icon: 'bot',
+      meta: ['12-hour programme'],
+      note: 'Generative AI, AI ethics and academic plagiarism, data security, and building simple AI-based tools.',
+      visual: {
+        kind: 'scan',
+        images: [
+          { src: 'images/cert-ai-ready.webp', thumb: 'images/cert-ai-ready-sm.webp', alt: 'AI Ready ASEAN certificate of completion presented to Tio Ilham Wahyudi', caption: 'AI Ready ASEAN · Certificate of Completion' },
+          { src: 'images/cert-ai-ready-modules.webp', thumb: 'images/cert-ai-ready-modules-sm.webp', alt: 'List of the 15 completed AI Ready ASEAN learning modules', caption: 'AI Ready ASEAN · 15 completed modules' },
+        ],
+      },
+    },
+    {
+      id: 'meaningful-pe',
+      title: 'Guest Lecture: “Meaningful PE: A Background on Its Rationale and Design”',
+      issuer: 'Sports Education Study Program, School of Postgraduate Studies, UPI',
+      date: '14 October 2026',
+      category: 'Guest Lecture',
+      icon: 'school',
+      visual: {
+        kind: 'scan',
+        images: [{ src: 'images/cert-meaningful-pe.webp', thumb: 'images/cert-meaningful-pe-sm.webp', alt: 'Certificate of appreciation for the guest lecture Meaningful PE', caption: 'Meaningful PE · Certificate of Appreciation' }],
+      },
+    },
+    {
+      id: 'teacher-skills',
+      title: 'Guest Lecture: “Enhancing Teacher Skills and Innovative Pedagogical Approaches in PE”',
+      issuer: 'Faculty of Sport and Health Education (FPOK), UPI',
+      date: '24 October 2024',
+      category: 'Guest Lecture',
+      icon: 'school',
+      visual: { kind: 'emblem', code: 'FPOK UPI · 2024' }, // ← ganti dengan scan bila ada
+    },
+    {
+      id: 'cyber-1',
+      title: 'Cybersecurity Training for MSMEs · Module 1: Know What You Have and Update Your Defenses',
+      issuer: 'MicroMentor by Mercy Corps & Mastercard Center for Inclusive Growth',
+      date: '27 May 2023',
+      category: 'Training Certificate',
+      icon: 'shield',
+      visual: { kind: 'scan', images: [{ src: 'images/cert-cyber-1.webp', thumb: 'images/cert-cyber-1-sm.webp', alt: 'Cybersecurity Training for MSMEs module 1 certificate', caption: 'Module 1 · Know What You Have and Update Your Defenses' }] },
+    },
+    {
+      id: 'cyber-2',
+      title: 'Cybersecurity Training for MSMEs · Module 2: Beyond Simple Passwords and Prevent Phishing and Malware',
+      issuer: 'MicroMentor by Mercy Corps & Mastercard Center for Inclusive Growth',
+      date: '2023',
+      category: 'Training Certificate',
+      icon: 'shield',
+      visual: { kind: 'scan', images: [{ src: 'images/cert-cyber-2.webp', thumb: 'images/cert-cyber-2-sm.webp', alt: 'Cybersecurity Training for MSMEs module 2 certificate', caption: 'Module 2 · Beyond Simple Passwords and Prevent Phishing and Malware' }] },
+    },
+    {
+      id: 'cyber-3',
+      title: 'Cybersecurity Training for MSMEs · Module 3: Backup and Recover',
+      issuer: 'MicroMentor by Mercy Corps & Mastercard Center for Inclusive Growth',
+      date: '2023',
+      category: 'Training Certificate',
+      icon: 'shield',
+      visual: { kind: 'scan', images: [{ src: 'images/cert-cyber-3.webp', thumb: 'images/cert-cyber-3-sm.webp', alt: 'Cybersecurity Training for MSMEs module 3 certificate', caption: 'Module 3 · Backup and Recover' }] },
+    },
+    {
+      id: 'cum-laude',
+      title: 'Cum Laude Graduate · GPA 3.83 / 4.00',
+      issuer: 'Bachelor of Physical Education, FPOK, Universitas Pendidikan Indonesia',
+      date: 'Academic distinction',
+      category: 'Academic Excellence',
+      icon: 'award',
+      note: "Graduated with distinction and continued as a fast-track Master's student in Sport Education.",
+      prestige: true,
+      visual: { kind: 'emblem', code: 'Cum Laude · 3.83' }, // ← ganti dengan scan ijazah/transkrip bila ingin
+    },
+    {
+      id: 'papila',
+      title: 'Swimming Coaching & Aquatics Practice',
+      issuer: 'Papila Swim Club',
+      date: 'Ongoing',
+      category: 'Coaching Practice',
+      icon: 'waves',
+      note: 'Technique and conditioning sessions for young swimmers built on sport-science principles.',
+      visual: { kind: 'photo', photo: 'swim-coaching' },
+    },
   ],
 
-  /* ---------- H. CONTACT & SOCIAL ---------- */
+  /* ---------- SECTION 6 · CONTACT ---------- */
   contact: {
     email: 'tioilhamw123@upi.edu',
     heading: 'Let’s build your next paper, study or sports event.',

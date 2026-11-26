@@ -1,126 +1,86 @@
-import { useRef } from 'react';
 import { Maximize2 } from 'lucide-react';
 import { getPhoto, PORTFOLIO_DATA } from '../data/portfolio';
-import type { Photo } from '../data/types';
+import type { ExperienceItem, Photo } from '../data/types';
 import { Section, SectionHeader } from '../components/ui';
 import { SpotlightCard } from '../components/SpotlightCard';
 import { Icon } from '../components/Icon';
-import { ParallaxImage } from '../components/ParallaxImage';
 import { useLightbox } from '../components/Lightbox';
-import { gsap, MOTION_OK, useGSAP } from '../lib/gsap';
 import { cn } from '../lib/utils';
 
-export function Experience() {
-  const { experience, leadership } = PORTFOLIO_DATA;
+function ExperienceCard({ item, index }: { item: ExperienceItem; index: number }) {
   const openLightbox = useLightbox();
-  const listRef = useRef<HTMLDivElement>(null);
-
-  const photoIds = experience.map((e) => ('photo' in e ? e.photo : undefined)).filter((id): id is string => !!id);
-  const photos = photoIds.map(getPhoto).filter((p): p is Photo => !!p);
-  const photoItems = photos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption }));
-
-  // Timeline progress line fills as the list scrolls past (scrubbed).
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-      mm.add(MOTION_OK, () => {
-        gsap.fromTo(
-          '[data-progress]',
-          { scaleY: 0 },
-          {
-            scaleY: 1,
-            ease: 'none',
-            scrollTrigger: { trigger: listRef.current, start: 'top 70%', end: 'bottom 55%', scrub: 0.4 },
-          },
-        );
-      });
-      return () => mm.revert();
-    },
-    { scope: listRef },
-  );
+  const photos = (item.photos ?? []).map(getPhoto).filter((p): p is Photo => !!p);
+  const items = photos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption }));
 
   return (
-    <Section id="experience">
-      <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-5">
-          <div className="lg:sticky lg:top-28">
-            <SectionHeader
-              eyebrow="Coaching, events & leadership"
-              title="On the pool deck and the race course."
-              lead="Coaching and event operations keep the research grounded in real sessions and real race days."
-            />
-            <div data-reveal className="grid grid-cols-2 gap-3">
-              {photos.map((p, i) => (
-                <button
-                  key={p.src}
-                  type="button"
-                  onClick={() => openLightbox(photoItems, i)}
-                  className={cn('media-tile group/media relative block aspect-[4/5] w-full overflow-hidden rounded-[22px] text-left', i === 1 && 'mt-10')}
-                  aria-label={`Enlarge photo: ${p.caption}`}
-                >
-                  <ParallaxImage src={p.thumb ?? p.src} alt={p.alt} position={p.position} imgClassName="media-zoom" intensity={8} />
-                  <span className="media-caption">
-                    <span className="line-clamp-2">{p.caption}</span>
-                    <Maximize2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div ref={listRef} className="relative lg:col-span-7">
-          <span aria-hidden="true" className="absolute bottom-4 left-[22px] top-4 w-px bg-line" />
-          <span aria-hidden="true" data-progress className="absolute bottom-4 left-[22px] top-4 w-px origin-top bg-cerulean-600" />
-
-          <ol className="space-y-4">
-            {experience.map((e) => (
-              <li key={`${e.role}-${e.org}`} data-reveal className="relative pl-[64px]">
-                <span
-                  className={cn(
-                    'absolute left-0 top-5 grid h-11 w-11 place-items-center rounded-2xl border bg-white shadow-soft',
-                    'ongoing' in e && e.ongoing ? 'border-cerulean-300 text-cerulean-600 ring-4 ring-cerulean-100' : 'border-line text-ink',
-                  )}
-                  aria-hidden="true"
-                >
-                  <Icon name={e.icon} className="h-5 w-5" />
-                </span>
-                <SpotlightCard innerClassName="p-5 sm:p-6">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="text-[13px] font-semibold text-cerulean-700">{e.org}</p>
-                    {'period' in e && e.period && (
-                      <span className={cn('split-chip', 'ongoing' in e && e.ongoing && 'split-chip-live')}>
-                        {'ongoing' in e && e.ongoing && <span className="live-dot" aria-hidden="true" />}
-                        {e.period}
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="mt-2 text-[1.15rem] font-bold tracking-tight text-ink">{e.role}</h3>
-                  <p className="mt-2 text-[14.5px] leading-relaxed text-muted">{e.body}</p>
-                </SpotlightCard>
-              </li>
-            ))}
-
-            <li data-reveal className="relative pl-[64px]">
-              <span className="absolute left-0 top-5 grid h-11 w-11 place-items-center rounded-2xl border border-line bg-ink text-white shadow-soft" aria-hidden="true">
-                <Icon name="users" className="h-5 w-5" />
-              </span>
-              <SpotlightCard innerClassName="p-5 sm:p-6">
-                <p className="text-[13px] font-semibold text-cerulean-700">Organizational leadership</p>
-                <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-                  {leadership.map((l) => (
-                    <li key={l.org} className="rounded-2xl border border-line bg-canvas/70 p-4">
-                      <p className="text-[14.5px] font-bold leading-snug text-ink">{l.org}</p>
-                      <p className="mt-1 text-[13px] text-muted">{l.unit}</p>
-                      <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">{l.note}</p>
-                    </li>
-                  ))}
-                </ul>
-              </SpotlightCard>
-            </li>
-          </ol>
-        </div>
+    <SpotlightCard tilt={1.5} innerClassName="grid gap-5 p-5 sm:p-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-7">
+      <div className="flex items-center gap-4 md:flex-col md:items-start md:gap-3">
+        <span className="font-display text-[2.1rem] font-extrabold leading-none tracking-[-0.04em] text-line [-webkit-text-stroke:1px_#94a3b8]">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span
+          className={cn(
+            'grid h-11 w-11 place-items-center rounded-2xl border bg-white',
+            item.ongoing ? 'border-cerulean-300 text-cerulean-600 ring-4 ring-cerulean-100' : 'border-line text-ink',
+          )}
+        >
+          <Icon name={item.icon} className="h-5 w-5" />
+        </span>
       </div>
+
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <p className="font-label text-[12px] font-semibold uppercase tracking-[0.1em] text-cerulean-700">{item.org}</p>
+          {item.period && (
+            <span className={cn('split-chip', item.ongoing && 'split-chip-live')}>
+              {item.ongoing && <span className="live-dot" aria-hidden="true" />}
+              {item.period}
+            </span>
+          )}
+        </div>
+        <h3 className="mt-2 text-[1.2rem] font-bold tracking-tight text-ink">{item.role}</h3>
+        <p className="mt-1.5 max-w-[68ch] text-[14.5px] leading-relaxed text-muted">{item.body}</p>
+      </div>
+
+      {photos.length > 0 && (
+        <ul className="flex gap-2">
+          {photos.map((p, i) => (
+            <li key={p.src}>
+              <button
+                type="button"
+                onClick={() => openLightbox(items, i)}
+                className="media-tile group/media relative block h-[88px] w-[112px] overflow-hidden rounded-2xl border border-line"
+                aria-label={`Enlarge photo: ${p.caption}`}
+              >
+                <img src={p.thumb ?? p.src} alt={p.alt} loading="lazy" decoding="async" className="media-zoom absolute inset-0 h-full w-full object-cover" style={p.position ? { objectPosition: p.position } : undefined} />
+                <span className="absolute inset-0 grid place-items-center bg-ink/0 text-white opacity-0 transition duration-300 group-hover/media:bg-ink/35 group-hover/media:opacity-100">
+                  <Maximize2 className="h-4 w-4" aria-hidden="true" />
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </SpotlightCard>
+  );
+}
+
+export function Experience() {
+  const { experience } = PORTFOLIO_DATA;
+  return (
+    <Section id="experience" tone="canvas">
+      <SectionHeader
+        eyebrow="Experience & leadership"
+        title="Coaching, events & leadership."
+        lead="Pool sessions, race days and campus organisations keep the research grounded in real practice."
+      />
+      <ol className="space-y-4">
+        {experience.map((item, i) => (
+          <li key={`${item.role}-${item.org}`} data-reveal>
+            <ExperienceCard item={item as ExperienceItem} index={i} />
+          </li>
+        ))}
+      </ol>
     </Section>
   );
 }

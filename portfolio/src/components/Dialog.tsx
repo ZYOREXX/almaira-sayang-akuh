@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useBodyLock } from '../hooks/useBodyLock';
@@ -49,7 +50,8 @@ export function Dialog({
     };
   }, [onClose]);
 
-  return (
+  // Portal to <body> so the dialog sits above the sticky nav and every section.
+  return createPortal(
     <motion.div
       className="fixed inset-0 z-[80] flex items-end justify-center sm:items-center sm:p-6"
       initial={{ opacity: 0 }}
@@ -77,6 +79,7 @@ export function Dialog({
         </div>
         <div className="px-5 pb-8 pt-2 sm:px-8 sm:pb-10">{children}</div>
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body,
   );
 }

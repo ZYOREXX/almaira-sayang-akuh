@@ -1,13 +1,13 @@
 import type { IconName } from '../components/Icon';
 import type { BrandId } from './brandIcons';
 
-/** A documentation photo. `thumb` is optional (used on cards & tiles). */
+/** A documentation photo. `thumb` is optional (used on cards & thumbnails). */
 export interface Photo {
   src: string;
   thumb?: string;
   alt: string;
   caption: string;
-  /** 'contain' for diagrams/scans that must not be cropped. */
+  /** 'contain' for diagrams, documents and scans that must not be cropped. */
   fit?: 'cover' | 'contain';
   /** CSS object-position, e.g. '50% 30%'. */
   position?: string;
@@ -21,34 +21,46 @@ export interface ImageRef {
   caption?: string;
 }
 
-export interface BadgeData {
-  icon: IconName;
+/** Animated number. `display` overrides the final text; omit `value` for text-only metrics. */
+export interface MetricData {
   label: string;
-  detail: string;
-}
-
-/** Animated number (counter). `display` overrides the final text. */
-export interface CounterData {
-  label: string;
-  value: number;
+  value?: number;
   from?: number;
-  decimals: number;
+  decimals?: number;
   prefix?: string;
   suffix?: string;
   display?: string;
-}
-
-export interface HeroStat extends CounterData {
-  note: string;
+  note?: string;
   prestige?: boolean;
 }
 
-export interface Pillar {
+export interface Pill {
+  icon: IconName;
+  label: string;
+  detail: string;
+  prestige?: boolean;
+}
+
+export interface Persona {
   icon: IconName;
   title: string;
   body: string;
-  tags: string[];
-  /** Photo ids from PORTFOLIO_DATA.photos shown inside the card. */
+  points: string[];
+}
+
+export interface SkillGroup {
+  title: string;
+  icon: IconName;
+  tools: BrandId[];
+}
+
+export interface ExperienceItem {
+  role: string;
+  org: string;
+  period?: string;
+  ongoing?: boolean;
+  body: string;
+  icon: IconName;
   photos?: string[];
 }
 
@@ -61,101 +73,96 @@ export interface Effect {
   magnitude: string;
 }
 
-export interface Publication {
+export interface DescriptiveRow {
+  measure: string;
+  unit: string;
+  lowerIsBetter?: boolean;
+  domain: [number, number];
+  ticks: number[];
+  pre: { mean: number; sd: number; min: number; max: number };
+  post: { mean: number; sd: number; min: number; max: number };
+}
+
+interface WorkBase {
   id: string;
-  kind: string;
-  venue: string;
-  venueFull: string;
-  citation?: string;
-  authorship: string;
-  year: string;
+  label: string; // short label for thumbnails
+  kind: string; // e.g. International Conference Paper
   title: string;
   titleAlt?: string;
+  venue: string;
+  role: string;
+  year: string;
+  summary: string;
+  tags: string[];
+  metrics: MetricData[];
+  /** Photo ids from PORTFOLIO_DATA.photos; the first one is the cover. */
+  images: string[];
+  cta: string;
+}
+
+export interface ConferenceWork extends WorkBase {
+  type: 'conference';
   byline: string;
   affiliation: string;
-  design: string;
-  instruments: string[];
-  metrics: CounterData[];
-  ci?: { low: number; high: number; estimate: number; resamples: number };
-  bayes?: { bf01: number; posteriorMean: number };
-  effects?: Effect[];
-  finding: string;
   abstract: string[];
-  notes: Array<[string, string]>;
-  photos?: string[];
+  keywords: string[];
+  method: Array<[string, string]>;
+  descriptives: Array<{ variable: string; mean: number; sd: number; level: string }>;
+  ci: { low: number; high: number; estimate: number; resamples: number };
+  bayes: { bf01: number; posteriorMean: number; credible: [number, number] };
+  implication: string;
 }
 
-export interface Spec {
-  icon: IconName;
-  label: string;
-  detail: string;
+export interface JournalWork extends WorkBase {
+  type: 'journal';
+  byline: string;
+  affiliation: string;
+  citation: string;
+  link?: string;
+  abstract: string[];
+  keywords: string[];
+  method: Array<[string, string]>;
+  program: Array<{ sessions: string; focus: string; content: string }>;
+  descriptives: DescriptiveRow[];
+  effects: Effect[];
+  conclusion: string;
 }
 
-export interface TeamMember {
-  name: string;
-  unit: string;
-  role?: string;
-  self?: boolean;
+export interface ProjectWork extends WorkBase {
+  type: 'project';
+  subtitleId: string;
+  achievements: Array<{ label: string; detail: string; prestige?: boolean }>;
+  specs: Array<{ icon: IconName; label: string; detail: string }>;
+  team: Array<{ name: string; unit: string; role?: string; self?: boolean }>;
 }
 
-export interface GalleryFilter {
-  id: string;
-  label: string;
-}
-
-export interface GalleryItem {
-  photo: string;
-  category: string;
-  /** Tile size in the "All" view: big = 2×2, wide = 2×1, tall = 1×2. */
-  span: 'big' | 'wide' | 'tall' | 'normal';
-}
-
-export interface Certificate {
-  id: string;
-  title: string;
-  subtitle?: string;
-  issuer: string;
-  date: string;
-  meta?: string;
-  category: string;
-  icon: IconName;
-  /** Short code printed on the summary card when no scan is available. */
-  code: string;
-  prestige?: boolean;
-  prestigeLabel?: string;
-  focus?: string;
-  /** null = no scan yet → elegant summary card is shown instead. */
-  image: ImageRef | null;
-  more?: ImageRef[];
-}
-
-export interface AdditionalCredential {
-  title: string;
-  issuer: string;
-  date: string;
-  images: ImageRef[];
-}
-
-export interface ExperienceItem {
-  role: string;
-  org: string;
-  period?: string;
-  ongoing?: boolean;
-  body: string;
-  icon: IconName;
-  photo?: string;
-}
-
-export interface LeadershipItem {
-  org: string;
-  unit: string;
-  note: string;
-}
-
-export interface SkillGroup {
-  title: string;
-  icon: IconName;
+export interface ServiceWork extends WorkBase {
+  type: 'service';
+  services: Array<{ icon: IconName; title: string; body: string }>;
   tools: BrandId[];
+}
+
+export type Work = ConferenceWork | JournalWork | ProjectWork | ServiceWork;
+
+/** How an achievement card shows its visual. */
+export type AchievementVisual =
+  | { kind: 'scan'; images: ImageRef[] } // certificate scan(s)
+  | { kind: 'photo'; photo: string } // documentation photo id
+  | { kind: 'emblem'; code: string }; // designed summary card (no scan yet)
+
+export interface Achievement {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  category: string;
+  icon: IconName;
+  meta?: string[];
+  note?: string;
+  prestige?: boolean;
+  /** Short, factual tag such as "E-signed · BSrE–BSSN". */
+  badge?: string;
+  visual: AchievementVisual;
 }
 
 export interface Social {
@@ -167,39 +174,30 @@ export interface Social {
 
 export interface PortfolioData {
   nav: Array<{ id: string; label: string }>;
-  profile: {
+  hero: {
+    eyebrow: string;
+    title: string;
     name: string;
     suffix: string;
     roles: string[];
     tagline: string;
-    affiliation: string;
-    focus: string[];
     portrait: ImageRef;
-    status: { label: string; detail: string };
+    pills: Pill[];
   };
-  prestigeBadges: BadgeData[];
-  heroStats: HeroStat[];
-  summary: string;
-  pillars: Pillar[];
+  about: {
+    eyebrow: string;
+    heading: string;
+    statement: string;
+    body: string;
+    photo: ImageRef;
+    metrics: MetricData[];
+    stack: SkillGroup[];
+    personas: Persona[];
+  };
   photos: Record<string, Photo>;
-  publications: Publication[];
-  swipe: {
-    program: string;
-    acronym: string;
-    title: string;
-    summary: string;
-    subtitleId: string;
-    achievements: Array<{ label: string; detail: string; prestige?: boolean }>;
-    role: string;
-    specs: Spec[];
-    team: TeamMember[];
-    photos: string[];
-  };
   experience: ExperienceItem[];
-  leadership: LeadershipItem[];
-  gallery: { filters: GalleryFilter[]; items: GalleryItem[] };
-  certificates: { featured: Certificate[]; additional: AdditionalCredential[] };
-  skills: SkillGroup[];
+  works: Work[];
+  achievements: Achievement[];
   contact: {
     email: string;
     heading: string;

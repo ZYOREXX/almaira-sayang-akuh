@@ -3,13 +3,10 @@ import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from './lib/gsap';
 import { LightboxProvider } from './components/Lightbox';
 import { Nav } from './sections/Nav';
 import { Hero } from './sections/Hero';
-import { Pillars } from './sections/Pillars';
-import { Publications } from './sections/Publications';
-import { SwipeProject } from './sections/SwipeProject';
+import { About } from './sections/About';
 import { Experience } from './sections/Experience';
-import { Gallery } from './sections/Gallery';
-import { Certificates } from './sections/Certificates';
-import { Toolkit } from './sections/Toolkit';
+import { Works } from './sections/Works';
+import { Achievements } from './sections/Achievements';
 import { Contact } from './sections/Contact';
 import { Footer } from './sections/Footer';
 
@@ -73,20 +70,16 @@ export default function App() {
   return (
     <LightboxProvider>
       <div className="site">
-        <div aria-hidden="true" className="ambient" />
-        <a href="#research" className="skip-link">
-          Skip to research
+        <a href="#about" className="skip-link">
+          Skip to content
         </a>
         <Nav />
         <main ref={mainRef}>
           <Hero />
-          <Pillars />
-          <Publications />
-          <SwipeProject />
+          <About />
           <Experience />
-          <Gallery />
-          <Certificates />
-          <Toolkit />
+          <Works />
+          <Achievements />
           <Contact />
         </main>
         <Footer />

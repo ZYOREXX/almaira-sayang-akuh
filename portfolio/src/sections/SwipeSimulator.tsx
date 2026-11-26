@@ -172,28 +172,28 @@ export function SwipeSimulator() {
           <span aria-hidden="true" className="device-btn right-[-5px] top-[22%]" />
           <span aria-hidden="true" className="device-btn right-[-5px] top-[62%]" />
           <div className="oled rounded-[30px] px-5 pb-4 pt-3.5">
-            <div className="flex items-center justify-between font-mono text-[10px] tracking-[0.14em] text-cyan-300/70">
+            <div className="flex items-center justify-between font-label text-[10px] tracking-[0.14em] text-cyan-300/70">
               <span className="font-sans text-[13px] font-extrabold tracking-[0.08em] text-cyan-200">SWIPE</span>
               <span>TONE · {tone.label.toUpperCase()}</span>
             </div>
-            <div className="mt-3 flex items-baseline justify-between font-mono text-cyan-200">
+            <div className="mt-3 flex items-baseline justify-between font-label text-cyan-200">
               <span className="text-[10px] tracking-[0.14em] text-cyan-300/60">SPLIT</span>
               <span ref={splitRef} className="text-[17px] tabular-nums">
                 00:00.00
               </span>
             </div>
-            <div className="mt-1 flex items-baseline justify-between font-mono text-cyan-200">
+            <div className="mt-1 flex items-baseline justify-between font-label text-cyan-200">
               <span className="text-[10px] tracking-[0.14em] text-cyan-300/60">LAP {lapNo}</span>
               <span ref={lapRef} className="text-[17px] tabular-nums">
                 00:00.00
               </span>
             </div>
-            <div className="mt-3 text-center font-mono text-[clamp(2.1rem,9vw,2.6rem)] leading-none text-cyan-100 [text-shadow:0_0_14px_rgba(34,211,238,0.55)]">
+            <div className="mt-3 text-center font-label text-[clamp(2.1rem,9vw,2.6rem)] leading-none text-cyan-100 [text-shadow:0_0_14px_rgba(34,211,238,0.55)]">
               <span ref={mainRef} className="tabular-nums">
                 00:00.00
               </span>
             </div>
-            <div className="mt-3 flex items-center justify-between font-mono text-[10px] tracking-[0.14em]">
+            <div className="mt-3 flex items-center justify-between font-label text-[10px] tracking-[0.14em]">
               <span className={cn('flex items-center gap-1.5', running ? 'text-emerald-300' : 'text-cyan-300/60')}>
                 <span className={cn('h-1.5 w-1.5 rounded-full', running ? 'bg-emerald-300 animate-pulse' : 'bg-cyan-300/40')} />
                 {running ? 'RUN' : hasTime ? 'HOLD' : 'READY'}
@@ -241,7 +241,7 @@ export function SwipeSimulator() {
         {laps.length === 0 ? (
           <p className="px-1 py-2 text-[13px] leading-snug text-muted">Press Start, then Lap / Flag to record splits the way a coach would at the pool or track.</p>
         ) : (
-          <ol aria-live="polite" className="space-y-1 font-mono text-[12.5px]">
+          <ol aria-live="polite" className="space-y-1 font-label text-[12.5px]">
             <AnimatePresence initial={false}>
               {laps.slice(0, 4).map((l) => (
                 <motion.li

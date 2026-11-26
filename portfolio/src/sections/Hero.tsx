@@ -1,12 +1,12 @@
 import { Fragment, useRef } from 'react';
-import { ArrowDownRight, GraduationCap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowDownRight } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolio';
+import type { Pill } from '../data/types';
 import { gsap, MOTION_OK, useGSAP } from '../lib/gsap';
 import { cn } from '../lib/utils';
-import { SpotlightCard } from '../components/SpotlightCard';
 import { MagneticButton } from '../components/MagneticButton';
-import { Counter } from '../components/Counter';
-import { PrestigeBadge } from '../components/ui';
+import { Icon } from '../components/Icon';
 
 function Word({ children, className }: { children: string; className?: string }) {
   return (
@@ -18,26 +18,63 @@ function Word({ children, className }: { children: string; className?: string })
   );
 }
 
-export function Hero() {
-  const { profile, prestigeBadges, heroStats } = PORTFOLIO_DATA;
-  const scope = useRef<HTMLElement>(null);
-  const [first, ...rest] = profile.name.split(' ');
+/** Glass pill that floats gently (Framer Motion loop; off with reduced motion). */
+function FloatingPill({ pill, delay, className }: { pill: Pill; delay: number; className?: string }) {
+  return (
+    <div data-h="pill" className={className}>
+      <motion.div
+        className="hero-pill"
+        animate={{ y: [0, -9, 0] }}
+        transition={{ duration: 5.5 + delay, repeat: Infinity, ease: 'easeInOut', delay }}
+        whileHover={{ scale: 1.04 }}
+      >
+        <span className={cn('grid h-10 w-10 shrink-0 place-items-center rounded-2xl', pill.prestige ? 'bg-prestige-soft text-prestige' : 'bg-cerulean-50 text-cerulean-600')}>
+          <Icon name={pill.icon} className="h-5 w-5" />
+        </span>
+        <span className="min-w-0 text-left leading-tight">
+          <span className={cn('block text-[13px] font-bold', pill.prestige ? 'text-prestige' : 'text-ink')}>{pill.label}</span>
+          <span className="mt-0.5 block text-[12px] font-medium text-muted">{pill.detail}</span>
+        </span>
+      </motion.div>
+    </div>
+  );
+}
 
-  // Staggered entrance on load (GSAP timeline).
+export function Hero() {
+  const { hero } = PORTFOLIO_DATA;
+  const scope = useRef<HTMLElement>(null);
+  const [p1, p2, p3] = hero.pills;
+  const titleWords = hero.title.toUpperCase().split(' ');
+  const half = Math.ceil(titleWords.length / 2);
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
+        // 1) Staggered entrance on load.
         gsap
           .timeline({ defaults: { ease: 'expo.out' } })
-          .from('[data-h="card"]', { y: 30, autoAlpha: 0, duration: 1, stagger: 0.1 })
-          .from('[data-h="eyebrow"]', { y: 12, autoAlpha: 0, duration: 0.7 }, 0.15)
-          .from('[data-h="word"]', { yPercent: 118, rotate: 4, duration: 1.15, stagger: 0.075 }, 0.25)
-          .from('[data-h="line"]', { y: 20, autoAlpha: 0, duration: 0.9, stagger: 0.08 }, 0.6)
-          .from('[data-h="badge"]', { y: 16, autoAlpha: 0, scale: 0.97, duration: 0.8, stagger: 0.08 }, 0.85)
-          .from('[data-h="portrait"]', { clipPath: 'inset(16% 12% 16% 12% round 22px)', scale: 1.08, duration: 1.6, ease: 'expo.inOut' }, 0.1)
-          .from('[data-h="float"]', { y: 14, autoAlpha: 0, scale: 0.9, duration: 0.8, ease: 'back.out(1.7)', stagger: 0.12 }, 1.05)
-          .from('[data-h="stat"]', { y: 24, autoAlpha: 0, duration: 0.9, stagger: 0.08 }, 0.7);
+          .from('[data-h="eyebrow"]', { y: 14, autoAlpha: 0, duration: 0.7 }, 0.1)
+          .from('[data-h="word"]', { yPercent: 118, rotate: 3, duration: 1.15, stagger: 0.07 }, 0.2)
+          .from('[data-h="name"]', { y: 18, autoAlpha: 0, duration: 0.9 }, 0.6)
+          .from('[data-h="frame"]', { clipPath: 'inset(18% 14% 18% 14% round 32px)', scale: 1.06, duration: 1.5, ease: 'expo.inOut' }, 0.3)
+          .from('[data-h="pill"]', { y: 26, autoAlpha: 0, scale: 0.92, duration: 0.9, stagger: 0.12, ease: 'back.out(1.6)' }, 1.0)
+          .from('[data-h="line"]', { y: 18, autoAlpha: 0, duration: 0.8, stagger: 0.08 }, 1.1);
+
+        // 2) Hero recedes as the page scrolls on (video reference: panel drifts back).
+        gsap.to('[data-h="recede"]', {
+          yPercent: -18,
+          scale: 0.94,
+          autoAlpha: 0.35,
+          ease: 'none',
+          scrollTrigger: { trigger: scope.current, start: 'top top', end: 'bottom top', scrub: 0.6 },
+        });
+        gsap.to('[data-h="stage"]', {
+          y: -60,
+          scale: 0.95,
+          ease: 'none',
+          scrollTrigger: { trigger: scope.current, start: 'top top', end: 'bottom top', scrub: 0.6 },
+        });
       });
       return () => mm.revert();
     },
@@ -45,121 +82,85 @@ export function Hero() {
   );
 
   return (
-    <section id="top" ref={scope} className="relative pt-6 sm:pt-10">
-      <div className="gutter mx-auto max-w-7xl">
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-12">
-          {/* Identity */}
-          <div data-h="card" className="col-span-2 lg:col-span-8">
-            <SpotlightCard lift={2} innerClassName="flex h-full flex-col p-6 sm:p-10 lg:p-12">
-              <p data-h="eyebrow" className="eyebrow eyebrow-live">
-                {profile.affiliation}
-              </p>
-              <h1 className="mt-6 text-[clamp(2.7rem,7.4vw,5.9rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-ink">
-                <span className="block">
-                  <Word>{first}</Word>
-                  {rest.length > 1 && (
-                    <>
-                      {' '}
-                      <Word>{rest.slice(0, -1).join(' ')}</Word>
-                    </>
-                  )}
-                </span>
-                <span className="block">
-                  <Word>{`${rest[rest.length - 1]},`}</Word>{' '}
-                  <Word className="align-baseline text-[0.5em] font-bold tracking-[-0.02em] text-cerulean-600">{profile.suffix}</Word>
-                </span>
-              </h1>
+    <section id="home" ref={scope} className="band band-canvas pb-20 pt-28 sm:pb-28 sm:pt-32">
+      <div className="gutter relative mx-auto max-w-7xl">
+        <div data-h="recede" className="text-center">
+          <p data-h="eyebrow" className="eyebrow eyebrow-live justify-center">
+            {hero.eyebrow}
+          </p>
+          <h1 className="mt-6 font-display text-[clamp(2.5rem,9.2vw,7.4rem)] font-extrabold leading-[0.92] tracking-[-0.045em] text-ink">
+            <span className="block">
+              {titleWords.slice(0, half).map((w, i) => (
+                <Fragment key={w + i}>
+                  {i > 0 && ' '}
+                  <Word>{w}</Word>
+                </Fragment>
+              ))}
+            </span>
+            <span className="block">
+              {titleWords.slice(half).map((w, i) => (
+                <Fragment key={w + i}>
+                  {i > 0 && ' '}
+                  <Word className={i === titleWords.slice(half).length - 1 ? 'text-cerulean-600' : undefined}>{w}</Word>
+                </Fragment>
+              ))}
+            </span>
+          </h1>
+          <p data-h="name" className="mt-6 font-label text-[clamp(1rem,2.3vw,1.5rem)] font-bold uppercase tracking-[0.08em] text-ink">
+            {hero.name}, <span className="normal-case text-cerulean-700">{hero.suffix}</span>
+          </p>
+        </div>
 
-              <p data-h="line" className="mt-7 flex flex-col gap-1.5 text-[15px] font-semibold text-ink sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3">
-                {profile.roles.map((r, i) => (
-                  <Fragment key={r}>
-                    {i > 0 && <span aria-hidden="true" className="hidden h-1.5 w-1.5 rounded-full bg-cerulean-500 sm:inline-block" />}
-                    <span className="flex items-center gap-2.5">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-cerulean-500 sm:hidden" />
-                      {r}
-                    </span>
-                  </Fragment>
-                ))}
-              </p>
-              <p data-h="line" className="mt-4 max-w-2xl text-[17px] leading-relaxed text-muted sm:text-lg">
-                {profile.tagline}
-              </p>
-              <div data-h="line" className="mt-8 flex flex-wrap gap-3">
-                <MagneticButton href="#research">
-                  Explore Publications &amp; Projects
-                  <ArrowDownRight className="h-4 w-4" aria-hidden="true" />
-                </MagneticButton>
-                <MagneticButton href="#contact" variant="secondary">
-                  Mentoring &amp; Collaboration
-                </MagneticButton>
-              </div>
-
-              <ul className="mt-auto grid gap-3 border-t border-line pt-6 sm:grid-cols-3 lg:mt-12">
-                {prestigeBadges.map((b) => (
-                  <li key={b.label} data-h="badge" className="min-w-0">
-                    <PrestigeBadge {...b} className="h-full" />
-                  </li>
-                ))}
-              </ul>
-            </SpotlightCard>
+        {/* Portrait in a glass frame + floating pills */}
+        <div data-h="stage" className="mt-10 grid items-center gap-4 sm:mt-14 lg:grid-cols-[1fr_minmax(0,380px)_1fr] lg:gap-8">
+          <div className="order-2 hidden flex-col items-end gap-24 lg:order-1 lg:flex">
+            <FloatingPill pill={p1} delay={0} />
+            <FloatingPill pill={p3} delay={1.2} className="mr-10" />
           </div>
 
-          {/* Portrait in a glass frame */}
-          <div data-h="card" className="col-span-2 lg:col-span-4">
-            <SpotlightCard tilt={4} lift={2} tone="tint" innerClassName="flex h-full flex-col p-3 sm:p-4">
-              <figure className="portrait-stage relative flex flex-1 items-center justify-center rounded-[22px] p-4 sm:p-6">
-                <div className="glass-frame relative w-full max-w-[400px]">
-                  <div data-h="portrait" className="portrait-clip relative aspect-[4/5] w-full overflow-hidden rounded-[20px]">
-                    {/* GANTI FOTO: PORTFOLIO_DATA.profile.portrait */}
-                    <img
-                      src={profile.portrait.src}
-                      alt={profile.portrait.alt}
-                      className="absolute inset-0 h-full w-full object-cover object-top"
-                      loading="eager"
-                      decoding="async"
-                    />
-                    <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-ink/25 to-transparent" />
-                  </div>
-                  <div data-h="float" className="status-badge absolute -left-3 top-5 sm:-left-5">
-                    <span className="grid h-8 w-8 place-items-center rounded-xl bg-prestige-soft text-prestige">
-                      <GraduationCap className="h-4 w-4" aria-hidden="true" />
-                    </span>
-                    <span className="leading-tight">
-                      <span className="block text-[12px] font-bold text-ink">{profile.status.label}</span>
-                      <span className="flex items-center gap-1.5 text-[11px] font-medium text-muted">
-                        <span className="live-dot" aria-hidden="true" />
-                        {profile.status.detail}
-                      </span>
-                    </span>
-                  </div>
-                </div>
-                <figcaption className="sr-only">{profile.portrait.alt}</figcaption>
-              </figure>
-              <div data-h="float" className="mt-3 rounded-[20px] border border-line bg-white/85 px-4 py-3.5">
-                <p className="font-mono text-[10.5px] font-medium uppercase tracking-[0.16em] text-muted">Research focus</p>
-                <ul className="mt-2.5 flex flex-wrap gap-1.5">
-                  {profile.focus.map((f) => (
-                    <li key={f} className="chip">
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+          <figure className="order-1 mx-auto w-full max-w-[360px] lg:order-2">
+            <div className="glass-frame hero-frame">
+              <div data-h="frame" className="portrait-clip relative aspect-[4/5] w-full overflow-hidden rounded-[20px]">
+                {/* GANTI FOTO: PORTFOLIO_DATA.hero.portrait */}
+                <img src={hero.portrait.src} alt={hero.portrait.alt} className="absolute inset-0 h-full w-full object-cover object-top" loading="eager" decoding="async" />
+                <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-ink/25 to-transparent" />
               </div>
-            </SpotlightCard>
-          </div>
-
-          {/* Running research metrics */}
-          {heroStats.map((s) => (
-            <div key={s.label} data-h="stat" className="col-span-1 lg:col-span-3">
-              <SpotlightCard tone={s.prestige ? 'prestige' : 'white'} innerClassName="flex h-full flex-col p-4 sm:p-6">
-                <p className={cn('text-[12px] font-semibold sm:text-[13px]', s.prestige ? 'text-prestige' : 'text-muted')}>{s.label}</p>
-                <p className={cn('stat-value mt-3', s.prestige ? 'text-prestige' : 'text-ink')}>
-                  <Counter value={s.value} from={s.from} decimals={s.decimals} prefix={s.prefix} suffix={s.suffix} display={s.display} />
-                </p>
-                <p className={cn('mt-3 text-[12px] leading-snug sm:text-[13px]', s.prestige ? 'text-prestige-deep/85' : 'text-muted')}>{s.note}</p>
-              </SpotlightCard>
             </div>
-          ))}
+          </figure>
+
+          <div className="order-3 hidden lg:flex lg:flex-col lg:items-start">
+            <FloatingPill pill={p2} delay={0.6} className="ml-2" />
+          </div>
+
+          {/* Mobile / tablet: pills below the photo, no overlap */}
+          <div className="order-3 grid gap-3 sm:grid-cols-3 lg:hidden">
+            {hero.pills.map((p, i) => (
+              <FloatingPill key={p.label} pill={p} delay={i * 0.6} />
+            ))}
+          </div>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-3xl text-center sm:mt-14">
+          <p data-h="line" className="flex flex-col items-center gap-1.5 font-display text-[15px] font-semibold text-ink sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-3">
+            {hero.roles.map((r, i) => (
+              <Fragment key={r}>
+                {i > 0 && <span aria-hidden="true" className="hidden h-1.5 w-1.5 rounded-full bg-cerulean-500 sm:inline-block" />}
+                <span>{r}</span>
+              </Fragment>
+            ))}
+          </p>
+          <p data-h="line" className="mx-auto mt-4 max-w-2xl text-[17px] leading-relaxed text-muted">
+            {hero.tagline}
+          </p>
+          <div data-h="line" className="mt-8 flex flex-wrap justify-center gap-3">
+            <MagneticButton href="#works">
+              Explore Works &amp; Research
+              <ArrowDownRight className="h-4 w-4" aria-hidden="true" />
+            </MagneticButton>
+            <MagneticButton href="#contact" variant="secondary">
+              Mentoring &amp; Collaboration
+            </MagneticButton>
+          </div>
         </div>
       </div>
     </section>

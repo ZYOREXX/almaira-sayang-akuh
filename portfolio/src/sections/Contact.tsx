@@ -43,7 +43,7 @@ export function Contact() {
   };
 
   return (
-    <Section id="contact">
+    <Section id="contact" tone="white">
       <div data-reveal>
         <SpotlightCard lift={2} innerClassName="grid gap-10 p-6 sm:p-10 lg:grid-cols-12 lg:gap-12 lg:p-14">
           <div className="lg:col-span-7">
@@ -68,7 +68,7 @@ export function Contact() {
               <p className="flex items-center gap-2 text-[13px] font-semibold text-muted">
                 <Mail className="h-4 w-4 text-cerulean-600" aria-hidden="true" /> Email
               </p>
-              <span ref={emailRef} className="mt-2 block select-all break-all font-mono text-[clamp(1.05rem,2.4vw,1.35rem)] font-semibold text-ink">
+              <span ref={emailRef} className="mt-2 block select-all break-all font-label text-[clamp(1.05rem,2.4vw,1.35rem)] font-semibold text-ink">
                 {contact.email}
               </span>
               <div className="mt-5 flex flex-wrap gap-2.5">

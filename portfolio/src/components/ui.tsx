@@ -2,11 +2,26 @@ import type { ReactNode } from 'react';
 import { cn } from '../lib/utils';
 import { Icon, type IconName } from './Icon';
 
-/** Section wrapper: consistent spacing, anchor offset and side gutter. */
-export function Section({ id, children, className }: { id?: string; children: ReactNode; className?: string }) {
+/**
+ * Section band: alternating #F8FAFC / #FFFFFF background with a dot-matrix grid
+ * and soft cerulean + amber ambient glows. `flip` mirrors the glow positions.
+ */
+export function Section({
+  id,
+  children,
+  className,
+  tone = 'canvas',
+  flip = false,
+}: {
+  id?: string;
+  children: ReactNode;
+  className?: string;
+  tone?: 'canvas' | 'white';
+  flip?: boolean;
+}) {
   return (
-    <section id={id} className={cn('section relative', className)}>
-      <div className="gutter mx-auto max-w-7xl">{children}</div>
+    <section id={id} className={cn('section band', tone === 'white' ? 'band-white' : 'band-canvas', flip && 'band-flip', className)}>
+      <div className="gutter relative mx-auto max-w-7xl">{children}</div>
     </section>
   );
 }

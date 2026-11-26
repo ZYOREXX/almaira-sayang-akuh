@@ -1,7 +1,7 @@
 import { useRef, type CSSProperties, type ReactNode, type RefObject } from 'react';
 import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from '../lib/gsap';
 import { cn, formatStat } from '../lib/utils';
-import type { Effect } from '../data/types';
+import type { DescriptiveRow, Effect } from '../data/types';
 
 /*
   Statistical instruments drawn in HTML/CSS on one linear (or log) scale.
@@ -111,7 +111,7 @@ export function CiAxis({
     <figure ref={ref} className="w-full">
       <figcaption className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[12px] leading-snug text-muted">
         <span>95% BCa CI for Pearson r · {resamples.toLocaleString('en-US')} bootstrap resamples</span>
-        <span className="font-mono text-ink tabular-nums">
+        <span className="font-label text-ink tabular-nums">
           [{fmt3(low)}, {fmt3(high)}]
         </span>
       </figcaption>
@@ -139,7 +139,7 @@ export function CiAxis({
         </Tip>
 
         {/* point estimate */}
-        <div data-callout className="absolute top-0 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] font-medium text-ink" style={{ left: `${p(estimate)}%` }}>
+        <div data-callout className="absolute top-0 -translate-x-1/2 whitespace-nowrap font-label text-[11px] font-medium text-ink" style={{ left: `${p(estimate)}%` }}>
           r = {fmt3(estimate)}
         </div>
         <Tip
@@ -155,7 +155,7 @@ export function CiAxis({
         {ticks.map((t) => (
           <span
             key={`l${t}`}
-            className="absolute top-[54px] -translate-x-1/2 font-mono text-[10.5px] text-muted tabular-nums"
+            className="absolute top-[54px] -translate-x-1/2 font-label text-[10.5px] text-muted tabular-nums"
             style={{ left: `${Math.min(Math.max(p(t), 3), 97)}%` }}
           >
             {t === 0 ? '0' : t > 0 ? `+${t}` : formatStat(t, 1)}
@@ -192,11 +192,11 @@ export function BayesScale({ bf01, posteriorMean, trigger = 'scroll' }: { bf01: 
     <figure ref={ref} className="w-full">
       <figcaption className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[12px] leading-snug text-muted">
         <span>Bayes factor for H₀ · log scale, Jeffreys’ categories</span>
-        <span className="font-mono text-ink tabular-nums">posterior mean r = {fmt3(posteriorMean)}</span>
+        <span className="font-label text-ink tabular-nums">posterior mean r = {fmt3(posteriorMean)}</span>
       </figcaption>
       <div className="relative mt-3 h-[70px]">
         <div data-marker className="absolute top-0 -translate-x-1/2 text-center" style={{ left: `${p(bf01)}%` }}>
-          <span className="block whitespace-nowrap font-mono text-[11px] font-medium text-ink">BF₀₁ = {fmt3(bf01)}</span>
+          <span className="block whitespace-nowrap font-label text-[11px] font-medium text-ink">BF₀₁ = {fmt3(bf01)}</span>
           <span className="mx-auto mt-1 block h-[14px] w-px bg-ink/50" />
         </div>
         <div className="absolute inset-x-0 top-[34px] flex h-2 gap-[2px]">
@@ -276,7 +276,7 @@ function Bars({
               <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-3 text-[12.5px]">
                 <span className="font-semibold text-ink">{d.label}</span>
                 <span className="text-muted">
-                  <span className="font-mono font-semibold text-ink tabular-nums">{d.valueText}</span> · {d.note}
+                  <span className="font-label font-semibold text-ink tabular-nums">{d.valueText}</span> · {d.note}
                 </span>
               </div>
               <Tip label={`${d.label}: ${d.valueText}, ${d.note}`} lines={d.tip} align="start" className="relative block h-3 rounded-r-[4px] bg-cerulean-50">
@@ -294,7 +294,7 @@ function Bars({
           {ticks.map((t) => (
             <span
               key={t}
-              className="absolute top-1 -translate-x-1/2 font-mono text-[10.5px] text-muted tabular-nums"
+              className="absolute top-1 -translate-x-1/2 font-label text-[10.5px] text-muted tabular-nums"
               style={{ left: `${Math.min(Math.max(p(t), 2), 98)}%` }}
             >
               {t}
@@ -352,5 +352,89 @@ export function NGainBars({ effects, trigger = 'scroll' }: { effects: Effect[]; 
         ],
       }))}
     />
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Pretest → posttest mean on the measure's own scale (one chart per unit)     */
+/* -------------------------------------------------------------------------- */
+export function PrePost({ row, trigger = 'scroll' }: { row: DescriptiveRow; trigger?: Trigger }) {
+  const ref = useRef<HTMLElement>(null);
+  const [lo, hi] = row.domain;
+  const p = (v: number) => Math.min(100, Math.max(0, pctLinear(v, lo, hi)));
+  const pre = p(row.pre.mean);
+  const post = p(row.post.mean);
+  const left = Math.min(pre, post);
+  const width = Math.abs(post - pre);
+  const forward = post >= pre;
+  const fmt2 = (v: number) => formatStat(v, 2);
+
+  useEnter(ref, trigger, (root) =>
+    gsap
+      .timeline({ defaults: { ease: 'expo.out' } })
+      .from(root.querySelector('[data-seg]'), { scaleX: 0, duration: 1.2 })
+      .from(root.querySelector('[data-post]'), { scale: 0, duration: 0.6, ease: 'back.out(2.2)' }, '-=0.6'),
+  );
+
+  return (
+    <figure ref={ref} className="w-full">
+      <figcaption className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[12px] leading-snug text-muted">
+        <span>
+          <span className="font-semibold text-ink">{row.measure}</span> · {row.unit}
+          {row.lowerIsBetter ? ' · lower = faster' : ''}
+        </span>
+        <span className="font-label font-semibold tabular-nums text-ink">
+          {fmt2(row.pre.mean)} → {fmt2(row.post.mean)}
+        </span>
+      </figcaption>
+      <div className="relative mt-2 h-[78px]">
+        <div className="absolute inset-x-0 top-[40px] h-px bg-line" />
+        {row.ticks.map((t) => (
+          <div key={t} className="absolute top-[35px] h-[11px] w-px bg-line" style={{ left: `${p(t)}%` }} />
+        ))}
+        <span
+          data-seg
+          className="absolute top-[38px] block h-[5px] rounded-full bg-gradient-to-r from-cerulean-200 to-cerulean-600"
+          style={{ left: `${left}%`, width: `${width}%`, transformOrigin: forward ? 'left center' : 'right center', ...(forward ? {} : { backgroundImage: 'linear-gradient(to left, #BAE6FD, #0284C7)' }) }}
+        />
+        <span className="absolute top-[14px] -translate-x-1/2 whitespace-nowrap font-label text-[10.5px] font-semibold text-muted" style={{ left: `${pre}%` }}>
+          Pre
+        </span>
+        <span className="absolute top-[14px] -translate-x-1/2 whitespace-nowrap font-label text-[10.5px] font-semibold text-cerulean-700" style={{ left: `${post}%` }}>
+          Post
+        </span>
+        <Tip
+          label={`Pretest mean ${fmt2(row.pre.mean)}, SD ${formatStat(row.pre.sd, 3)}`}
+          lines={[
+            [`M = ${fmt2(row.pre.mean)}`, 'pretest'],
+            [`SD = ${formatStat(row.pre.sd, 3)}`, `range ${row.pre.min}–${row.pre.max}`],
+          ]}
+          className="absolute top-[40px] grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 place-items-center"
+          style={{ left: `${pre}%` }}
+        >
+          <span className="block h-3 w-3 rounded-full border-2 border-cerulean-400 bg-white" />
+        </Tip>
+        <Tip
+          label={`Posttest mean ${fmt2(row.post.mean)}, SD ${formatStat(row.post.sd, 3)}`}
+          lines={[
+            [`M = ${fmt2(row.post.mean)}`, 'posttest'],
+            [`SD = ${formatStat(row.post.sd, 3)}`, `range ${row.post.min}–${row.post.max}`],
+          ]}
+          className="absolute top-[40px] grid h-6 w-6 -translate-x-1/2 -translate-y-1/2 place-items-center"
+          style={{ left: `${post}%` }}
+        >
+          <span data-post className="block h-3.5 w-3.5 rounded-full bg-cerulean-600 ring-2 ring-white" />
+        </Tip>
+        {row.ticks.map((t) => (
+          <span
+            key={`l${t}`}
+            className="absolute top-[54px] -translate-x-1/2 font-label text-[10.5px] tabular-nums text-muted"
+            style={{ left: `${Math.min(Math.max(p(t), 3), 97)}%` }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </figure>
   );
 }

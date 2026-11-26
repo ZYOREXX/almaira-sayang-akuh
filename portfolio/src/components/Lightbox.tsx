@@ -118,7 +118,7 @@ function LightboxView({
       transition={{ duration: 0.25 }}
     >
       <div className="lightbox-bar flex items-center justify-between gap-4 px-4 pb-3 pt-4 sm:px-6">
-        <p className="font-mono text-xs tracking-wide text-white/70 tabular-nums">
+        <p className="font-label text-xs tracking-wide text-white/70 tabular-nums">
           {many ? `${String(index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}` : 'Preview'}
         </p>
         <button ref={closeBtn} type="button" onClick={onClose} className="lb-btn" aria-label="Close image viewer">

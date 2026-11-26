@@ -1,9 +1,11 @@
 import { useRef } from 'react';
 import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from '../lib/gsap';
 import { formatStat } from '../lib/utils';
-import type { CounterData } from '../data/types';
+import type { MetricData } from '../data/types';
 
-type Props = Pick<CounterData, 'value' | 'from' | 'decimals' | 'prefix' | 'suffix' | 'display'> & {
+type Props = Pick<MetricData, 'from' | 'prefix' | 'suffix' | 'display'> & {
+  value: number;
+  decimals: number;
   className?: string;
   duration?: number;
 };
