@@ -1,67 +1,57 @@
-import { Maximize2 } from 'lucide-react';
 import { getPhoto, PORTFOLIO_DATA } from '../data/portfolio';
 import type { ExperienceItem, Photo } from '../data/types';
 import { Section, SectionHeader } from '../components/ui';
-import { SpotlightCard } from '../components/SpotlightCard';
+import { Reveal } from '../components/Reveal';
+import { OrgLogo } from '../components/Logos';
 import { Icon } from '../components/Icon';
 import { useLightbox } from '../components/Lightbox';
 import { cn } from '../lib/utils';
 
-function ExperienceCard({ item, index }: { item: ExperienceItem; index: number }) {
+function ExperienceCard({ item }: { item: ExperienceItem }) {
   const openLightbox = useLightbox();
   const photos = (item.photos ?? []).map(getPhoto).filter((p): p is Photo => !!p);
   const items = photos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption }));
 
   return (
-    <SpotlightCard tilt={1.5} innerClassName="grid gap-5 p-5 sm:p-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-7">
-      <div className="flex items-center gap-4 md:flex-col md:items-start md:gap-3">
-        <span className="font-display text-[2.1rem] font-extrabold leading-none tracking-[-0.04em] text-line [-webkit-text-stroke:1px_#94a3b8]">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <span
-          className={cn(
-            'grid h-11 w-11 place-items-center rounded-2xl border bg-white',
-            item.ongoing ? 'border-cerulean-300 text-cerulean-600 ring-4 ring-cerulean-100' : 'border-line text-ink',
-          )}
-        >
-          <Icon name={item.icon} className="h-5 w-5" />
-        </span>
+    <article className="exp-card group/exp flex flex-col gap-6 md:flex-row md:items-center">
+      {/* Official logos */}
+      <div className="flex shrink-0 items-center gap-2 md:w-[188px]">
+        {item.logos.length ? (
+          item.logos.map((id) => <OrgLogo key={id} id={id} className={cn(item.logos.length > 2 ? 'h-14 w-14' : 'h-20 w-20')} />)
+        ) : (
+          <span className="grid h-20 w-20 place-items-center rounded-2xl border border-line bg-white text-cerulean-600">
+            <Icon name={item.icon} className="h-8 w-8" />
+          </span>
+        )}
       </div>
 
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <p className="font-label text-[12px] font-semibold uppercase tracking-[0.1em] text-cerulean-700">{item.org}</p>
-          {item.period && (
-            <span className={cn('split-chip', item.ongoing && 'split-chip-live')}>
-              {item.ongoing && <span className="live-dot" aria-hidden="true" />}
-              {item.period}
-            </span>
-          )}
-        </div>
-        <h3 className="mt-2 text-[1.2rem] font-bold tracking-tight text-ink">{item.role}</h3>
-        <p className="mt-1.5 max-w-[68ch] text-[14.5px] leading-relaxed text-muted">{item.body}</p>
+      <div className="min-w-0 flex-1">
+        <p className={cn('font-display text-[13px] font-bold uppercase tracking-[0.14em]', item.ongoing ? 'text-cerulean-600' : 'text-muted')}>
+          {item.ongoing && <span className="live-dot mr-2 align-middle" aria-hidden="true" />}
+          {item.period ?? 'Organisation'}
+        </p>
+        <h3 className="mt-2 font-display text-[1.35rem] font-bold tracking-tight text-ink">{item.role}</h3>
+        <p className="mt-0.5 text-[15px] font-semibold text-cerulean-700">{item.org}</p>
+        <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-muted">{item.body}</p>
       </div>
 
       {photos.length > 0 && (
-        <ul className="flex gap-2">
+        <ul className="flex shrink-0 -space-x-6">
           {photos.map((p, i) => (
-            <li key={p.src}>
+            <li key={p.src} style={{ zIndex: photos.length - i }}>
               <button
                 type="button"
                 onClick={() => openLightbox(items, i)}
-                className="media-tile group/media relative block h-[88px] w-[112px] overflow-hidden rounded-2xl border border-line"
-                aria-label={`Enlarge photo: ${p.caption}`}
+                className="media-tile block h-24 w-20 overflow-hidden rounded-2xl border-2 border-white shadow-soft transition-transform duration-500 ease-out hover:-translate-y-1.5 hover:rotate-[-2deg]"
+                aria-label={`View photo: ${p.caption}`}
               >
-                <img src={p.thumb ?? p.src} alt={p.alt} loading="lazy" decoding="async" className="media-zoom absolute inset-0 h-full w-full object-cover" style={p.position ? { objectPosition: p.position } : undefined} />
-                <span className="absolute inset-0 grid place-items-center bg-ink/0 text-white opacity-0 transition duration-300 group-hover/media:bg-ink/35 group-hover/media:opacity-100">
-                  <Maximize2 className="h-4 w-4" aria-hidden="true" />
-                </span>
+                <img src={p.thumb ?? p.src} alt={p.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" style={p.position ? { objectPosition: p.position } : undefined} />
               </button>
             </li>
           ))}
         </ul>
       )}
-    </SpotlightCard>
+    </article>
   );
 }
 
@@ -69,16 +59,12 @@ export function Experience() {
   const { experience } = PORTFOLIO_DATA;
   return (
     <Section id="experience" tone="canvas">
-      <SectionHeader
-        eyebrow="Experience & leadership"
-        title="Coaching, events & leadership."
-        lead="Pool sessions, race days and campus organisations keep the research grounded in real practice."
-      />
-      <ol className="space-y-4">
+      <SectionHeader eyebrow="Experience & leadership" title="Experience & leadership." />
+      <ol className="space-y-5">
         {experience.map((item, i) => (
-          <li key={`${item.role}-${item.org}`} data-reveal>
-            <ExperienceCard item={item as ExperienceItem} index={i} />
-          </li>
+          <Reveal as="li" key={`${item.role}-${item.org}`} delay={i * 0.08}>
+            <ExperienceCard item={item as ExperienceItem} />
+          </Reveal>
         ))}
       </ol>
     </Section>

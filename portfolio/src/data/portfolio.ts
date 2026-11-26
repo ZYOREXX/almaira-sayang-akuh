@@ -32,62 +32,71 @@ export const PORTFOLIO_DATA = {
     { id: 'contact', label: 'Contact' },
   ],
 
+  /* ---------- LOGO RESMI (file di public/logos) ---------- */
+  logos: {
+    upi: { src: 'logos/upi.webp', alt: 'Universitas Pendidikan Indonesia logo' },
+    'upi-sps': { src: 'logos/upi-sps.webp', alt: 'UPI School of Postgraduate Studies logo' },
+    icsdp: { src: 'logos/icsdp.webp', alt: 'International Conference of Sport for Development and Peace logo' },
+    papila: { src: 'logos/papila.webp', alt: 'Papila Swimming School logo' },
+    'upi-half-marathon': { src: 'logos/upi-half-marathon.webp', alt: 'UPI Half Marathon logo' },
+    'dpm-pgsd-penjas': { src: 'logos/dpm-pgsd-penjas.webp', alt: 'DPM PGSD Penjas FPOK UPI logo' },
+    'hmp-pgsd-penjas': { src: 'logos/hmp-pgsd-penjas.webp', alt: 'HMP PGSD Penjas FPOK UPI logo' },
+    'ukm-ibaf': { src: 'logos/ukm-ibaf.webp', alt: 'UKM Ideal Body and Fitness UPI logo' },
+  },
+
+  /* ---------- LOGO APLIKASI RESMI (Tech Stack) ---------- */
+  tools: {
+    spss: { name: 'IBM SPSS', logo: 'logos/spss.webp' },
+    stata: { name: 'Stata', logo: 'logos/stata.webp' },
+    smartpls: { name: 'SmartPLS', logo: 'logos/smartpls.webp' },
+    python: { name: 'Python', logo: 'logos/python.webp' },
+    excel: { name: 'Excel', logo: 'logos/excel.webp' },
+    vosviewer: { name: 'VOSviewer', logo: 'logos/vosviewer.webp' },
+    pop: { name: 'Publish or Perish', logo: 'logos/harzing.webp' },
+    mendeley: { name: 'Mendeley', logo: 'logos/mendeley.webp' },
+    googlescholar: { name: 'Google Scholar', logo: 'logos/googlescholar.webp' },
+    orcid: { name: 'ORCID', logo: 'logos/orcid.webp' },
+    canva: { name: 'Canva', logo: 'logos/canva.webp' },
+    lightroom: { name: 'Lightroom', logo: 'logos/lightroom.webp' },
+    capcut: { name: 'CapCut', logo: 'logos/capcut.webp' },
+    picsart: { name: 'Picsart', logo: 'logos/picsart.webp' },
+    snapseed: { name: 'Snapseed', logo: 'logos/snapseed.webp' },
+    powerpoint: { name: 'PowerPoint', logo: 'logos/powerpoint.webp' },
+  },
+
   /* ---------- SECTION 1 · HERO ---------- */
   hero: {
-    eyebrow: 'Academic & Sport-Science Portfolio',
+    // LATAR HERO — ilustrasi kampus UPI (diberi lapisan gelap otomatis)
+    background: { src: 'images/upi-campus-anime.webp', alt: 'Illustration of the Universitas Pendidikan Indonesia campus building' },
+    institution: 'Universitas Pendidikan Indonesia',
+    institutionLogo: 'upi',
     title: 'Welcome to my portfolio',
     name: 'Tio Ilham Wahyudi',
     suffix: 'S.Pd.',
     roles: ['Sport Education Researcher', 'Academic Writing Mentor', 'Sport Project Specialist'],
-    tagline: 'Bridging evidence-based sport science, reputable academic publishing, and dynamic sports event management.',
-    // FOTO PROFIL — rasio 4:5. PNG/WebP berlatar transparan paling serasi dengan bingkai kaca.
-    portrait: {
-      src: 'images/profile-cutout.webp',
-      alt: 'Formal portrait of Tio Ilham Wahyudi in a black suit and tie',
-    },
+    // FOTO UTAMA — rasio 4:5
+    portrait: { src: 'images/hero-portrait.webp', alt: 'Tio Ilham Wahyudi at the 11th ICSDP 2026, wearing batik and a conference lanyard' },
     pills: [
-      { icon: 'graduation', label: "Fast-Track Master's Student", detail: 'Sport Education · UPI', prestige: true },
-      { icon: 'award', label: 'Bachelor of Physical Education', detail: 'Cum Laude · GPA 3.83', prestige: true },
-      { icon: 'mic', label: 'International Conference & Reputable Journal Author', detail: 'ICSDP 2026 · Jurnal Porkes 2025' },
+      { logo: 'upi', label: "Fast-Track Master's", detail: 'Sport Education UPI' },
+      { icon: 'award', label: 'Cum Laude', detail: 'GPA 3.83 / 4.00', prestige: true },
+      { icon: 'mic', label: 'International Conference', detail: '& Journal Author' },
     ],
   },
 
   /* ---------- SECTION 2 · ABOUT ---------- */
   about: {
-    eyebrow: 'About me',
     heading: 'About me',
-    // Kalimat besar ini "terisi" kata demi kata saat di-scroll.
-    statement:
-      'I connect evidence-based sport science with practice: researching motor development and sportspersonship, mentoring reputable academic writing, and coaching and running sport on the field.',
-    body: "I am a fast-track Master's student in Sport Education at Universitas Pendidikan Indonesia. My research focuses on children's motor development and character in sport; I mentor students writing for SINTA-indexed journals and international proceedings, and I work as a swimming coach and sports event committee member.",
-    // FOTO ABOUT — rasio 4:5 (boleh foto berbeda dari hero).
-    photo: {
-      src: 'images/profile-cutout.webp',
-      alt: 'Tio Ilham Wahyudi, formal portrait',
-    },
-    metrics: [
-      { label: 'GPA · Cum Laude', value: 3.83, decimals: 2, note: 'Bachelor of Physical Education', prestige: true },
-      { label: 'Scientific works', value: 2, decimals: 0, note: 'ICSDP 2026 · Jurnal Porkes 2025' },
-      { label: 'National PKP2 Finalist', display: 'PKP2', note: 'PKM-KC 2025 · SWIPE' },
-    ],
+    body: "Fast-track Master's student in Sport Education at Universitas Pendidikan Indonesia (UPI) and Bachelor of Physical Education (GPA 3.83). I research motor development and sport psychology, and mentor the writing of reputable journal articles (SINTA and international proceedings). In the field, I run operations for national sports events and coach swimming with a sport-science approach.",
+    // FOTO ABOUT — foto formal rasio 4:5
+    photo: { src: 'images/profile-cutout.webp', alt: 'Formal portrait of Tio Ilham Wahyudi in a black suit and tie' },
     stack: [
       { title: 'Quantitative Analytics', icon: 'sigma', tools: ['spss', 'stata', 'smartpls', 'python', 'excel'] },
-      { title: 'Bibliometrics & Publishing', icon: 'network', tools: ['vosviewer', 'pop', 'mendeley', 'googlescholar', 'orcid'] },
-      { title: 'Creative Media', icon: 'palette', tools: ['canva', 'lightroom', 'capcut', 'picsart', 'snapseed', 'powerpoint'] },
+      { title: 'Research & Bibliometrics', icon: 'network', tools: ['vosviewer', 'pop', 'mendeley', 'googlescholar', 'orcid'] },
+      { title: 'Media & Design', icon: 'palette', tools: ['canva', 'lightroom', 'capcut', 'picsart', 'snapseed', 'powerpoint'] },
     ],
-    personas: [
-      {
-        icon: 'research',
-        title: 'Data-Driven Researcher',
-        body: 'Correlational and experimental designs analysed with bootstrapping and Bayesian inference.',
-        points: ['SPSS 27 · SmartPLS · Python', 'Bootstrap BCa & Bayes factors', 'VOSviewer bibliometric mapping'],
-      },
-      {
-        icon: 'waves',
-        title: 'Field Sport Practitioner',
-        body: 'Swimming coaching and field operations for national-scale and campus sport events.',
-        points: ['Papila Swim Club coach', 'Pocari Sweat Run Indonesia 2025', 'PORDOSKA · UPI Half Marathon'],
-      },
+    highlights: [
+      { icon: 'pen', title: 'Academic Mentoring', body: 'Guides the writing and statistical analysis of reputable scientific articles.' },
+      { icon: 'waves', title: 'Dual Persona', body: 'Equally at home in statistical analysis and at the poolside or race course.' },
     ],
   },
 
@@ -165,6 +174,84 @@ export const PORTFOLIO_DATA = {
       caption: 'Half-marathon start stage · Pocari Sweat Run Indonesia 2025',
       position: '50% 55%',
     },
+    'icsdp-tio': {
+      src: 'images/icsdp-tio.webp',
+      thumb: 'images/icsdp-tio-sm.webp',
+      alt: 'Tio Ilham Wahyudi in batik at the 11th ICSDP 2026 venue',
+      caption: '11th ICSDP 2026 · Presenting author at the School of Postgraduate Studies, UPI',
+      position: '50% 70%',
+    },
+    'icsdp-team': {
+      src: 'images/icsdp-team.webp',
+      thumb: 'images/icsdp-team-sm.webp',
+      alt: 'Five participants in front of the 11th ICSDP 2026 screen',
+      caption: '11th ICSDP 2026 · With fellow participants in front of the conference screen',
+      position: '50% 55%',
+    },
+    'icsdp-room': {
+      src: 'images/icsdp-room.webp',
+      thumb: 'images/icsdp-room-sm.webp',
+      alt: 'Parallel session room at ICSDP 2026 with participants facing a presenter',
+      caption: '11th ICSDP 2026 · Parallel session room',
+    },
+    'icsdp-online': {
+      src: 'images/icsdp-online.webp',
+      thumb: 'images/icsdp-online-sm.webp',
+      alt: 'Online session of the 11th ICSDP 2026 on a video-conference screen',
+      caption: '11th ICSDP 2026 · Hybrid online session',
+    },
+    'coding-laptop': {
+      src: 'images/coding-laptop.webp',
+      thumb: 'images/coding-laptop-sm.webp',
+      alt: 'Writing analysis code on a laptop',
+      caption: 'Data analysis session · code and statistics on the laptop',
+    },
+    'upi-class': {
+      src: 'images/upi-class.webp',
+      thumb: 'images/upi-class-sm.webp',
+      alt: 'Students in a seminar room at Universitas Pendidikan Indonesia',
+      caption: 'Postgraduate class session · Universitas Pendidikan Indonesia',
+    },
+    'pordoska-podium': {
+      src: 'images/pordoska-podium.webp',
+      thumb: 'images/pordoska-podium-sm.webp',
+      alt: 'Badminton winners on the podium at PORDOSKA XIV 2024',
+      caption: 'PORDOSKA XIV 2024 · Badminton podium ceremony',
+      position: '50% 40%',
+    },
+    'festival-gerak': {
+      src: 'images/festival-gerak.webp',
+      thumb: 'images/festival-gerak-sm.webp',
+      alt: 'Committee group photo in black at Festival Gerak',
+      caption: 'Festival Gerak PGSD Penjas UPI · Committee',
+      position: '50% 70%',
+    },
+    'upi-half-marathon-crew': {
+      src: 'images/upi-half-marathon-crew.webp',
+      thumb: 'images/upi-half-marathon-crew-sm.webp',
+      alt: 'UPI Half Marathon committee in orange shirts on the course',
+      caption: 'UPI Half Marathon · Field operations committee',
+    },
+    'pocari-finish': {
+      src: 'images/pocari-finish.webp',
+      thumb: 'images/pocari-finish-sm.webp',
+      alt: 'Runners crossing the Pocari Sweat Run finish gate at night',
+      caption: 'Pocari Sweat Run Indonesia 2025 · Finish area',
+    },
+    'papila-poolside': {
+      src: 'images/papila-poolside.webp',
+      thumb: 'images/papila-poolside-sm.webp',
+      alt: 'Swimming coach and young swimmer with kickboards at the poolside, Papila Swimming School',
+      caption: 'Papila Swimming School · Kickboard session',
+      position: '50% 60%',
+    },
+    'papila-lesson': {
+      src: 'images/papila-lesson.webp',
+      thumb: 'images/papila-lesson-sm.webp',
+      alt: 'Coach guiding a young swimmer with a kickboard and pool noodles',
+      caption: 'Papila Swimming School · Guided lesson in the pool',
+      position: '50% 55%',
+    },
   },
 
   /* ---------- SECTION 3 · EXPERIENCE & LEADERSHIP ---------- */
@@ -174,9 +261,10 @@ export const PORTFOLIO_DATA = {
       org: 'Papila Swim Club',
       period: 'Ongoing',
       ongoing: true,
-      body: "Develops swimmers' technique and physical conditioning with a sport-science approach.",
+      body: 'Coaches swimming technique and athletes’ physical conditioning with a sport-science approach.',
       icon: 'waves',
-      photos: ['swim-coaching'],
+      logos: ['papila'],
+      photos: ['papila-poolside', 'papila-lesson', 'swim-coaching'],
     },
     {
       role: 'Field Operations Committee',
@@ -184,33 +272,33 @@ export const PORTFOLIO_DATA = {
       period: '2025',
       body: 'Technical and on-field operations coordination for a national-scale running event.',
       icon: 'flag',
-      photos: ['pocari-crew', 'pocari-stage'],
+      logos: [],
+      photos: ['pocari-finish', 'pocari-crew', 'pocari-stage'],
     },
     {
       role: 'Badminton Branch Committee',
       org: 'PORDOSKA UPI',
       period: '2024',
-      body: 'Organising committee for the badminton branch of Pekan Olahraga Dosen dan Karyawan, the UPI faculty and staff sports week.',
+      body: 'Organising committee for the badminton branch of the UPI faculty and staff sports week.',
       icon: 'trophy',
+      logos: ['upi'],
+      photos: ['pordoska-podium'],
     },
     {
       role: 'Field Operations Committee',
-      org: 'UPI Half Marathon',
-      body: 'Technical course coordination and running-event operations.',
-      icon: 'route',
-    },
-    {
-      role: 'Field Operations Committee',
-      org: 'Festival Gerak PGSD Penjas UPI',
+      org: 'UPI Half Marathon & Festival Gerak PGSD Penjas',
       period: '2024',
-      body: 'Managed participant flow and kept the festival’s sport activities running smoothly.',
-      icon: 'sparkles',
+      body: 'Managed participant flow, course logistics and the smooth running of campus sport events.',
+      icon: 'route',
+      logos: ['upi-half-marathon', 'upi'],
+      photos: ['upi-half-marathon-crew', 'festival-gerak'],
     },
     {
       role: 'Organizational Leadership',
       org: 'DPM PGSD Penjas FPOK UPI & UKM IBAF UPI',
-      body: 'Student legislation for the study programme (Dewan Perwakilan Mahasiswa) and development of a campus sport unit (Unit Kegiatan Mahasiswa).',
+      body: 'Student legislation at study-programme level and development of a campus sport activity unit.',
       icon: 'users',
+      logos: ['dpm-pgsd-penjas', 'hmp-pgsd-penjas', 'ukm-ibaf'],
     },
   ],
 
@@ -237,8 +325,9 @@ export const PORTFOLIO_DATA = {
         { label: 'p-value', value: 0.504, decimals: 3 },
         { label: 'BF₀₁', value: 5.759, decimals: 3 },
       ],
-      images: ['icsdp-screen', 'icsdp-group', 'icsdp-session'],
-      cta: 'Read Full Abstract & Methodology',
+      images: ['icsdp-tio', 'icsdp-team', 'icsdp-screen', 'icsdp-group', 'icsdp-session', 'icsdp-room', 'icsdp-online'],
+      logos: ['icsdp', 'upi-sps'],
+      cta: 'View Full Abstract',
       // Abstrak asli (bahasa Inggris) dari berkas ICSDP 2026.
       abstract: [
         'Physical Education, Sports, and Health (PJOK) in elementary schools plays a strategic role in simultaneously fostering cognitive-creative and affective-social domains, yet the empirical relationship between these two domains among children aged 10–11 years remains underexplored. This exploratory study aimed to analyze the relationship between creative thinking in movement and sportsmanship orientation among elementary school students.',
@@ -288,7 +377,8 @@ export const PORTFOLIO_DATA = {
         { label: 'd · agility', value: 0.68, decimals: 3 },
       ],
       images: ['porkes-article'],
-      cta: 'Read Full Abstract & Methodology',
+      logos: ['upi'],
+      cta: 'View Full Abstract',
       // Abstrak asli (bahasa Inggris) dari artikel Jurnal Porkes.
       abstract: [
         'Balance and agility are fundamental motor components that support movement proficiency and physical performance among elementary school students. This study aimed to examine the effect of rhythmic movement learning on improving students’ dynamic balance and agility.',
@@ -354,7 +444,8 @@ export const PORTFOLIO_DATA = {
         { label: 'Stage reached', display: 'PKP2', note: 'National finalist' },
       ],
       images: ['swipe-prototype', 'swipe-schematic'],
-      cta: 'View Specifications & Try the Interface',
+      logos: ['upi'],
+      cta: 'View Project Details',
       achievements: [
         { label: 'PKM-KC 2025 National Funding', detail: 'Program Kreativitas Mahasiswa – Karsa Cipta · Kemendikbudristek', prestige: true },
         { label: 'National PKP2 Finalist', detail: 'Represented Universitas Pendidikan Indonesia at the PKM progress review (PKP2)' },
@@ -389,8 +480,9 @@ export const PORTFOLIO_DATA = {
         'Guidance for researchers and students from research question to submission: writing reputable articles, statistical analysis in SPSS, SmartPLS and Bayesian frameworks, and bibliometric mapping with VOSviewer.',
       tags: ['SINTA journals', 'International proceedings', 'SPSS', 'SmartPLS', 'Bayesian', 'VOSviewer'],
       metrics: [],
-      images: ['forum-workshop', 'forum-cohort'],
-      cta: 'See Mentoring Services',
+      images: ['coding-laptop', 'upi-class', 'forum-workshop', 'forum-cohort'],
+      logos: ['upi'],
+      cta: 'View Project Details',
       services: [
         { icon: 'pen', title: 'Reputable article writing', body: 'Structuring and revising manuscripts for SINTA-indexed journals and international conference proceedings.' },
         { icon: 'sigma', title: 'Statistical analysis', body: 'Analysis plans and reporting in SPSS and SmartPLS, including bootstrapping and Bayesian correlation.' },
@@ -430,6 +522,7 @@ export const PORTFOLIO_DATA = {
       icon: 'presentation',
       meta: ['Bandung · signed by the Rector of UPI'],
       note: 'Sole and corresponding author of the accepted paper on creative movement and sportspersonship orientation.',
+      logo: 'icsdp',
       visual: {
         kind: 'scan',
         images: [{ src: 'images/cert-icsdp.webp', thumb: 'images/cert-icsdp-sm.webp', alt: 'Certificate of participation in the 11th International Conference of Sport for Development and Peace 2026', caption: '11th ICSDP 2026 · Certificate of Participation' }],
@@ -444,6 +537,7 @@ export const PORTFOLIO_DATA = {
       icon: 'landmark',
       meta: ['No. 180/UN40.F6/DL.17/2023'],
       note: 'Organised by the PETE for Elementary School Study Program, Faculty of Sport and Health Education.',
+      logo: 'upi',
       visual: {
         kind: 'scan',
         images: [{ src: 'images/cert-stadium-generale.webp', thumb: 'images/cert-stadium-generale-sm.webp', alt: 'Participant certificate for the Stadium Generale Sport Leadership and Policy, UPI and Universiti Malaya', caption: 'Stadium Generale · Sport Leadership and Policy · 14 November 2023' }],
@@ -458,6 +552,7 @@ export const PORTFOLIO_DATA = {
       icon: 'trophy',
       note: 'SWIPE smart-whistle innovation for PE teachers and coaches.',
       prestige: true,
+      logo: 'upi',
       visual: { kind: 'photo', photo: 'swipe-prototype' },
     },
     {
@@ -484,6 +579,7 @@ export const PORTFOLIO_DATA = {
       date: '14 October 2026',
       category: 'Guest Lecture',
       icon: 'school',
+      logo: 'upi-sps',
       visual: {
         kind: 'scan',
         images: [{ src: 'images/cert-meaningful-pe.webp', thumb: 'images/cert-meaningful-pe-sm.webp', alt: 'Certificate of appreciation for the guest lecture Meaningful PE', caption: 'Meaningful PE · Certificate of Appreciation' }],
@@ -496,7 +592,11 @@ export const PORTFOLIO_DATA = {
       date: '24 October 2024',
       category: 'Guest Lecture',
       icon: 'school',
-      visual: { kind: 'emblem', code: 'FPOK UPI · 2024' }, // ← ganti dengan scan bila ada
+      logo: 'upi',
+      visual: {
+        kind: 'scan',
+        images: [{ src: 'images/cert-teacher-skills.webp', thumb: 'images/cert-teacher-skills-sm.webp', alt: 'FPOK UPI certificate for the guest lecture Enhancing Teacher Skills and Innovative Pedagogical Approaches in Physical Education', caption: 'Guest Lecture · FPOK UPI · 24 October 2024' }],
+      },
     },
     {
       id: 'cyber-1',
@@ -534,6 +634,7 @@ export const PORTFOLIO_DATA = {
       icon: 'award',
       note: "Graduated with distinction and continued as a fast-track Master's student in Sport Education.",
       prestige: true,
+      logo: 'upi',
       visual: { kind: 'emblem', code: 'Cum Laude · 3.83' }, // ← ganti dengan scan ijazah/transkrip bila ingin
     },
     {
@@ -544,6 +645,7 @@ export const PORTFOLIO_DATA = {
       category: 'Coaching Practice',
       icon: 'waves',
       note: 'Technique and conditioning sessions for young swimmers built on sport-science principles.',
+      logo: 'papila',
       visual: { kind: 'photo', photo: 'swim-coaching' },
     },
   ],

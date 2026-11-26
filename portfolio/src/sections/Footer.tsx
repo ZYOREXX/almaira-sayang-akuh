@@ -29,7 +29,7 @@ export function Footer() {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="eyebrow">Signature</p>
-            <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-muted">{hero.tagline}</p>
+            <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-muted">{hero.roles.join(' · ')}</p>
             <p className="mt-3 select-all font-label text-[13px] font-semibold text-ink">{contact.email}</p>
           </div>
           <nav aria-label="Footer">

@@ -1,11 +1,10 @@
 import { ArrowUpRight, Maximize2 } from 'lucide-react';
 import { getPhoto } from '../data/portfolio';
 import type { ConferenceWork, JournalWork, MetricData, Photo, ProjectWork, ServiceWork, Work } from '../data/types';
-import type { BrandId } from '../data/brandIcons';
 import { BayesScale, CiAxis, EffectBars, NGainBars, PrePost } from '../components/StatViz';
 import { Chip, PrestigeBadge } from '../components/ui';
 import { Icon } from '../components/Icon';
-import { LogoDock } from '../components/LogoDock';
+import { ToolGrid, OrgLogo } from '../components/Logos';
 import { useLightbox } from '../components/Lightbox';
 import { cn, formatStat } from '../lib/utils';
 import { SwipeSimulator } from './SwipeSimulator';
@@ -110,10 +109,23 @@ function Abstract({ paragraphs, keywords }: { paragraphs: string[]; keywords: st
 function Header({ work, byline, affiliation, extra }: { work: Work; byline?: string; affiliation?: string; extra?: string }) {
   return (
     <>
+      {work.logos.length > 0 && (
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          {work.logos.map((id) => (
+            <OrgLogo key={id} id={id} className={cn('h-11', id === 'icsdp' || id === 'upi-sps' ? 'w-32' : 'w-11')} />
+          ))}
+        </div>
+      )}
       <p className="font-label text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
         {work.kind} · {work.year}
       </p>
-      <h3 id={`work-${work.id}-title`} className="mt-3 font-display text-[1.55rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-ink sm:text-[2rem]">
+      <h3
+        id={`work-${work.id}-title`}
+        className={cn(
+          'mt-3 leading-[1.22] text-ink',
+          work.type === 'conference' || work.type === 'journal' ? 'font-serif text-[1.6rem] font-semibold sm:text-[2.05rem]' : 'font-display text-[1.55rem] font-extrabold tracking-[-0.02em] sm:text-[2rem]',
+        )}
+      >
         {work.title}
       </h3>
       {work.titleAlt && <p className="mt-2 text-[16px] font-medium italic text-muted">{work.titleAlt}</p>}
@@ -349,7 +361,7 @@ function ServiceDetail({ w, onContact }: { w: ServiceWork; onContact: () => void
         ))}
       </ul>
       <Heading>Tools used in sessions</Heading>
-      <LogoDock tools={w.tools as BrandId[]} size="sm" />
+      <ToolGrid ids={w.tools} />
       <div className="mt-6 flex flex-wrap gap-2">
         {w.tags.map((t) => (
           <Chip key={t}>{t}</Chip>

@@ -1,25 +1,37 @@
-import { useMemo } from 'react';
-import { BadgeCheck, Images, Maximize2 } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion, type PanInfo } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { getPhoto, PORTFOLIO_DATA } from '../data/portfolio';
 import type { Achievement } from '../data/types';
 import { Chip, Section, SectionHeader } from '../components/ui';
-import { SpotlightCard } from '../components/SpotlightCard';
 import { Icon } from '../components/Icon';
-import { useLightbox, type LightboxItem } from '../components/Lightbox';
+import { OrgLogo } from '../components/Logos';
+import { EASE, Reveal } from '../components/Reveal';
 import { cn } from '../lib/utils';
 
-/** Images of an achievement for the lightbox (scans or a documentation photo). */
-function imagesOf(a: Achievement): LightboxItem[] {
-  if (a.visual.kind === 'scan') return a.visual.images.map((im) => ({ src: im.src, alt: im.alt, caption: im.caption ?? a.title }));
+const AUTO_MS = 4500;
+
+/** Visual of a card: certificate scan, documentation photo, or a designed summary. */
+function Visual({ a }: { a: Achievement }) {
+  if (a.visual.kind === 'scan') {
+    const im = a.visual.images[0];
+    return <img src={im.thumb ?? im.src} alt={im.alt} loading="lazy" decoding="async" draggable={false} className="absolute inset-0 h-full w-full object-contain p-3" />;
+  }
   if (a.visual.kind === 'photo') {
     const p = getPhoto(a.visual.photo);
-    return p ? [{ src: p.src, alt: p.alt, caption: p.caption }] : [];
+    if (!p) return null;
+    return (
+      <img
+        src={p.thumb ?? p.src}
+        alt={p.alt}
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        className={cn('absolute inset-0 h-full w-full', p.fit === 'contain' ? 'object-contain p-3' : 'object-cover')}
+        style={p.position ? { objectPosition: p.position } : undefined}
+      />
+    );
   }
-  return [];
-}
-
-/** Designed summary card for achievements without a scan (clearly not a certificate replica). */
-function Emblem({ a }: { a: Achievement }) {
   const prestige = !!a.prestige;
   return (
     <div className={cn('emblem absolute inset-0 grid place-items-center', prestige ? 'emblem-prestige' : 'emblem-cerulean')}>
@@ -27,113 +39,155 @@ function Emblem({ a }: { a: Achievement }) {
         <span className={cn('emblem-ring grid h-20 w-20 place-items-center rounded-full', prestige ? 'text-prestige' : 'text-cerulean-600')}>
           <Icon name={a.icon} className="h-8 w-8" strokeWidth={1.5} />
         </span>
-        <span className={cn('mt-4 font-label text-[11px] font-bold uppercase tracking-[0.18em]', prestige ? 'text-prestige' : 'text-cerulean-700')}>
-          {a.visual.kind === 'emblem' ? a.visual.code : ''}
-        </span>
-        <span className="mt-1 text-[11.5px] font-medium text-muted">{a.date}</span>
+        <span className={cn('mt-4 font-display text-[12px] font-bold uppercase tracking-[0.18em]', prestige ? 'text-prestige' : 'text-cerulean-700')}>{a.visual.code}</span>
       </div>
     </div>
   );
 }
 
-function AchievementCard({ a, onOpen }: { a: Achievement; onOpen: () => void }) {
-  const images = imagesOf(a);
-  const thumb =
-    a.visual.kind === 'scan'
-      ? { src: a.visual.images[0].thumb ?? a.visual.images[0].src, alt: a.visual.images[0].alt, contain: true, position: undefined as string | undefined }
-      : a.visual.kind === 'photo'
-        ? (() => {
-            const p = getPhoto(a.visual.photo);
-            return p ? { src: p.thumb ?? p.src, alt: p.alt, contain: p.fit === 'contain', position: p.position } : null;
-          })()
-        : null;
-
+function Card({ a }: { a: Achievement }) {
   return (
-    <SpotlightCard tilt={4} tone={a.prestige ? 'prestige' : 'white'} innerClassName="flex h-full flex-col p-3">
-      {thumb ? (
-        <button
-          type="button"
-          onClick={onOpen}
-          className={cn('media-tile group/media relative block aspect-[4/3] w-full overflow-hidden rounded-[20px] border border-line', thumb.contain ? 'bg-canvas' : 'bg-ink/5')}
-          aria-label={`Enlarge: ${a.title}`}
-        >
-          <img
-            src={thumb.src}
-            alt={thumb.alt}
-            loading="lazy"
-            decoding="async"
-            className={cn('media-zoom absolute inset-0 h-full w-full', thumb.contain ? 'object-contain p-3' : 'object-cover')}
-            style={thumb.position ? { objectPosition: thumb.position } : undefined}
-          />
-          <span className="zoom-chip">
-            {images.length > 1 ? <Images className="h-3.5 w-3.5" aria-hidden="true" /> : <Maximize2 className="h-3.5 w-3.5" aria-hidden="true" />}
-            {images.length > 1 ? `${images.length} pages` : 'Enlarge'}
-          </span>
-        </button>
-      ) : (
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[20px] border border-line">
-          <Emblem a={a} />
-        </div>
-      )}
-
-      <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <Chip tone={a.prestige ? 'prestige' : 'plain'}>{a.category}</Chip>
-          {a.badge && (
-            <Chip tone="cerulean">
-              <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
-              {a.badge}
-            </Chip>
-          )}
-        </div>
-        <h3 className="mt-4 font-display text-[1.08rem] font-bold leading-snug tracking-[-0.01em] text-ink">{a.title}</h3>
-        <p className="mt-1.5 text-[13px] leading-snug text-muted">{a.issuer}</p>
-        {a.note && <p className="mt-3 text-[13px] leading-relaxed text-muted">{a.note}</p>}
-        <div className="mt-auto pt-5">
-          <p className="font-label text-[12px] font-semibold text-ink tabular-nums">{a.date}</p>
-          {a.meta?.map((m) => (
-            <p key={m} className="mt-0.5 break-words font-label text-[11.5px] font-medium text-muted tabular-nums">
-              {m}
-            </p>
-          ))}
-        </div>
+    <article className="flex h-full flex-col overflow-hidden rounded-[26px] border border-line bg-white shadow-soft">
+      <div className={cn('relative aspect-[4/3] overflow-hidden border-b border-line', a.visual.kind === 'scan' ? 'bg-canvas' : 'bg-ink/5')}>
+        <Visual a={a} />
       </div>
-    </SpotlightCard>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <Chip tone={a.prestige ? 'prestige' : 'plain'}>{a.category}</Chip>
+          {a.logo && <OrgLogo id={a.logo} className={cn('h-10 shrink-0 !rounded-xl !p-1', a.logo === 'upi-sps' || a.logo === 'icsdp' ? 'w-28' : 'w-10')} />}
+        </div>
+        <h3 className="mt-4 font-display text-[1.1rem] font-bold leading-snug text-ink">{a.title}</h3>
+        <p className="mt-1.5 text-[13.5px] leading-snug text-muted">{a.issuer}</p>
+        <p className="mt-auto pt-5 text-[13px] font-semibold text-ink">{a.date}</p>
+      </div>
+    </article>
   );
 }
 
-export function Achievements() {
-  const achievements = PORTFOLIO_DATA.achievements as Achievement[];
-  const openLightbox = useLightbox();
+function usePerView() {
+  const get = () => (typeof window === 'undefined' ? 3 : window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1);
+  const [n, setN] = useState(get);
+  useEffect(() => {
+    const on = () => setN(get());
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+  }, []);
+  return n;
+}
 
-  // One lightbox sequence across all cards that have images.
-  const { all, startIndex } = useMemo(() => {
-    const list: LightboxItem[] = [];
-    const start: Record<string, number> = {};
-    achievements.forEach((a) => {
-      const imgs = imagesOf(a);
-      if (imgs.length) {
-        start[a.id] = list.length;
-        list.push(...imgs);
-      }
-    });
-    return { all: list, startIndex: start };
-  }, [achievements]);
+/** Auto-sliding carousel (no popups). Pauses on hover, focus, tab change or reduced motion. */
+export function Achievements() {
+  const items = PORTFOLIO_DATA.achievements as Achievement[];
+  const reduce = useReducedMotion();
+  const perView = usePerView();
+  const maxIndex = Math.max(0, items.length - perView);
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+  const viewport = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const GAP = 24;
+
+  useEffect(() => {
+    const el = viewport.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setWidth(el.clientWidth));
+    ro.observe(el);
+    setWidth(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => setIndex((i) => Math.min(i, maxIndex)), [maxIndex]);
+
+  const go = useCallback((d: number) => setIndex((i) => (i + d > maxIndex ? 0 : i + d < 0 ? maxIndex : i + d)), [maxIndex]);
+
+  useEffect(() => {
+    if (reduce || paused || userPaused) return;
+    const t = window.setInterval(() => {
+      if (!document.hidden) go(1);
+    }, AUTO_MS);
+    return () => window.clearInterval(t);
+  }, [go, paused, userPaused, reduce]);
+
+  const cardW = width ? (width - GAP * (perView - 1)) / perView : 0;
+  const x = -index * (cardW + GAP);
+  const onDragEnd = (_: unknown, info: PanInfo) => {
+    if (info.offset.x < -60) go(1);
+    else if (info.offset.x > 60) go(-1);
+  };
 
   return (
-    <Section id="achievements" tone="canvas" flip>
+    <Section id="achievements" tone="canvas">
       <SectionHeader
         eyebrow="Achievements & certifications"
         title="Achievements & certifications."
-        lead={`${achievements.length} credentials, from national certification and research funding to international training. Select a card to open the scan.`}
+        aside={
+          <div className="flex items-center gap-2">
+            <button type="button" className="icon-btn !h-11 !w-11" onClick={() => go(-1)} aria-label="Previous certificates">
+              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button type="button" className="icon-btn !h-11 !w-11" onClick={() => go(1)} aria-label="Next certificates">
+              <ChevronRight className="h-5 w-5" aria-hidden="true" />
+            </button>
+            {!reduce && (
+              <button type="button" className="icon-btn !h-11 !w-11" onClick={() => setUserPaused((v) => !v)} aria-label={userPaused ? 'Play auto-slide' : 'Pause auto-slide'}>
+                {userPaused ? <Play className="h-4 w-4" aria-hidden="true" /> : <Pause className="h-4 w-4" aria-hidden="true" />}
+              </button>
+            )}
+          </div>
+        }
       />
-      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {achievements.map((a) => (
-          <li key={a.id} data-reveal>
-            <AchievementCard a={a} onOpen={() => openLightbox(all, startIndex[a.id] ?? 0)} />
-          </li>
+
+      <Reveal>
+        <div
+          ref={viewport}
+          className="overflow-hidden"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Achievements and certifications"
+        >
+          <motion.ul
+            className="flex cursor-grab active:cursor-grabbing"
+            style={{ gap: GAP }}
+            animate={{ x }}
+            transition={{ duration: 0.9, ease: EASE }}
+            drag="x"
+            dragConstraints={{ left: x, right: x }}
+            dragElastic={0.15}
+            onDragEnd={onDragEnd}
+          >
+            {items.map((a, i) => (
+              <li
+                key={a.id}
+                className="shrink-0"
+                style={{ width: cardW || `calc((100% - ${GAP * (perView - 1)}px) / ${perView})` }}
+                aria-roledescription="slide"
+                aria-label={`${i + 1} of ${items.length}: ${a.title}`}
+                aria-hidden={i < index || i >= index + perView ? true : undefined}
+              >
+                <Card a={a} />
+              </li>
+            ))}
+          </motion.ul>
+        </div>
+      </Reveal>
+
+      <div className="mt-8 flex items-center justify-center gap-2" role="group" aria-label="Choose slide">
+        {Array.from({ length: maxIndex + 1 }, (_, k) => (
+          <button
+            key={k}
+            type="button"
+            onClick={() => setIndex(k)}
+            aria-label={`Go to slide ${k + 1}`}
+            aria-current={k === index ? 'true' : undefined}
+            className={cn('h-2 rounded-full transition-all duration-500', k === index ? 'w-8 bg-cerulean-600' : 'w-2 bg-slate-300 hover:bg-cerulean-300')}
+          />
         ))}
-      </ul>
+      </div>
     </Section>
   );
 }

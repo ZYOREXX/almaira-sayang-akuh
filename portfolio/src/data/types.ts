@@ -13,6 +13,12 @@ export interface Photo {
   position?: string;
 }
 
+/** An official logo (file in public/logos). */
+export interface Logo {
+  src: string;
+  alt: string;
+}
+
 /** A certificate scan or any standalone image. */
 export interface ImageRef {
   src: string;
@@ -35,9 +41,11 @@ export interface MetricData {
 }
 
 export interface Pill {
-  icon: IconName;
   label: string;
   detail: string;
+  /** Logo id from PORTFOLIO_DATA.logos (shown instead of the icon). */
+  logo?: string;
+  icon?: IconName;
   prestige?: boolean;
 }
 
@@ -51,7 +59,13 @@ export interface Persona {
 export interface SkillGroup {
   title: string;
   icon: IconName;
-  tools: BrandId[];
+  /** Tool ids from PORTFOLIO_DATA.tools. */
+  tools: string[];
+}
+
+export interface Tool {
+  name: string;
+  logo: string; // path in public/logos
 }
 
 export interface ExperienceItem {
@@ -61,6 +75,8 @@ export interface ExperienceItem {
   ongoing?: boolean;
   body: string;
   icon: IconName;
+  /** Logo ids from PORTFOLIO_DATA.logos shown on the left of the card. */
+  logos: string[];
   photos?: string[];
 }
 
@@ -98,6 +114,8 @@ interface WorkBase {
   /** Photo ids from PORTFOLIO_DATA.photos; the first one is the cover. */
   images: string[];
   cta: string;
+  /** Organizer / institution logo ids. */
+  logos: string[];
 }
 
 export interface ConferenceWork extends WorkBase {
@@ -139,7 +157,7 @@ export interface ProjectWork extends WorkBase {
 export interface ServiceWork extends WorkBase {
   type: 'service';
   services: Array<{ icon: IconName; title: string; body: string }>;
-  tools: BrandId[];
+  tools: string[];
 }
 
 export type Work = ConferenceWork | JournalWork | ProjectWork | ServiceWork;
@@ -162,6 +180,8 @@ export interface Achievement {
   prestige?: boolean;
   /** Short, factual tag such as "E-signed · BSrE–BSSN". */
   badge?: string;
+  /** Issuer logo id (optional). */
+  logo?: string;
   visual: AchievementVisual;
 }
 
@@ -174,25 +194,25 @@ export interface Social {
 
 export interface PortfolioData {
   nav: Array<{ id: string; label: string }>;
+  logos: Record<string, Logo>;
+  tools: Record<string, Tool>;
   hero: {
-    eyebrow: string;
+    background: ImageRef;
+    institution: string;
+    institutionLogo: string;
     title: string;
     name: string;
     suffix: string;
     roles: string[];
-    tagline: string;
     portrait: ImageRef;
     pills: Pill[];
   };
   about: {
-    eyebrow: string;
     heading: string;
-    statement: string;
     body: string;
     photo: ImageRef;
-    metrics: MetricData[];
     stack: SkillGroup[];
-    personas: Persona[];
+    highlights: Array<{ icon: IconName; title: string; body: string }>;
   };
   photos: Record<string, Photo>;
   experience: ExperienceItem[];
