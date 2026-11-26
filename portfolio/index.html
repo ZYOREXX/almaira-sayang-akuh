@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tio Ilham Wahyudi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Tio Ilham Wahyudi, S.Pd. — Sport Education Researcher, Academic Writing Mentor and Sport Project Specialist at Universitas Pendidikan Indonesia (UPI).">
+
+<!-- =====================================================================
+     LIBRARIES (CDN, versi dikunci agar stabil)
+     - Tailwind CSS (Play CDN)  - Lucide Icons  - Google Fonts
+     ===================================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+
+<script>
+  /* Konfigurasi warna & font Tailwind (palet "Premium Academic Sport-Science") */
+  if (window.tailwind) tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          obsidian: '#0B0F19',   // latar utama
+          panel:    '#111827',   // latar kartu Bento
+          ink:      '#F8FAFC',   // teks utama
+          mute:     '#94A3B8',   // teks sekunder
+          gold:     '#D4AF37',   // aksen Champagne Gold
+          cyan:     '#06B6D4'    // aksen Electric Cyan (data/metrik)
+        },
+        fontFamily: {
+          sans:  ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'sans-serif'],
+          serif: ['"Playfair Display"', 'Georgia', 'Cambria', '"Times New Roman"', 'serif']
+        }
+      }
+    }
+  };
+</script>
+
+<style>
+  /* Layout concept: an executive research dossier laid out as a bento grid,
+     with statistics drawn as instruments (CI axis, effect-size scale, BF scale). */
+  :root {
+    --obsidian: #0B0F19;
+    --panel: #111827;
+    --panel-2: #0F1522;
+    --ink: #F8FAFC;
+    --mute: #94A3B8;
+    --gold: #D4AF37;
+    --cyan: #06B6D4;
+    --line: rgba(30, 41, 59, .8);
+    --font-ui: "Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+    --font-journal: "Playfair Display", Georgia, Cambria, "Times New Roman", serif;
+    color-scheme: dark;
+  }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  body {
+    background: var(--obsidian);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  /* Band di atas sticky nav (area notch di ponsel) */
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+    z-index: 60; background: var(--obsidian);
+  }
+  /* Gutter samping yang aman di semua lebar layar */
+  .gutter {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 768px) {
+    .gutter { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+  }
+  [hidden] { display: none !important; }
+  h1, h2, h3, .balance { text-wrap: balance; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .eyebrow { letter-spacing: .18em; text-transform: uppercase; font-size: 11px; font-weight: 600; }
+
+  /* Sticky glassmorphism navigation */
+  .glass-nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+    background: rgba(11, 15, 25, .72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Kartu Bento */
+  .bento {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    min-width: 0;
+  }
+  .bento-hover { transition: border-color .25s ease, transform .25s ease; }
+  .bento-hover:hover { border-color: rgba(212, 175, 55, .45); transform: translateY(-2px); }
+
+  /* Grid tipis bergaya kertas milimeter (detail "lab sport-science") */
+  body {
+    background-image:
+      linear-gradient(rgba(148,163,184,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148,163,184,.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* Bingkai foto profil 4:5 */
+  .portrait-frame { position: relative; aspect-ratio: 4 / 5; max-width: 100%; }
+  .portrait-frame::before {
+    content: ""; position: absolute; inset: -10px 10px 10px -10px;
+    border: 1px solid rgba(212, 175, 55, .55); border-radius: 20px; pointer-events: none;
+  }
+  .portrait-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+
+  /* Tombol */
+  .btn-gold { background: var(--gold); color: #0B0F19; }
+  .btn-gold:hover { background: #E2C25A; }
+  .btn-ghost { border: 1px solid rgba(148,163,184,.3); color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 8px; }
+
+  /* Tag teknis & chip */
+  .chip { border: 1px solid var(--line); background: rgba(15, 21, 34, .9); }
+  .filter-btn[aria-pressed="true"] { background: var(--gold); color: #0B0F19; border-color: var(--gold); }
+
+  /* Instrumen statistik */
+  .axis { position: relative; height: 44px; }
+  .axis-line { position: absolute; left: 0; right: 0; top: 20px; height: 1px; background: rgba(148,163,184,.35); }
+  .axis-tick { position: absolute; top: 14px; width: 1px; height: 13px; background: rgba(148,163,184,.45); }
+  .axis-label { position: absolute; top: 30px; transform: translateX(-50%); font-size: 10px; color: var(--mute); white-space: nowrap; }
+  .ci-band { position: absolute; top: 15px; height: 11px; border-radius: 6px; background: rgba(6,182,212,.22); border: 1px solid rgba(6,182,212,.7); }
+  .ci-point { position: absolute; top: 12px; width: 17px; height: 17px; margin-left: -8.5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 4px rgba(6,182,212,.18); }
+  .bar-track { height: 8px; border-radius: 999px; background: rgba(148,163,184,.12); position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; }
+
+  /* Modal */
+  .modal-backdrop { background: rgba(3, 6, 12, .78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .modal-panel { max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; }
+  .modal-open { overflow: hidden; }
+  .prose-abstract p + p { margin-top: .85rem; }
+
+  /* Timeline */
+  .timeline-dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--gold); background: var(--obsidian); }
+
+  @keyframes rise { from { transform: translateY(10px); } to { transform: translateY(0); } }
+  .rise { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .rise { animation: none; }
+    .bento-hover, .bento-hover:hover { transition: none; transform: none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================================
+     NAVIGATION — Sticky Glassmorphism
+     ===================================================================== -->
+<header class="glass-nav">
+  <nav class="gutter mx-auto max-w-7xl flex items-center justify-between gap-4 py-3.5" aria-label="Main">
+    <a href="#home" class="flex items-center gap-3 min-w-0">
+      <span class="grid place-items-center w-9 h-9 rounded-lg border border-gold/60 font-serif text-gold font-semibold text-sm shrink-0">TW</span>
+      <span class="hidden sm:block leading-tight min-w-0">
+        <span class="block text-sm font-semibold truncate">Tio Ilham Wahyudi, S.Pd.</span>
+        <span class="block text-[11px] text-mute truncate">Sport Education · UPI</span>
+      </span>
+    </a>
+
+    <ul class="hidden lg:flex items-center gap-7 text-[13px] text-mute">
+      <li><a class="hover:text-ink transition" href="#about">About</a></li>
+      <li><a class="hover:text-ink transition" href="#research">Research</a></li>
+      <li><a class="hover:text-ink transition" href="#swipe">SWIPE</a></li>
+      <li><a class="hover:text-ink transition" href="#experience">Experience</a></li>
+      <li><a class="hover:text-ink transition" href="#credentials">Credentials</a></li>
+      <li><a class="hover:text-ink transition" href="#skills">Skills</a></li>
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <a href="#contact" class="btn-gold inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-semibold transition">
+        <i data-lucide="calendar-check" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Academic Consultation</span><span class="sm:hidden">Consult</span>
+      </a>
+      <button id="menuToggle" class="lg:hidden grid place-items-center w-10 h-10 rounded-full btn-ghost" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </nav>
+  <!-- Menu mobile -->
+  <div id="mobileMenu" class="lg:hidden gutter pb-4" hidden>
+    <ul class="grid grid-cols-2 gap-2 text-sm">
+      <li><a class="block chip rounded-xl px-4 py-3" href="#about">About</a></li>
+      <li><a class="block chip rounded-xl px-4 py-3" href="#research">Research</a></li>
+      <li><a class="block chip rounded-xl px-4 py-3" href="#swipe">SWIPE Project</a></li>
+      <li><a class="block chip rounded-xl px-4 py-3" href="#experience">Experience</a></li>
+      <li><a class="block chip rounded-xl px-4 py-3" href="#credentials">Credentials</a></li>
+      <li><a class="block chip rounded-xl px-4 py-3" href="#skills">Skills</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<!-- =====================================================================
+     A. HERO — Identitas Utama
+     ===================================================================== -->
+<section id="home" class="gutter mx-auto max-w-7xl pt-10 md:pt-16 pb-14">
+  <div class="grid lg:grid-cols-12 gap-5">
+
+    <!-- Kartu identitas -->
+    <div class="bento lg:col-span-8 p-6 md:p-10 rise">
+      <p class="eyebrow text-cyan flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> Evidence-based Sport Science</p>
+      <h1 class="mt-5 font-serif text-4xl md:text-6xl leading-[1.05] font-semibold">
+        Tio Ilham Wahyudi<span class="text-gold">, S.Pd.</span>
+      </h1>
+      <p class="mt-4 text-[15px] md:text-base text-ink/90 font-medium">
+        Sport Education Researcher <span class="text-gold mx-1.5">•</span> Academic Writing Mentor <span class="text-gold mx-1.5">•</span> Sport Project Specialist
+      </p>
+      <p class="mt-4 max-w-2xl text-mute leading-relaxed">
+        Bridging evidence-based sport science, reputable academic publishing, and dynamic sports event management.
+      </p>
+
+      <!-- Highlight badges -->
+      <ul class="mt-7 grid sm:grid-cols-3 gap-3">
+        <li class="chip rounded-2xl p-4">
+          <i data-lucide="graduation-cap" class="w-5 h-5 text-gold"></i>
+          <p class="mt-3 text-[13px] font-semibold leading-snug">Ongoing Fast-Track Master's Student in Sport Education</p>
+          <p class="mt-1 text-[12px] text-mute">Universitas Pendidikan Indonesia (UPI)</p>
+        </li>
+        <li class="chip rounded-2xl p-4">
+          <i data-lucide="award" class="w-5 h-5 text-gold"></i>
+          <p class="mt-3 text-[13px] font-semibold leading-snug">Bachelor of Physical Education, Cum Laude</p>
+          <p class="mt-1 text-[12px] text-mute tabular">GPA <span class="text-cyan font-semibold">3.83</span> / 4.00</p>
+        </li>
+        <li class="chip rounded-2xl p-4">
+          <i data-lucide="mic" class="w-5 h-5 text-gold"></i>
+          <p class="mt-3 text-[13px] font-semibold leading-snug">International Conference Presenter</p>
+          <p class="mt-1 text-[12px] text-mute">&amp; Reputable Journal Author</p>
+        </li>
+      </ul>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#research" class="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition">
+          Explore Publications &amp; Projects <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+        </a>
+        <a href="#contact" class="btn-ghost inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition">
+          Mentoring &amp; Collaboration <i data-lucide="handshake" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Foto profil 4:5
+         GANTI FOTO: ubah src="assets/profile.jpg" dengan file foto formal Anda (rasio 4:5 disarankan). -->
+    <div class="bento lg:col-span-4 p-6 md:p-8 flex flex-col rise">
+      <div class="portrait-frame mx-auto w-full max-w-[320px]">
+        <img src="assets/profile.jpg" alt="Formal portrait of Tio Ilham Wahyudi" loading="eager">
+      </div>
+      <dl class="mt-7 grid grid-cols-3 gap-2 text-center">
+        <div class="chip rounded-xl py-3">
+          <dt class="text-[10px] text-mute eyebrow !tracking-wider">Papers</dt>
+          <dd class="mt-1 text-xl font-bold text-cyan tabular">2</dd>
+        </div>
+        <div class="chip rounded-xl py-3">
+          <dt class="text-[10px] text-mute eyebrow !tracking-wider">Events</dt>
+          <dd class="mt-1 text-xl font-bold text-cyan tabular">5</dd>
+        </div>
+        <div class="chip rounded-xl py-3">
+          <dt class="text-[10px] text-mute eyebrow !tracking-wider">Forums</dt>
+          <dd class="mt-1 text-xl font-bold text-cyan tabular">4</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     B. ABOUT & SERVICES — What I Do (Bento)
+     ===================================================================== -->
+<section id="about" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="flex items-end justify-between gap-4 mb-6">
+    <div>
+      <p class="eyebrow text-gold">What I Do</p>
+      <h2 class="mt-2 text-2xl md:text-3xl font-bold">Research rigor, applied on the field</h2>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-6 gap-4">
+    <!-- Executive summary -->
+    <article class="bento md:col-span-6 lg:col-span-3 lg:row-span-2 p-6 md:p-8">
+      <p class="eyebrow text-cyan">Executive Summary</p>
+      <p class="mt-4 font-serif text-xl md:text-2xl leading-snug text-ink">
+        A young academic and physical-education practitioner working where motor development, sport psychology and modern PE pedagogy meet.
+      </p>
+      <p class="mt-4 text-mute leading-relaxed max-w-prose">
+        My work centres on motor development, sport psychology and character formation, contemporary physical-education pedagogy, and sport project management. I bring advanced quantitative analysis, including bootstrapped and Bayesian inference, into classroom, coaching and event settings so that findings translate into practice.
+      </p>
+      <ul class="mt-6 flex flex-wrap gap-2 text-[12px]">
+        <li class="chip rounded-full px-3 py-1.5">Motor Development</li>
+        <li class="chip rounded-full px-3 py-1.5">Sportspersonship &amp; Character</li>
+        <li class="chip rounded-full px-3 py-1.5">PE Pedagogy</li>
+        <li class="chip rounded-full px-3 py-1.5">Sport Project Management</li>
+      </ul>
+    </article>
+
+    <!-- Pilar 1 -->
+    <article class="bento bento-hover md:col-span-3 lg:col-span-3 p-6">
+      <div class="flex items-start gap-4">
+        <span class="grid place-items-center w-11 h-11 rounded-xl bg-gold/10 text-gold shrink-0"><i data-lucide="book-open-check" class="w-5 h-5"></i></span>
+        <div class="min-w-0">
+          <h3 class="font-semibold text-[17px]">Reputable Journal &amp; Conference Mentoring</h3>
+          <p class="mt-2 text-sm text-mute leading-relaxed">Guidance on manuscript writing, quantitative data analysis, bibliometric mapping, and publication in reputable outlets: SINTA, Scopus and international proceedings.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Pilar 2 -->
+    <article class="bento bento-hover md:col-span-3 lg:col-span-3 p-6">
+      <div class="flex items-start gap-4">
+        <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan/10 text-cyan shrink-0"><i data-lucide="flask-conical" class="w-5 h-5"></i></span>
+        <div class="min-w-0">
+          <h3 class="font-semibold text-[17px]">Sport Science &amp; Motor Development Research</h3>
+          <p class="mt-2 text-sm text-mute leading-relaxed">Experimental and correlational quantitative designs, Bayesian and bootstrap analysis, and evaluation of PJOK (physical education) learning outcomes.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Pilar 3 -->
+    <article class="bento bento-hover md:col-span-6 lg:col-span-6 p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+        <span class="grid place-items-center w-11 h-11 rounded-xl bg-gold/10 text-gold shrink-0"><i data-lucide="flag" class="w-5 h-5"></i></span>
+        <div class="min-w-0 flex-1">
+          <h3 class="font-semibold text-[17px]">Sports Event &amp; Coaching Operations</h3>
+          <p class="mt-2 text-sm text-mute leading-relaxed">Operational management of national-scale sporting events, and swimming coaching grounded in sport-science principles.</p>
+        </div>
+        <a href="#experience" class="btn-ghost inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-semibold transition self-start sm:self-center">View track record <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =====================================================================
+     C. PUBLICATIONS & INTERNATIONAL CONFERENCES
+     Data detail modal ada di objek MODAL_DATA (bagian <script> di bawah).
+     ===================================================================== -->
+<section id="research" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="mb-6">
+    <p class="eyebrow text-gold">Publications &amp; Conferences</p>
+    <h2 class="mt-2 text-2xl md:text-3xl font-bold">Featured research</h2>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-4">
+
+    <!-- Paper 1: ICSDP 2026 -->
+    <article class="bento bento-hover p-6 md:p-8 flex flex-col">
+      <div class="flex flex-wrap gap-2 text-[11px] font-semibold">
+        <span class="rounded-full px-3 py-1 bg-gold/10 text-gold border border-gold/30">11th ICSDP 2026</span>
+        <span class="rounded-full px-3 py-1 bg-cyan/10 text-cyan border border-cyan/30">Sole &amp; Corresponding Author</span>
+      </div>
+      <p class="mt-3 text-[12px] text-mute">11th International Conference on Sport and Development Peace (ICSDP) 2026</p>
+      <h3 class="mt-4 font-serif text-xl md:text-[26px] leading-snug font-semibold">
+        Creative Thinking in Movement and Sportspersonship Orientation Among Fifth-Grade Elementary School Students: A Correlational Study in Physical Education
+      </h3>
+      <p class="mt-3 text-[13px] text-mute">Department of Sports Education, School of Postgraduate Studies, Universitas Pendidikan Indonesia (UPI)</p>
+
+      <!-- Metrik visual -->
+      <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">Sample</p><p class="mt-1 font-bold text-cyan tabular">n = 31</p></div>
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">Pearson r</p><p class="mt-1 font-bold text-cyan tabular">−0.125</p></div>
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">p-value</p><p class="mt-1 font-bold text-cyan tabular">0.504</p></div>
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">BF<sub>01</sub></p><p class="mt-1 font-bold text-gold tabular">5.759</p></div>
+      </div>
+
+      <!-- Instrumen: 95% BCa CI pada sumbu r -->
+      <div class="mt-5 chip rounded-xl p-4">
+        <p class="text-[11px] text-mute flex justify-between gap-2"><span>95% BCa CI · 5,000 bootstrap resamples</span><span class="tabular text-ink">[−0.471, 0.279]</span></p>
+        <div class="axis mt-2" aria-hidden="true">
+          <div class="axis-line"></div>
+          <div class="ci-band" style="left:26.45%; width:37.5%"></div>
+          <div class="axis-tick" style="left:50%; background:rgba(212,175,55,.8)"></div>
+          <div class="ci-point" style="left:43.75%"></div>
+          <span class="axis-label" style="left:2%">−1</span>
+          <span class="axis-label" style="left:50%">0</span>
+          <span class="axis-label" style="left:98%">+1</span>
+        </div>
+      </div>
+
+      <ul class="mt-5 space-y-2 text-[13px] text-mute">
+        <li class="flex gap-2"><i data-lucide="layout-grid" class="w-4 h-4 text-gold shrink-0 mt-0.5"></i>Cross-sectional correlational design</li>
+        <li class="flex gap-2"><i data-lucide="clipboard-list" class="w-4 h-4 text-gold shrink-0 mt-0.5"></i>TCAM &amp; Indonesian MSOS instruments</li>
+      </ul>
+
+      <button type="button" data-modal="icsdp" class="mt-auto pt-6 self-start">
+        <span class="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Read Abstract &amp; Statistical Notes
+        </span>
+      </button>
+    </article>
+
+    <!-- Paper 2: Jurnal Porkes 2025 -->
+    <article class="bento bento-hover p-6 md:p-8 flex flex-col">
+      <div class="flex flex-wrap gap-2 text-[11px] font-semibold">
+        <span class="rounded-full px-3 py-1 bg-gold/10 text-gold border border-gold/30">Jurnal Porkes · 2025</span>
+        <span class="rounded-full px-3 py-1 bg-cyan/10 text-cyan border border-cyan/30">First &amp; Corresponding Author</span>
+      </div>
+      <p class="mt-3 text-[12px] text-mute tabular">Vol. 8, No. 1, pp. 01–09, April 2025 · with Ricky Wibowo &amp; Mukhlisin (FPOK UPI)</p>
+      <h3 class="mt-4 font-serif text-xl md:text-[26px] leading-snug font-semibold">
+        Effect of Rhythmic Movement Learning on Improving Dynamic Balance and Agility
+      </h3>
+      <p class="mt-3 text-[13px] text-mute italic font-serif">Pengaruh Pembelajaran Aktivitas Gerak Berirama terhadap Peningkatan Keseimbangan dan Kelincahan Gerak</p>
+
+      <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">Sample</p><p class="mt-1 font-bold text-cyan tabular">n = 32</p></div>
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">Sessions</p><p class="mt-1 font-bold text-cyan tabular">12</p></div>
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">p-value</p><p class="mt-1 font-bold text-cyan tabular">&lt; 0.001</p></div>
+        <div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">Max d</p><p class="mt-1 font-bold text-gold tabular">2.495</p></div>
+      </div>
+
+      <!-- Instrumen: Cohen's d -->
+      <div class="mt-5 chip rounded-xl p-4 space-y-3">
+        <p class="text-[11px] text-mute">Cohen's <i>d</i> (scale 0–3)</p>
+        <div>
+          <div class="flex justify-between text-[12px] mb-1.5"><span>Dynamic balance</span><span class="tabular text-gold font-semibold">2.495 · very large</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:83.2%; background:linear-gradient(90deg,#B8962A,#D4AF37)"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-[12px] mb-1.5"><span>Agility</span><span class="tabular text-cyan font-semibold">0.680 · medium</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:22.7%; background:#06B6D4"></div></div>
+        </div>
+      </div>
+
+      <ul class="mt-5 space-y-2 text-[13px] text-mute">
+        <li class="flex gap-2"><i data-lucide="layout-grid" class="w-4 h-4 text-gold shrink-0 mt-0.5"></i>Pre-experimental one-group pretest–posttest</li>
+        <li class="flex gap-2"><i data-lucide="clipboard-list" class="w-4 h-4 text-gold shrink-0 mt-0.5"></i>Modified Bass Test &amp; T-Test (TKSI Phase B)</li>
+      </ul>
+
+      <button type="button" data-modal="porkes" class="mt-auto pt-6 self-start">
+        <span class="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Read Abstract &amp; Statistical Notes
+        </span>
+      </button>
+    </article>
+  </div>
+</section>
+
+<!-- =====================================================================
+     D. FEATURED INNOVATION — PKM-KC 2025 SWIPE
+     GANTI FOTO: assets/swipe-prototype.jpg & assets/swipe-schematic.jpg
+     ===================================================================== -->
+<section id="swipe" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="mb-6">
+    <p class="eyebrow text-gold">Featured Sport-Tech Project · PKM-KC 2025</p>
+    <h2 class="mt-2 text-2xl md:text-3xl font-bold">SWIPE: Smart Whistle Integrated with Precision Electronics</h2>
+  </div>
+
+  <div class="grid md:grid-cols-6 gap-4">
+    <!-- Gambar prototipe -->
+    <figure class="bento md:col-span-3 lg:col-span-2 p-4 flex flex-col">
+      <div class="rounded-xl overflow-hidden bg-white">
+        <img src="assets/swipe-prototype.jpg" alt="SWIPE prototype concept: stopwatch-whistle device with OLED display showing split and lap times" class="w-full h-auto">
+      </div>
+      <figcaption class="mt-3 text-[12px] text-mute">Prototype concept — whistle, tone mode, flag, start/stop and OLED readout.</figcaption>
+    </figure>
+
+    <!-- Deskripsi -->
+    <article class="bento md:col-span-3 lg:col-span-4 p-6 md:p-8 flex flex-col">
+      <p class="text-mute leading-relaxed max-w-prose">
+        A multifunctional whistle powered by <span class="text-ink font-semibold">WhistleSync</span> technology, designed to make PE teachers and sport coaches more effective by combining signalling, timing and lap tracking in one handheld device.
+      </p>
+      <div class="mt-5 grid sm:grid-cols-2 gap-3">
+        <div class="chip rounded-xl p-4">
+          <i data-lucide="trophy" class="w-5 h-5 text-gold"></i>
+          <p class="mt-2 text-[13px] font-semibold">National Funding — Kemendikbudristek 2025</p>
+          <p class="mt-1 text-[12px] text-mute">Program Kreativitas Mahasiswa – Karsa Cipta (PKM-KC)</p>
+        </div>
+        <div class="chip rounded-xl p-4">
+          <i data-lucide="milestone" class="w-5 h-5 text-cyan"></i>
+          <p class="mt-2 text-[13px] font-semibold">Represented UPI to the PKP2 stage</p>
+          <p class="mt-1 text-[12px] text-mute">Penilaian Kemajuan Pelaksanaan PKM (progress review)</p>
+        </div>
+      </div>
+      <p class="mt-5 text-[13px]"><span class="text-mute">My role:</span> Member of the Research &amp; Physical Education Development Team (PGSD Penjas, FPOK UPI)</p>
+
+      <p class="mt-6 eyebrow text-mute">Technical Specification</p>
+      <ul class="mt-3 flex flex-wrap gap-2 text-[12px]">
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-cyan"></i>ESP-32 Microcontroller</li>
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="monitor" class="w-3.5 h-3.5 text-cyan"></i>OLED Display</li>
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 text-cyan"></i>RTC Module</li>
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="volume-2" class="w-3.5 h-3.5 text-cyan"></i>Mini Speaker 3W</li>
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="battery-charging" class="w-3.5 h-3.5 text-cyan"></i>Lithium-ion Battery</li>
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="timer" class="w-3.5 h-3.5 text-cyan"></i>Stopwatch &amp; Lap/Flag Timer</li>
+        <li class="chip rounded-full px-3 py-1.5 inline-flex items-center gap-1.5"><i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-cyan"></i>Tone Mode Selector</li>
+      </ul>
+
+      <button type="button" data-modal="swipe" class="mt-auto pt-6 self-start">
+        <span class="btn-gold inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition">
+          <i data-lucide="circuit-board" class="w-4 h-4"></i> View Prototype Specifications
+        </span>
+      </button>
+    </article>
+
+    <!-- Tim lintas disiplin -->
+    <article class="bento md:col-span-6 p-6">
+      <p class="eyebrow text-mute flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-gold"></i> Interdisciplinary Team</p>
+      <ul class="mt-4 grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <li class="chip rounded-xl p-4"><p class="text-[13px] font-semibold">Siti Zakiatul Balqis</p><p class="mt-1 text-[12px] text-gold">Team Leader</p><p class="text-[12px] text-mute">Physical Education</p></li>
+        <li class="chip rounded-xl p-4 border-gold/40"><p class="text-[13px] font-semibold">Tio Ilham Wahyudi</p><p class="mt-1 text-[12px] text-gold">Research &amp; PE Development</p><p class="text-[12px] text-mute">PGSD Penjas</p></li>
+        <li class="chip rounded-xl p-4"><p class="text-[13px] font-semibold">Alifa Prayudio Dava Nugroho</p><p class="mt-1 text-[12px] text-gold">Engineering</p><p class="text-[12px] text-mute">Industrial Automation &amp; Robotics Education</p></li>
+        <li class="chip rounded-xl p-4"><p class="text-[13px] font-semibold">Raihan Tristan Pakpahan</p><p class="mt-1 text-[12px] text-gold">Member</p><p class="text-[12px] text-mute">PJKR</p></li>
+        <li class="chip rounded-xl p-4"><p class="text-[13px] font-semibold">Amelia Putri Sylfia</p><p class="mt-1 text-[12px] text-gold">Design</p><p class="text-[12px] text-mute">Visual Communication Design</p></li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- =====================================================================
+     E. COACHING, SPORTS EVENTS & ORGANISATIONS
+     GANTI FOTO dokumentasi: assets/swim-coaching.jpg, assets/pocari-crew.jpg, assets/pocari-stage.jpg
+     ===================================================================== -->
+<section id="experience" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="mb-6">
+    <p class="eyebrow text-gold">Coaching · Events · Leadership</p>
+    <h2 class="mt-2 text-2xl md:text-3xl font-bold">Field experience</h2>
+  </div>
+
+  <div class="grid lg:grid-cols-12 gap-4">
+    <!-- Timeline -->
+    <article class="bento lg:col-span-7 p-6 md:p-8">
+      <ol class="relative border-l border-slate-800 ml-1.5 space-y-7">
+        <li class="pl-6 relative">
+          <span class="timeline-dot absolute -left-[6px] top-1.5" style="background:#D4AF37"></span>
+          <p class="text-[12px] text-cyan font-semibold tabular">Ongoing</p>
+          <h3 class="mt-1 font-semibold">Swimming Coach — Papila Swim Club</h3>
+          <p class="mt-1 text-sm text-mute">Develops swimming technique and athletes' physical conditioning through a sport-science approach.</p>
+        </li>
+        <li class="pl-6 relative">
+          <span class="timeline-dot absolute -left-[6px] top-1.5"></span>
+          <p class="text-[12px] text-cyan font-semibold tabular">2025</p>
+          <h3 class="mt-1 font-semibold">Field Operations Committee — Pocari Sweat Run Indonesia</h3>
+          <p class="mt-1 text-sm text-mute">Coordinated on-field operations at a national-scale running event.</p>
+        </li>
+        <li class="pl-6 relative">
+          <span class="timeline-dot absolute -left-[6px] top-1.5"></span>
+          <p class="text-[12px] text-cyan font-semibold tabular">2024</p>
+          <h3 class="mt-1 font-semibold">Badminton Branch Committee — PORDOSKA UPI</h3>
+          <p class="mt-1 text-sm text-mute">Pekan Olahraga Dosen dan Karyawan, the faculty and staff sports week of Universitas Pendidikan Indonesia.</p>
+        </li>
+        <li class="pl-6 relative">
+          <span class="timeline-dot absolute -left-[6px] top-1.5"></span>
+          <p class="text-[12px] text-cyan font-semibold tabular">2024</p>
+          <h3 class="mt-1 font-semibold">Field Operations Committee — Festival Gerak PGSD Penjas UPI</h3>
+          <p class="mt-1 text-sm text-mute">Field operations for the PGSD Physical Education movement festival.</p>
+        </li>
+        <li class="pl-6 relative">
+          <span class="timeline-dot absolute -left-[6px] top-1.5"></span>
+          <p class="text-[12px] text-cyan font-semibold">Event</p>
+          <h3 class="mt-1 font-semibold">Field Operations Committee — UPI Half Marathon</h3>
+          <p class="mt-1 text-sm text-mute">Technical course coordination and running-event operations.</p>
+        </li>
+      </ol>
+
+      <div class="mt-8 pt-6 border-t border-slate-800">
+        <p class="eyebrow text-mute flex items-center gap-2"><i data-lucide="landmark" class="w-4 h-4 text-gold"></i> Organizational Leadership</p>
+        <ul class="mt-3 grid sm:grid-cols-2 gap-3 text-[13px]">
+          <li class="chip rounded-xl p-4"><p class="font-semibold">Dewan Perwakilan Mahasiswa (DPM)</p><p class="mt-1 text-mute text-[12px]">PGSD Penjas, FPOK UPI — Student Representative Council</p></li>
+          <li class="chip rounded-xl p-4"><p class="font-semibold">UKM IBAF UPI</p><p class="mt-1 text-mute text-[12px]">Unit Kegiatan Mahasiswa — Student Activity Unit</p></li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- Galeri dokumentasi -->
+    <div class="lg:col-span-5 grid grid-cols-2 gap-4 content-start">
+      <figure class="bento col-span-2 overflow-hidden">
+        <img src="assets/swim-coaching.jpg" alt="Swimming coaching session with young athletes in the pool" class="w-full aspect-[4/3] object-cover" loading="lazy">
+        <figcaption class="p-4 text-[12px] text-mute flex items-center gap-2"><i data-lucide="waves" class="w-4 h-4 text-cyan"></i>Coaching at Papila Swim Club</figcaption>
+      </figure>
+      <figure class="bento overflow-hidden">
+        <img src="assets/pocari-crew.jpg" alt="Field operations crew at Pocari Sweat Run Indonesia" class="w-full aspect-[4/5] object-cover" loading="lazy">
+        <figcaption class="p-3 text-[12px] text-mute">Pocari Sweat Run — field crew</figcaption>
+      </figure>
+      <figure class="bento overflow-hidden">
+        <img src="assets/pocari-stage.jpg" alt="Pocari Sweat Run Indonesia half marathon start stage at night" class="w-full aspect-[4/5] object-cover" loading="lazy">
+        <figcaption class="p-3 text-[12px] text-mute">Half-marathon start area</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     F. CERTIFICATIONS & SCHOLARLY FORUMS (dengan filter kategori)
+     Kategori: data-cat="cert" atau data-cat="forum"
+     ===================================================================== -->
+<section id="credentials" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+    <div>
+      <p class="eyebrow text-gold">Certifications &amp; Scholarly Forums</p>
+      <h2 class="mt-2 text-2xl md:text-3xl font-bold">Curated credentials</h2>
+    </div>
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter credentials">
+      <button type="button" class="filter-btn chip rounded-full px-4 py-2 text-[13px] font-semibold transition" data-filter="all" aria-pressed="true">All <span class="tabular opacity-70" data-count="all"></span></button>
+      <button type="button" class="filter-btn chip rounded-full px-4 py-2 text-[13px] font-semibold transition" data-filter="cert" aria-pressed="false">National &amp; International Certification <span class="tabular opacity-70" data-count="cert"></span></button>
+      <button type="button" class="filter-btn chip rounded-full px-4 py-2 text-[13px] font-semibold transition" data-filter="forum" aria-pressed="false">Conferences &amp; Guest Lectures <span class="tabular opacity-70" data-count="forum"></span></button>
+    </div>
+  </div>
+
+  <div id="credGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- 1 -->
+    <article class="cred bento bento-hover p-6 flex flex-col" data-cat="cert">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="medal" class="w-5 h-5 text-gold"></i><span class="text-[11px] text-mute tabular">July 2026 · 34 JP</span></div>
+      <h3 class="mt-4 font-semibold leading-snug">Tenaga Penggerak Olahraga Nasional (TPON)</h3>
+      <p class="mt-1 text-[12px] text-cyan">Ministry of Youth and Sports (KEMENPORA) RI</p>
+      <p class="mt-3 text-[13px] text-mute leading-relaxed">Sport-culture policy, physical literacy, community sport management, and first aid for sports injuries.</p>
+    </article>
+    <!-- 2 -->
+    <article class="cred bento bento-hover p-6 flex flex-col" data-cat="cert">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="bot" class="w-5 h-5 text-gold"></i><span class="text-[11px] text-mute tabular">September 2026</span></div>
+      <h3 class="mt-4 font-semibold leading-snug">AI Ready ASEAN — 15 Modules Completed</h3>
+      <p class="mt-1 text-[12px] text-cyan">ASEAN Foundation &amp; Google.org</p>
+      <p class="mt-3 text-[13px] text-mute leading-relaxed">Generative AI, AI ethics and academic plagiarism, data security, and building AI-based tools.</p>
+      <button type="button" class="mt-auto pt-4 self-start text-[13px] font-semibold text-gold inline-flex items-center gap-1.5 hover:underline" data-cert-img="assets/cert-ai-ready.jpg" data-cert-title="AI Ready ASEAN — Certificate of Completion">
+        <i data-lucide="image" class="w-4 h-4"></i> View certificate
+      </button>
+    </article>
+    <!-- 3 -->
+    <article class="cred bento bento-hover p-6 flex flex-col" data-cat="cert">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="shield-check" class="w-5 h-5 text-gold"></i><span class="text-[11px] text-mute tabular">May 2023</span></div>
+      <h3 class="mt-4 font-semibold leading-snug">Cybersecurity Training for MSMEs</h3>
+      <p class="mt-1 text-[12px] text-cyan">MicroMentor by Mercy Corps &amp; Mastercard Center for Inclusive Growth</p>
+      <p class="mt-3 text-[13px] text-mute leading-relaxed">Asset inventory and defence updates, phishing and malware prevention, and backup and recovery.</p>
+      <button type="button" class="mt-auto pt-4 self-start text-[13px] font-semibold text-gold inline-flex items-center gap-1.5 hover:underline" data-cert-img="assets/cert-cybersecurity.jpg" data-cert-title="Cybersecurity Training for MSMEs — Certificate of Training">
+        <i data-lucide="image" class="w-4 h-4"></i> View certificate
+      </button>
+    </article>
+    <!-- 4 -->
+    <article class="cred bento bento-hover p-6 flex flex-col" data-cat="forum">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="presentation" class="w-5 h-5 text-cyan"></i><span class="text-[11px] text-mute tabular">2026</span></div>
+      <h3 class="mt-4 font-semibold leading-snug">Presenter &amp; Participant — 11th ICSDP</h3>
+      <p class="mt-1 text-[12px] text-cyan">Sports Education Study Program (POR), School of Postgraduate Studies, UPI</p>
+      <p class="mt-3 text-[13px] text-mute leading-relaxed">11th International Conference on Sport and Development Peace.</p>
+    </article>
+    <!-- 5 -->
+    <article class="cred bento bento-hover p-6 flex flex-col" data-cat="forum">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="school" class="w-5 h-5 text-cyan"></i><span class="text-[11px] text-mute tabular">October 2026</span></div>
+      <h3 class="mt-4 font-semibold leading-snug font-serif text-[17px]">“Meaningful PE: A Background on Its Rationale and Design”</h3>
+      <p class="mt-1 text-[12px] text-cyan">Guest Lecture · School of Postgraduate Studies, UPI</p>
+      <button type="button" class="mt-auto pt-4 self-start text-[13px] font-semibold text-gold inline-flex items-center gap-1.5 hover:underline" data-cert-img="assets/cert-meaningful-pe.jpg" data-cert-title="Meaningful PE — Certificate of Appreciation">
+        <i data-lucide="image" class="w-4 h-4"></i> View certificate
+      </button>
+    </article>
+    <!-- 6 -->
+    <article class="cred bento bento-hover p-6 flex flex-col" data-cat="forum">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="school" class="w-5 h-5 text-cyan"></i><span class="text-[11px] text-mute tabular">October 2024</span></div>
+      <h3 class="mt-4 font-semibold leading-snug font-serif text-[17px]">“Enhancing Teacher Skills and Innovative Pedagogical Approaches in Physical Education”</h3>
+      <p class="mt-1 text-[12px] text-cyan">Guest Lecture · FPOK UPI</p>
+    </article>
+    <!-- 7 -->
+    <article class="cred bento bento-hover p-6 flex flex-col sm:col-span-2 lg:col-span-3" data-cat="forum">
+      <div class="flex items-center justify-between gap-2"><i data-lucide="globe-2" class="w-5 h-5 text-cyan"></i><span class="text-[11px] text-mute tabular">November 2023</span></div>
+      <h3 class="mt-4 font-semibold leading-snug font-serif text-[17px]">Stadium Generale: “Sport Leadership and Policy”</h3>
+      <p class="mt-1 text-[12px] text-cyan">Adjunct Professor Program · Universiti Malaya &amp; FPOK UPI</p>
+    </article>
+  </div>
+
+  <!-- Dokumentasi forum ilmiah. GANTI FOTO: assets/lecture-group.jpg & assets/research-workshop.jpg -->
+  <div class="mt-4 grid md:grid-cols-2 gap-4">
+    <figure class="bento overflow-hidden">
+      <img src="assets/lecture-group.jpg" alt="Postgraduate sport education cohort at Universitas Pendidikan Indonesia" class="w-full aspect-[16/9] object-cover" loading="lazy">
+      <figcaption class="p-4 text-[12px] text-mute">Academic forum documentation — Universitas Pendidikan Indonesia</figcaption>
+    </figure>
+    <figure class="bento overflow-hidden">
+      <img src="assets/research-workshop.jpg" alt="Collaborative research and writing session at FPOK UPI" class="w-full aspect-[16/9] object-cover" loading="lazy">
+      <figcaption class="p-4 text-[12px] text-mute">Collaborative research &amp; writing session — FPOK UPI</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- =====================================================================
+     G. SKILLS & TECH STACK
+     ===================================================================== -->
+<section id="skills" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="mb-6">
+    <p class="eyebrow text-gold">Skills &amp; Tools</p>
+    <h2 class="mt-2 text-2xl md:text-3xl font-bold">Technical stack</h2>
+  </div>
+  <div class="grid md:grid-cols-3 gap-4">
+    <article class="bento p-6">
+      <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan/10 text-cyan"><i data-lucide="sigma" class="w-5 h-5"></i></span>
+      <h3 class="mt-4 font-semibold">Quantitative &amp; Statistical Analytics</h3>
+      <ul class="mt-4 flex flex-wrap gap-2 text-[12px]">
+        <li class="chip rounded-lg px-3 py-1.5">IBM SPSS Statistics</li>
+        <li class="chip rounded-lg px-3 py-1.5">Stata</li>
+        <li class="chip rounded-lg px-3 py-1.5">SmartPLS</li>
+        <li class="chip rounded-lg px-3 py-1.5">Python</li>
+        <li class="chip rounded-lg px-3 py-1.5">Microsoft Excel</li>
+      </ul>
+    </article>
+    <article class="bento p-6">
+      <span class="grid place-items-center w-11 h-11 rounded-xl bg-gold/10 text-gold"><i data-lucide="network" class="w-5 h-5"></i></span>
+      <h3 class="mt-4 font-semibold">Bibliometrics &amp; Academic Research</h3>
+      <ul class="mt-4 flex flex-wrap gap-2 text-[12px]">
+        <li class="chip rounded-lg px-3 py-1.5">VOSviewer</li>
+        <li class="chip rounded-lg px-3 py-1.5">Publish or Perish (Harzing)</li>
+        <li class="chip rounded-lg px-3 py-1.5">Mendeley</li>
+        <li class="chip rounded-lg px-3 py-1.5">Google Scholar</li>
+        <li class="chip rounded-lg px-3 py-1.5">ORCID</li>
+      </ul>
+    </article>
+    <article class="bento p-6">
+      <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan/10 text-cyan"><i data-lucide="palette" class="w-5 h-5"></i></span>
+      <h3 class="mt-4 font-semibold">Creative Media &amp; Visual Design</h3>
+      <ul class="mt-4 flex flex-wrap gap-2 text-[12px]">
+        <li class="chip rounded-lg px-3 py-1.5">Canva</li>
+        <li class="chip rounded-lg px-3 py-1.5">Adobe Lightroom</li>
+        <li class="chip rounded-lg px-3 py-1.5">CapCut</li>
+        <li class="chip rounded-lg px-3 py-1.5">Picsart</li>
+        <li class="chip rounded-lg px-3 py-1.5">Snapseed</li>
+        <li class="chip rounded-lg px-3 py-1.5">Microsoft PowerPoint</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- =====================================================================
+     H. CONTACT & SOCIAL NETWORKS
+     Link media sosial diatur di objek SOCIAL_LINKS pada <script> di bawah.
+     ===================================================================== -->
+<section id="contact" class="gutter mx-auto max-w-7xl pb-16">
+  <div class="bento p-6 md:p-10 grid lg:grid-cols-2 gap-8 relative overflow-hidden">
+    <div>
+      <p class="eyebrow text-gold">Academic Consultation &amp; Collaboration</p>
+      <h2 class="mt-3 font-serif text-3xl md:text-4xl font-semibold leading-tight">Let's build research that holds up, and events that run on time.</h2>
+      <ul class="mt-6 space-y-3 text-sm">
+        <li class="flex gap-3"><i data-lucide="pen-line" class="w-5 h-5 text-gold shrink-0"></i>Journal &amp; scientific conference writing mentorship</li>
+        <li class="flex gap-3"><i data-lucide="microscope" class="w-5 h-5 text-gold shrink-0"></i>Sport science research collaboration</li>
+        <li class="flex gap-3"><i data-lucide="calendar-range" class="w-5 h-5 text-gold shrink-0"></i>Sports event management &amp; coaching</li>
+      </ul>
+    </div>
+
+    <div class="min-w-0">
+      <!-- Email (alamat ditampilkan sebagai teks + tombol salin) -->
+      <div class="chip rounded-2xl p-5">
+        <p class="text-[12px] text-mute">Email</p>
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <a id="emailText" href="mailto:tioilhamw123@upi.edu" class="text-lg md:text-xl font-semibold text-cyan break-all select-all">tioilhamw123@upi.edu</a>
+          <button id="copyEmail" type="button" class="btn-ghost inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-semibold transition">
+            <i data-lucide="copy" class="w-4 h-4"></i><span>Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tautan sosial (href diisi otomatis dari SOCIAL_LINKS) -->
+      <ul class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 text-[13px]">
+        <li><a data-social="linkedin"  target="_blank" rel="noopener" class="chip rounded-xl p-4 flex items-center gap-2.5 hover:border-cyan/60 transition"><i data-lucide="linkedin" class="w-4 h-4 text-cyan"></i>LinkedIn</a></li>
+        <li><a data-social="github"    target="_blank" rel="noopener" class="chip rounded-xl p-4 flex items-center gap-2.5 hover:border-cyan/60 transition"><i data-lucide="github" class="w-4 h-4 text-cyan"></i>GitHub</a></li>
+        <li><a data-social="instagram" target="_blank" rel="noopener" class="chip rounded-xl p-4 flex items-center gap-2.5 hover:border-cyan/60 transition"><i data-lucide="instagram" class="w-4 h-4 text-cyan"></i>Instagram</a></li>
+        <li><a data-social="threads"   target="_blank" rel="noopener" class="chip rounded-xl p-4 flex items-center gap-2.5 hover:border-cyan/60 transition"><i data-lucide="at-sign" class="w-4 h-4 text-cyan"></i>Threads</a></li>
+        <li class="col-span-2"><a data-social="academic" target="_blank" rel="noopener" class="chip rounded-xl p-4 flex items-center gap-2.5 hover:border-gold/60 transition"><i data-lucide="book-marked" class="w-4 h-4 text-gold"></i>Google Scholar / ORCID</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- =====================================================================
+     FOOTER
+     ===================================================================== -->
+<footer class="border-t border-slate-800/80">
+  <div class="gutter mx-auto max-w-7xl py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-[12px] text-mute">
+    <p>© <span id="year">2026</span> Tio Ilham Wahyudi, S.Pd. · Sport Education, Universitas Pendidikan Indonesia</p>
+    <a href="#home" class="inline-flex items-center gap-1.5 hover:text-ink transition"><i data-lucide="arrow-up" class="w-4 h-4"></i>Back to top</a>
+  </div>
+</footer>
+
+<!-- =====================================================================
+     MODAL (satu modal dipakai ulang untuk publikasi, SWIPE, dan sertifikat)
+     ===================================================================== -->
+<div id="modal" class="fixed inset-0 z-[70] grid place-items-center p-4" hidden>
+  <div class="modal-backdrop absolute inset-0" data-close></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+       class="modal-panel relative w-full max-w-3xl bento !rounded-2xl shadow-2xl">
+    <div class="sticky top-0 z-10 flex items-start justify-between gap-4 p-5 md:p-7 border-b border-slate-800 bg-panel/95 backdrop-blur">
+      <div class="min-w-0">
+        <p id="modalEyebrow" class="eyebrow text-gold"></p>
+        <h3 id="modalTitle" class="mt-2 font-serif text-xl md:text-2xl font-semibold leading-snug"></h3>
+      </div>
+      <button type="button" id="modalClose" data-close class="grid place-items-center w-10 h-10 rounded-full btn-ghost shrink-0" aria-label="Close dialog">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div id="modalBody" class="p-5 md:p-7"></div>
+  </div>
+</div>
+
+<script>
+/* =======================================================================
+   1) EDIT DI SINI — Tautan media sosial
+      Ganti "#" dengan URL profil Anda, contoh:
+      linkedin: "https://www.linkedin.com/in/username"
+   ======================================================================= */
+const SOCIAL_LINKS = {
+  linkedin:  "#",   // [LinkedIn Profile]
+  github:    "#",   // [GitHub Profile]
+  instagram: "#",   // [Instagram Profile]
+  threads:   "#",   // [Threads Profile]
+  academic:  "#"    // [Academic Profile] Google Scholar / ORCID
+};
+
+/* =======================================================================
+   2) Isi modal detail (abstrak, metodologi statistik, spesifikasi prototipe)
+   ======================================================================= */
+const stat = (label, value, tone = "cyan") =>
+  `<div class="chip rounded-xl p-3"><p class="text-[10px] text-mute eyebrow !tracking-wider">${label}</p><p class="mt-1 font-bold tabular text-${tone}">${value}</p></div>`;
+
+const row = (k, v) =>
+  `<tr class="border-t border-slate-800"><th scope="row" class="py-2.5 pr-4 text-left font-medium text-mute align-top whitespace-nowrap">${k}</th><td class="py-2.5 tabular">${v}</td></tr>`;
+
+const MODAL_DATA = {
+  /* ---------- Paper 1: ICSDP 2026 ---------- */
+  icsdp: {
+    eyebrow: "11th ICSDP 2026 · Sole & Corresponding Author",
+    title: "Creative Thinking in Movement and Sportspersonship Orientation Among Fifth-Grade Elementary School Students: A Correlational Study in Physical Education",
+    body: `
+      <p class="text-[13px] text-mute">Department of Sports Education, School of Postgraduate Studies, Universitas Pendidikan Indonesia (UPI)</p>
+      <div class="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        ${stat("Sample", "n = 31")}${stat("Pearson r", "−0.125")}${stat("p-value", "0.504")}${stat("BF<sub>01</sub>", "5.759", "gold")}
+      </div>
+
+      <h4 class="mt-7 eyebrow text-gold">Abstract</h4>
+      <div class="prose-abstract mt-3 text-[14px] leading-relaxed text-ink/90 max-w-prose">
+        <p>Creativity in movement and sportspersonship are both treated as targets of elementary physical education, yet whether they develop together has rarely been tested. This study examined the relationship between creative thinking in movement and sportspersonship orientation among fifth-grade elementary school students.</p>
+        <p>A cross-sectional correlational design was used with 31 fifth-grade students. Creative movement was measured with the Thinking Creatively in Action and Movement (TCAM) test, and sportspersonship with the Indonesian version of the Multidimensional Sportspersonship Orientations Scale (MSOS).</p>
+        <p>The association was weak, negative and non-significant (r = −0.125, p = 0.504), with a bootstrapped 95% BCa confidence interval that spans zero. A Bayesian correlation favoured the null hypothesis (BF<sub>01</sub> = 5.759), indicating moderate evidence that creative movement and sportspersonship develop along independent pathways. Physical education programmes may therefore need to target each outcome deliberately rather than expecting one to carry the other.</p>
+      </div>
+
+      <h4 class="mt-7 eyebrow text-gold">Statistical Notes</h4>
+      <div class="mt-3 chip rounded-xl p-4">
+        <p class="text-[12px] text-mute flex justify-between gap-2"><span>Bootstrap: 95% BCa CI for r (5,000 resamples)</span><span class="tabular text-ink">[−0.471, 0.279]</span></p>
+        <div class="axis mt-2" aria-hidden="true">
+          <div class="axis-line"></div>
+          <div class="ci-band" style="left:26.45%; width:37.5%"></div>
+          <div class="axis-tick" style="left:50%; background:rgba(212,175,55,.8)"></div>
+          <div class="ci-point" style="left:43.75%"></div>
+          <span class="axis-label" style="left:2%">−1</span><span class="axis-label" style="left:26.45%">−0.471</span>
+          <span class="axis-label" style="left:50%">0</span><span class="axis-label" style="left:63.95%">0.279</span><span class="axis-label" style="left:98%">+1</span>
+        </div>
+      </div>
+      <div class="mt-3 chip rounded-xl p-4">
+        <p class="text-[12px] text-mute flex justify-between gap-2"><span>Bayes factor BF<sub>01</sub> (log scale, Jeffreys categories)</span><span class="tabular text-gold">5.759 · moderate for H<sub>0</sub></span></p>
+        <div class="axis mt-2" aria-hidden="true">
+          <div class="axis-line"></div>
+          <div class="absolute top-[15px] h-[11px] rounded-md" style="left:23.9%; width:26.1%; background:rgba(212,175,55,.18); border:1px solid rgba(212,175,55,.6)"></div>
+          <div class="ci-point" style="left:38%; background:#D4AF37; box-shadow:0 0 0 4px rgba(212,175,55,.2)"></div>
+          <span class="axis-label" style="left:2%">1</span><span class="axis-label" style="left:23.9%">3</span>
+          <span class="axis-label" style="left:50%">10</span><span class="axis-label" style="left:73.9%">30</span><span class="axis-label" style="left:97%">100</span>
+        </div>
+      </div>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-[13px]">
+          <tbody>
+            ${row("Design", "Cross-sectional correlational study")}
+            ${row("Participants", "31 fifth-grade elementary school students")}
+            ${row("Instruments", "TCAM; Indonesian MSOS")}
+            ${row("Frequentist", "Pearson r = −0.125; p = 0.504")}
+            ${row("Bootstrap", "5,000 resamples; 95% BCa CI [−0.471, 0.279]")}
+            ${row("Bayesian", "BF<sub>01</sub> = 5.759; posterior mean r = −0.114")}
+            ${row("Inference", "Moderate evidence for independent developmental pathways")}
+          </tbody>
+        </table>
+      </div>`
+  },
+
+  /* ---------- Paper 2: Jurnal Porkes 2025 ---------- */
+  porkes: {
+    eyebrow: "Jurnal Porkes · Vol. 8, No. 1, pp. 01–09 · April 2025",
+    title: "Effect of Rhythmic Movement Learning on Improving Dynamic Balance and Agility",
+    body: `
+      <p class="text-[13px] text-mute">Tio Ilham Wahyudi (First &amp; Corresponding Author), Ricky Wibowo, Mukhlisin — FPOK, Universitas Pendidikan Indonesia</p>
+      <p class="mt-1 text-[13px] text-mute italic font-serif">Pengaruh Pembelajaran Aktivitas Gerak Berirama terhadap Peningkatan Keseimbangan dan Kelincahan Gerak</p>
+      <div class="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        ${stat("Sample", "n = 32")}${stat("Sessions", "12")}${stat("p-value", "&lt; 0.001")}${stat("Max d", "2.495", "gold")}
+      </div>
+
+      <h4 class="mt-7 eyebrow text-gold">Abstract</h4>
+      <div class="prose-abstract mt-3 text-[14px] leading-relaxed text-ink/90 max-w-prose">
+        <p>Rhythmic movement activities are part of the elementary physical education curriculum, but their measurable effect on fundamental motor qualities needs empirical support. This study tested the effect of rhythmic movement learning on dynamic balance and agility in fourth-grade elementary school students.</p>
+        <p>A pre-experimental one-group pretest–posttest design was applied to 32 fourth-grade students who completed 12 intervention sessions. Dynamic balance was measured with the Modified Bass Test of Dynamic Balance, and agility with the T-Test from the TKSI Phase B battery.</p>
+        <p>Both outcomes improved significantly. Dynamic balance showed t(31) = −38.906, p &lt; 0.001, N-Gain = 0.437 and Cohen's d = 2.495 (very large effect). Agility showed t(31) = 9.291, p &lt; 0.001, N-Gain = 0.314 and Cohen's d = 0.680 (medium effect). Rhythmic movement learning is therefore a practical way to build balance and agility within regular PE lessons.</p>
+      </div>
+
+      <h4 class="mt-7 eyebrow text-gold">Statistical Notes</h4>
+      <div class="mt-3 chip rounded-xl p-4 space-y-4">
+        <p class="text-[12px] text-mute">Cohen's <i>d</i> on a 0–3 scale. Markers show conventional thresholds 0.2 / 0.5 / 0.8.</p>
+        <div>
+          <div class="flex justify-between text-[12px] mb-1.5"><span>Dynamic balance</span><span class="tabular text-gold font-semibold">d = 2.495</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:83.2%; background:linear-gradient(90deg,#B8962A,#D4AF37)"></div>
+            <span class="absolute top-0 bottom-0 w-px bg-white/40" style="left:6.67%"></span><span class="absolute top-0 bottom-0 w-px bg-white/40" style="left:16.67%"></span><span class="absolute top-0 bottom-0 w-px bg-white/40" style="left:26.67%"></span></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-[12px] mb-1.5"><span>Agility</span><span class="tabular text-cyan font-semibold">d = 0.680</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:22.7%; background:#06B6D4"></div>
+            <span class="absolute top-0 bottom-0 w-px bg-white/40" style="left:6.67%"></span><span class="absolute top-0 bottom-0 w-px bg-white/40" style="left:16.67%"></span><span class="absolute top-0 bottom-0 w-px bg-white/40" style="left:26.67%"></span></div>
+        </div>
+        <p class="pt-2 text-[12px] text-mute">Normalized gain (N-Gain, 0–1). Both fall in the medium band (0.3–0.7).</p>
+        <div>
+          <div class="flex justify-between text-[12px] mb-1.5"><span>Dynamic balance</span><span class="tabular">0.437</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:43.7%; background:#D4AF37"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-[12px] mb-1.5"><span>Agility</span><span class="tabular">0.314</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:31.4%; background:#06B6D4"></div></div>
+        </div>
+      </div>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-[13px]">
+          <tbody>
+            ${row("Design", "Pre-experimental, one-group pretest–posttest")}
+            ${row("Participants", "32 fourth-grade elementary school students")}
+            ${row("Intervention", "12 sessions of rhythmic movement learning")}
+            ${row("Instruments", "Modified Bass Test of Dynamic Balance; T-Test (TKSI Phase B)")}
+            ${row("Dynamic balance", "t(31) = −38.906; p &lt; 0.001; N-Gain = 0.437; d = 2.495 (very large)")}
+            ${row("Agility", "t(31) = 9.291; p &lt; 0.001; N-Gain = 0.314; d = 0.680 (medium)")}
+          </tbody>
+        </table>
+      </div>`
+  },
+
+  /* ---------- PKM-KC SWIPE ---------- */
+  swipe: {
+    eyebrow: "PKM-KC 2025 · Kemendikbudristek National Funding",
+    title: "SWIPE: Smart Whistle Integrated with Precision Electronics",
+    body: `
+      <p class="text-[14px] text-ink/90 leading-relaxed max-w-prose">A multifunctional whistle with WhistleSync technology that lets PE teachers and coaches signal, time and log laps from a single device, so fewer tools are juggled during a lesson or training session.</p>
+      <div class="mt-5 grid sm:grid-cols-2 gap-3">
+        <figure class="rounded-xl overflow-hidden bg-white"><img src="assets/swipe-prototype.jpg" alt="SWIPE prototype concept" class="w-full h-auto"></figure>
+        <figure class="rounded-xl overflow-hidden bg-white"><img src="assets/swipe-schematic.jpg" alt="SWIPE electronic schematic with ESP-32, OLED, RTC, speaker, buttons and lithium-ion battery" class="w-full h-auto"></figure>
+      </div>
+      <p class="mt-2 text-[12px] text-mute">Left: prototype concept. Right: breadboard schematic.</p>
+
+      <h4 class="mt-7 eyebrow text-gold">Prototype Specification</h4>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-[13px]">
+          <tbody>
+            ${row("Microcontroller", "ESP-32")}
+            ${row("Display", "OLED screen for split, lap and running time")}
+            ${row("Timekeeping", "RTC (Real-Time Clock) module")}
+            ${row("Audio", "Mini speaker 3W with tone mode selector")}
+            ${row("Power", "Lithium-ion battery with LiPo battery module")}
+            ${row("Controls", "Start/Stop, Reset, Flag, Mode and Tone buttons")}
+            ${row("Functions", "Stopwatch, lap/flag timer, selectable whistle tones")}
+          </tbody>
+        </table>
+      </div>
+
+      <h4 class="mt-7 eyebrow text-gold">Programme Milestones</h4>
+      <ul class="mt-3 space-y-2 text-[13px]">
+        <li class="flex gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan shrink-0 mt-0.5"></i>Funded nationally under PKM-KC (Karsa Cipta) by Kemendikbudristek, 2025</li>
+        <li class="flex gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan shrink-0 mt-0.5"></i>Represented Universitas Pendidikan Indonesia through the PKP2 progress review</li>
+      </ul>
+
+      <h4 class="mt-7 eyebrow text-gold">Team</h4>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-[13px]">
+          <tbody>
+            ${row("Siti Zakiatul Balqis", "Team Leader — Physical Education")}
+            ${row("Tio Ilham Wahyudi", "Research &amp; PE Development — PGSD Penjas")}
+            ${row("Alifa Prayudio Dava Nugroho", "Industrial Automation &amp; Robotics Education")}
+            ${row("Raihan Tristan Pakpahan", "PJKR")}
+            ${row("Amelia Putri Sylfia", "Visual Communication Design")}
+          </tbody>
+        </table>
+      </div>`
+  }
+};
+
+/* =======================================================================
+   3) Logika interaksi (tidak perlu diubah)
+   ======================================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const renderIcons = () => { if (window.lucide) window.lucide.createIcons(); };
+  renderIcons();
+
+  // Tahun footer
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Tautan sosial
+  document.querySelectorAll("[data-social]").forEach(a => {
+    const url = SOCIAL_LINKS[a.dataset.social] || "#";
+    a.href = url;
+    if (url === "#") { a.removeAttribute("target"); a.title = "Link not set yet"; }
+  });
+
+  // Menu mobile
+  const toggle = document.getElementById("menuToggle");
+  const menu = document.getElementById("mobileMenu");
+  toggle.addEventListener("click", () => {
+    const open = menu.hidden;
+    menu.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+    menu.hidden = true; toggle.setAttribute("aria-expanded", "false");
+  }));
+
+  // Modal
+  const modal = document.getElementById("modal");
+  const mTitle = document.getElementById("modalTitle");
+  const mEyebrow = document.getElementById("modalEyebrow");
+  const mBody = document.getElementById("modalBody");
+  const mClose = document.getElementById("modalClose");
+  let lastFocus = null;
+
+  const openModal = ({ eyebrow, title, body }) => {
+    lastFocus = document.activeElement;
+    mEyebrow.innerHTML = eyebrow;
+    mTitle.textContent = title;
+    mBody.innerHTML = body;
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+    modal.querySelector(".modal-panel").scrollTop = 0;
+    renderIcons();
+    mClose.focus();
+  };
+  const closeModal = () => {
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+    if (lastFocus) lastFocus.focus();
+  };
+
+  document.querySelectorAll("[data-modal]").forEach(btn =>
+    btn.addEventListener("click", () => openModal(MODAL_DATA[btn.dataset.modal])));
+
+  document.querySelectorAll("[data-cert-img]").forEach(btn =>
+    btn.addEventListener("click", () => openModal({
+      eyebrow: "Certificate",
+      title: btn.dataset.certTitle,
+      body: `<figure class="rounded-xl overflow-hidden bg-white"><img src="${btn.dataset.certImg}" alt="${btn.dataset.certTitle}" class="w-full h-auto"></figure>`
+    })));
+
+  modal.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closeModal));
+  document.addEventListener("keydown", e => {
+    if (modal.hidden) return;
+    if (e.key === "Escape") closeModal();
+    if (e.key === "Tab") { // jaga fokus tetap di dalam modal
+      const f = modal.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])');
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // Filter sertifikat
+  const cards = [...document.querySelectorAll(".cred")];
+  const btns = [...document.querySelectorAll(".filter-btn")];
+  const counts = { all: cards.length, cert: 0, forum: 0 };
+  cards.forEach(c => counts[c.dataset.cat]++);
+  document.querySelectorAll("[data-count]").forEach(s => s.textContent = `(${counts[s.dataset.count]})`);
+  btns.forEach(b => b.addEventListener("click", () => {
+    const f = b.dataset.filter;
+    btns.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    cards.forEach(c => { c.hidden = !(f === "all" || c.dataset.cat === f); });
+  }));
+
+  // Salin email
+  const copyBtn = document.getElementById("copyEmail");
+  const emailEl = document.getElementById("emailText");
+  copyBtn.addEventListener("click", async () => {
+    const label = copyBtn.querySelector("span");
+    try {
+      await navigator.clipboard.writeText(emailEl.textContent.trim());
+      label.textContent = "Copied";
+    } catch (err) {
+      const range = document.createRange(); range.selectNodeContents(emailEl);
+      const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      label.textContent = "Selected";
+    }
+    setTimeout(() => { label.textContent = "Copy"; }, 1800);
+  });
+});
+</script>
+</body>
+</html>
