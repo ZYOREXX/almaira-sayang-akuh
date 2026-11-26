@@ -83,7 +83,7 @@ export function Contact() {
             </div>
 
             <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-2">
-              {contact.socials.map((s) => {
+              {contact.socials.filter((s) => !isPlaceholderUrl(s.url)).map((s) => {
                 const pending = isPlaceholderUrl(s.url);
                 return (
                   <li key={s.key}>

@@ -664,14 +664,15 @@ export const PORTFOLIO_DATA = {
       { icon: 'microscope', title: 'Sport research collaboration', body: 'Experimental, correlational and Bayesian studies in PE and sport science.' },
       { icon: 'calendar', title: 'Event management & coaching', body: 'Race-day field operations, school sport events and swimming coaching.' },
     ],
-    // GANTI '#' DENGAN URL PROFIL ANDA
+    // LINK MEDIA SOSIAL — tombol dengan url '#' disembunyikan otomatis.
+    // Isi LinkedIn/Threads kapan saja dengan URL lengkap agar tombolnya muncul.
     socials: [
+      { key: 'googlescholar', label: 'Google Scholar', url: 'https://scholar.google.com/citations?user=GuQsIqQAAAAJ&hl=id' },
+      { key: 'orcid', label: 'ORCID', url: 'https://orcid.org/0009-0008-1857-8202' },
+      { key: 'github', label: 'GitHub', url: 'https://github.com/ZYOREXX' },
+      { key: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/iyoilhem/' },
       { key: 'linkedin', label: 'LinkedIn', url: '#' }, // https://www.linkedin.com/in/...
-      { key: 'github', label: 'GitHub', url: '#' }, // https://github.com/...
-      { key: 'instagram', label: 'Instagram', url: '#' }, // https://www.instagram.com/...
       { key: 'threads', label: 'Threads', url: '#' }, // https://www.threads.net/@...
-      { key: 'googlescholar', label: 'Google Scholar', url: '#' }, // https://scholar.google.com/citations?user=...
-      { key: 'orcid', label: 'ORCID', url: '#' }, // https://orcid.org/0000-0000-0000-0000
     ],
   },
 } satisfies PortfolioData;
